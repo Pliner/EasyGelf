@@ -2,9 +2,9 @@
 
 namespace EasyGelf.Core
 {
-    public sealed class TransportConfiguration : ITransportConfiguration
+    public class AbstractTransportConfiguration : IAbstractTransportConfiguration
     {
-        public TransportConfiguration()
+        public AbstractTransportConfiguration()
         {
             LargeMessageSize = 1024;
             MessageChunkSize = 1024;

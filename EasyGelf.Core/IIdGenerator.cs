@@ -1,7 +1,10 @@
-﻿namespace EasyGelf.Core
+﻿using JetBrains.Annotations;
+
+namespace EasyGelf.Core
 {
     public interface IIdGenerator
     {
-        byte[] Generate(byte[] message);
+        [NotNull]
+        byte[] Generate([NotNull]byte[] message);
     }
 }

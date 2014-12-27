@@ -1,28 +1,22 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 
 namespace EasyGelf.Core
 {
-    public abstract class TransportBase : ITransport
+    public abstract class AbstractTransport : ITransport
     {
         private const int HeaderSize = 12;
 
-        private readonly ITransportConfiguration configuration;
-        private readonly IEndpointSelector endpointSelector;
+        private readonly IAbstractTransportConfiguration configuration;
         private readonly IIdGenerator idGenerator;
         
-        protected TransportBase(
-            ITransportConfiguration configuration, 
-            IEndpointSelector endpointSelector,
-            IIdGenerator idGenerator)
+        protected AbstractTransport(IAbstractTransportConfiguration configuration, IIdGenerator idGenerator)
         {
             this.configuration = configuration;
-            this.endpointSelector = endpointSelector;
             this.idGenerator = idGenerator;
         }
 
-        protected TransportBase(ITransportConfiguration configuration): this(configuration, new RandomEndpointSelector(), new IdGenerator())
+        protected AbstractTransport(IAbstractTransportConfiguration configuration): this(configuration, new IdGenerator())
         {
         }
 
@@ -62,13 +56,7 @@ namespace EasyGelf.Core
             get { return configuration.SplitLargeMessages; }
         }
 
-        private void SendInternal(byte[] bytes)
-        {
-            var endPoint = endpointSelector.GetEnpoint(configuration.Topology);
-            SendToEndpoint(endPoint, bytes);
-        }
-
-        public abstract void SendToEndpoint(IPEndPoint endPoint, byte[] bytes);
+        protected abstract void SendInternal(byte[] bytes);
 
         public abstract void Close();
     }

@@ -1,8 +1,10 @@
-﻿namespace EasyGelf.Core
+﻿using JetBrains.Annotations;
+
+namespace EasyGelf.Core
 {
     public interface ITransport
     {
-        void Send(byte[] bytes);
+        void Send([NotNull]byte[] bytes);
         void Close();
     }
 }

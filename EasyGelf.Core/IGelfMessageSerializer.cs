@@ -1,7 +1,10 @@
-﻿namespace EasyGelf.Core
+﻿using JetBrains.Annotations;
+
+namespace EasyGelf.Core
 {
     public interface IGelfMessageSerializer
     {
-        string Serialize(GelfMessage message);
+        [NotNull]
+        string Serialize([NotNull]GelfMessage message);
     }
 }

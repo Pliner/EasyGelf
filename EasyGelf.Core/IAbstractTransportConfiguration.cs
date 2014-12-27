@@ -1,12 +1,9 @@
-﻿using System.Net;
-
-namespace EasyGelf.Core
+﻿namespace EasyGelf.Core
 {
-    public interface ITransportConfiguration
+    public interface IAbstractTransportConfiguration
     {
         int LargeMessageSize { get; }    
         int MessageChunkSize { get; }
         bool SplitLargeMessages { get; }
-        IPEndPoint[] Topology { get; }
     }
 }

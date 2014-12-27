@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using EasyGelf.Core;
+using EasyGelf.Core.Udp;
+using JetBrains.Annotations;
 using log4net.Appender;
 using log4net.Core;
 
@@ -18,8 +20,11 @@ namespace EasyGelf.Log4Net
             Encoding = Encoding.UTF8;
         }
 
+        [UsedImplicitly]
         public Encoding Encoding { get; set; }
+        [UsedImplicitly]
         public IPAddress RemoteAddress { get; set; }
+        [UsedImplicitly]
         public int RemotePort { get; set; }
 
         protected override bool RequiresLayout
@@ -32,13 +37,13 @@ namespace EasyGelf.Log4Net
             base.ActivateOptions();
             try
             {
-                var endpoint = new IPEndPoint(RemoteAddress, RemotePort);
-                transport = new UdpTransport(new TransportConfiguration
+                var host = new IPEndPoint(RemoteAddress, RemotePort);
+                transport = new UdpTransport(new UdpTransportConfiguration
                 {
                     SplitLargeMessages = true,
                     LargeMessageSize = 1024,
                     MessageChunkSize = 1024,
-                    Topology = new[] { endpoint }
+                    Host = host
                 });
             }
             catch (Exception exception)

@@ -2,7 +2,7 @@
 using EasyGelf.Core;
 using NUnit.Framework;
 
-namespace EasyGelf.Tests.Newtonsoft
+namespace EasyGelf.Tests
 {
     [TestFixture]
     public class GelfMessageSerializerTests
