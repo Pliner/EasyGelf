@@ -21,7 +21,7 @@ namespace EasyGelf.Log4Net.Example
             while (isRunning)
             {
                 log.Info("I'm alive");
-                Thread.Sleep(TimeSpan.FromSeconds(1));
+                Thread.Sleep(TimeSpan.FromSeconds(0.5));
             }
         }
 

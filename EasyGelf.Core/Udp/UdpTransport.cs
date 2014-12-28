@@ -2,7 +2,7 @@
 
 namespace EasyGelf.Core.Udp
 {
-    public class UdpTransport : AbstractTransport
+    public sealed class UdpTransport : AbstractTransport
     {
         private readonly IUdpTransportConfiguration configuration;
         private readonly UdpClient udpClient;

@@ -7,14 +7,6 @@ namespace EasyGelf.Tests
     [TestFixture]
     public class GelfMessageSerializerTests
     {
-        private IGelfMessageSerializer serializer;
-
-        [SetUp]
-        public void SetUp()
-        {
-            serializer = new GelfMessageSerializer();
-        }
-
         [Test]
         public void TestSimple()
         {
@@ -27,7 +19,7 @@ namespace EasyGelf.Tests
                     Timestamp = dateTime, 
                     Level = GelfLevel.Alert,
                 };
-            var serializedMessage = serializer.Serialize(message);
+            var serializedMessage = message.Serialize();
             Assert.AreEqual("{\"version\":\"1.1\",\"host\":\"example.org\",\"short_message\":\"A short message that helps you identify what is going on\",\"full_message\":\"Backtrace here\\n\\nmore stuff\",\"timestamp\":1420070400.0,\"level\":1}", serializedMessage);
         }
     }

@@ -1,12 +1,14 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace EasyGelf.Core
 {
-    public sealed class GelfMessageSerializer : IGelfMessageSerializer
+    public static class GelfMessageSerializer
     {
-        public string Serialize(GelfMessage message)
+        [NotNull]
+        public static string Serialize([NotNull]this GelfMessage message)
         {
             var duration = message.Timestamp.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0);
             var result = new JObject
