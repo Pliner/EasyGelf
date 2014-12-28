@@ -45,23 +45,5 @@ namespace EasyGelf.Log4Net
 
             return GelfLevel.Debug;
         }
-
-        public static string Truncate(this string message, int length)
-        {
-            return (message.Length > length)
-                       ? message.Substring(0, length - 1)
-                       : message;
-        }
-
-        public static byte[] GZip(this byte[] bytes)
-        {
-            using (var input = new MemoryStream(bytes))
-            using (var output = new MemoryStream())
-            {
-                using (var compressed = new GZipStream(output, CompressionMode.Compress))
-                    input.CopyTo(compressed);
-                return output.ToArray();
-            }
-        }
     }
 }

@@ -53,14 +53,11 @@
     <Compile Include="Amqp\AmqpTransportConfiguration.cs" />
     <Compile Include="Amqp\IAmqpTransportConfiguration.cs" />
     <Compile Include="CoreExtentions.cs" />
-    <Compile Include="GelfMessageSerializer.cs" />
     <Compile Include="AbstractTransportConfiguration.cs" />
     <Compile Include="ITransport.cs" />
     <Compile Include="GelfLevel.cs" />
     <Compile Include="GelfMessage.cs" />
     <Compile Include="AbstractTransport.cs" />
-    <Compile Include="IdGenerator.cs" />
-    <Compile Include="IIdGenerator.cs" />
     <Compile Include="IAbstractTransportConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Udp\IUdpTransportConfiguration.cs" />

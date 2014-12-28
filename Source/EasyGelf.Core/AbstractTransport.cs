@@ -8,16 +8,10 @@ namespace EasyGelf.Core
         private const int HeaderSize = 12;
 
         private readonly IAbstractTransportConfiguration configuration;
-        private readonly IIdGenerator idGenerator;
         
-        protected AbstractTransport(IAbstractTransportConfiguration configuration, IIdGenerator idGenerator)
+        protected AbstractTransport(IAbstractTransportConfiguration configuration)
         {
             this.configuration = configuration;
-            this.idGenerator = idGenerator;
-        }
-
-        protected AbstractTransport(IAbstractTransportConfiguration configuration): this(configuration, new IdGenerator())
-        {
         }
 
         public void Send(byte[] bytes)
@@ -31,7 +25,7 @@ namespace EasyGelf.Core
                 var messageChunkSize = configuration.MessageChunkSize - HeaderSize;
                 var chunksCount = bytes.Length / messageChunkSize + 1;
                 var remainingBytes = bytes.Length;
-                var messageId = idGenerator.Generate(bytes);
+                var messageId = bytes.GenerateGelfId();
                 for (var chunkSequenceNumber = 0; chunkSequenceNumber < chunksCount; ++chunkSequenceNumber)
                 {
                     var chunkOffset = chunkSequenceNumber*messageChunkSize;
