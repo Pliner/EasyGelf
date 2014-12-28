@@ -21,7 +21,7 @@ namespace EasyGelf.Core
                 (from ip in ipAddresses where ip.AddressFamily == AddressFamily.InterNetwork select ip).FirstOrDefault();
 
             if (ipAddress == null)
-                return null;
+                throw new Exception("Cannot get an ipaddress");
 
             //read bytes of the last 2 segments and insert bits into the bit array
             var addressBytes = ipAddress.GetAddressBytes();

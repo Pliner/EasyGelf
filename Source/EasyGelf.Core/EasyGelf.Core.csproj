@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Version.cs">
+      <Link>Properties\Version.cs</Link>
+    </Compile>
     <Compile Include="Amqp\AmqpTransport.cs" />
     <Compile Include="Amqp\AmqpTransportConfiguration.cs" />
     <Compile Include="Amqp\IAmqpTransportConfiguration.cs" />
