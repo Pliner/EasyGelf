@@ -5,13 +5,11 @@ namespace EasyGelf.Core
 {
     public class BufferedTransport : ITransport
     {
-        private readonly BlockingCollection<byte[]> bytesToSend;
-        private readonly CancellationTokenSource cancellationTokenSource;
+        private readonly BlockingCollection<byte[]> bytesToSend = new BlockingCollection<byte[]>();
+        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         public BufferedTransport(ITransport transport)
         {
-            cancellationTokenSource = new CancellationTokenSource();
-            bytesToSend = new BlockingCollection<byte[]>();
             new Thread(() =>
                 {
                     foreach (var bytes in bytesToSend.GetConsumingEnumerable(cancellationTokenSource.Token))
