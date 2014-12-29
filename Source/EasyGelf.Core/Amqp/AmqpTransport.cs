@@ -10,19 +10,18 @@ namespace EasyGelf.Core.Amqp
         private readonly IAmqpTransportConfiguration configuration;
         private IConnection connection;
         private IModel channel;
-        private bool isConnected;
 
         public AmqpTransport(IAmqpTransportConfiguration configuration) : base(configuration)
         {
             this.configuration = configuration;
         }
 
-        private void EnsureConnected()
+        private bool IsConnectionDone()
         {
-            if (isConnected)
-                return;
             try
             {
+                if (connection != null)
+                    return true;
                 var connectionFactory = new ConnectionFactory
                     {
                         Uri = configuration.ConnectionUri,
@@ -36,7 +35,7 @@ namespace EasyGelf.Core.Amqp
                 channel.ExchangeDeclare(configuration.Exchange, configuration.ExchangeType, true);
                 channel.QueueDeclare(configuration.Queue, true, false, false, new Dictionary<string, object>());
                 channel.QueueBind(configuration.Queue, configuration.Exchange, configuration.RoutingKey);
-                isConnected = true;
+                return true;
             }
             catch (Exception)
             {
@@ -45,14 +44,14 @@ namespace EasyGelf.Core.Amqp
                     connection.Close();
                     connection = null;
                 }
-                throw;
+                return false;
             }
         }
 
         protected override void SendInternal(byte[] bytes)
         {
-            EnsureConnected();
-            channel.BasicPublish(configuration.Exchange, configuration.RoutingKey, false, false, new BasicProperties{DeliveryMode = 1}, bytes);
+            if (IsConnectionDone())
+                channel.BasicPublish(configuration.Exchange, configuration.RoutingKey, false, false, new BasicProperties {DeliveryMode = 1}, bytes);
         }
 
         public override void Close()

@@ -54,6 +54,7 @@
     <Compile Include="Amqp\AmqpTransport.cs" />
     <Compile Include="Amqp\AmqpTransportConfiguration.cs" />
     <Compile Include="Amqp\IAmqpTransportConfiguration.cs" />
+    <Compile Include="BufferedTransport.cs" />
     <Compile Include="CoreExtentions.cs" />
     <Compile Include="AbstractTransportConfiguration.cs" />
     <Compile Include="ITransport.cs" />

@@ -31,15 +31,15 @@ namespace EasyGelf.Log4Net
 
         protected override ITransport InitializeTransport()
         {
-            return new AmqpTransport(new AmqpTransportConfiguration
+            return new BufferedTransport(new AmqpTransport(new AmqpTransportConfiguration
                 {
                     ConnectionUri = ConnectionUri,
                     Exchange = Exchange,
                     ExchangeType = ExchangeType,
                     Queue = Queue,
                     RoutingKey = RoutingKey,
-                    SplitLargeMessages = true,
-                });
+                    SplitLargeMessages = false,
+                }));
         }
     }
 }
