@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Default">
+
+    <PropertyGroup>
+        <BuildNumber>$(BUILD_NUMBER)</BuildNumber>
+        <BuildNumber Condition="'$(BuildNumber)' == ''">0</BuildNumber>
+        <BaseDir>$(MSBuildProjectDirectory)\..</BaseDir>
+        <OutputDir>$(BaseDir)\bin</OutputDir>
+        <Tools>$(BaseDir)\Tools</Tools>
+        <MSBuildCommunityTasksPath>$(Tools)\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+        <Nunit>$(Tools)\NUnit\2.5</Nunit>
+        <NuGet>$(Tools)\NuGet</NuGet>
+        <Package>$(BaseDir)\Package</Package>
+        <Source>$(BaseDir)\Source</Source>
+        <ILRepack>$(Tools)\ILRepack\ILRepack.exe</ILRepack>
+    </PropertyGroup>
+
+    <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
+
+    <Target Name="Default" DependsOnTargets="Version; Build; Merge;" />
+
+    <Target Name="Version">
+        <FileUpdate Files="$(Source)\Version.cs"
+            Regex="AssemblyVersion\(&quot;(\d+)\.(\d+)\.(\d+)\.(\d+)&quot;\)"
+            ReplacementText="AssemblyVersion(&quot;$1.$2.$3.$(BuildNumber)&quot;)" />
+    </Target>
+
+    <ItemGroup>
+        <ProjectToBuild Include="$(Source)\EasyGelf.sln">
+            <Properties>OutputPath=$(OutputDir);Configuration=Release</Properties>
+        </ProjectToBuild>
+    </ItemGroup>
+
+    <Target Name="Build" DependsOnTargets="Version">
+        <MSBuild Projects="@(ProjectToBuild)" Targets="Clean;Rebuild"/>
+    </Target>
+
+    <Target Name="Merge" DependsOnTargets="Build">
+      <Exec 
+          WorkingDirectory="$(OutputDir)" 
+          Command="$(ILRepack) /internalize /out:$(OutputDir)\EasyGelf.Log4Net.dll $(OutputDir)\EasyGelf.Log4Net.dll $(OutputDir)\EasyGelf.Core.dll $(OutputDir)\RabbitMQ.Client.dll $(OutputDir)\Newtonsoft.Json.dll $(OutputDir)\JetBrains.Annotations.dll" />
+    </Target>
+
+    <!-- Packaging -->
+                                                                   </Project>
