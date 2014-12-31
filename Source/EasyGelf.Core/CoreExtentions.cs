@@ -25,8 +25,6 @@ namespace EasyGelf.Core
             }
         }
 
-
-
         public static string Truncate(this string message, int length)
         {
             return (message.Length > length)

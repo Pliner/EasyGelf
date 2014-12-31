@@ -14,11 +14,6 @@ namespace EasyGelf.Core.Udp
             udpClient = new UdpClient();
         }
 
-        protected override bool SplitLargeMessage
-        {
-            get { return true; }
-        }
-
         protected override void SendInternal(byte[] bytes)
         {
             udpClient.Send(bytes, bytes.Length, configuration.Host);

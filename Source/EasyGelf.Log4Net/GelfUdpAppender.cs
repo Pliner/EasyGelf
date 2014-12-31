@@ -16,9 +16,7 @@ namespace EasyGelf.Log4Net
         {
             return new UdpTransport(new UdpTransportConfiguration
             {
-                SplitLargeMessages = true,
-                LargeMessageSize = 1024,
-                MessageChunkSize = 1024,
+                MaxMessageSize = 1024,
                 Host = new IPEndPoint(RemoteAddress, RemotePort)
             });
         }

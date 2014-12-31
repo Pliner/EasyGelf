@@ -16,13 +16,11 @@ namespace EasyGelf.Core
 
         public void Send(byte[] bytes)
         {
-            if(! SplitLargeMessage)
-                SendInternal(bytes);
-            else if (bytes.Length <= configuration.LargeMessageSize)
+            if (bytes.Length <= configuration.MaxMessageSize)
                 SendInternal(bytes);
             else
             {
-                var messageChunkSize = configuration.MessageChunkSize - HeaderSize;
+                var messageChunkSize = configuration.MaxMessageSize - HeaderSize;
                 var chunksCount = bytes.Length / messageChunkSize + 1;
                 var remainingBytes = bytes.Length;
                 var messageId = bytes.GenerateGelfId();
@@ -43,11 +41,6 @@ namespace EasyGelf.Core
                     remainingBytes -= chunkBytes;
                 }
             }
-        }
-
-        protected virtual bool SplitLargeMessage
-        {
-            get { return configuration.SplitLargeMessages; }
         }
 
         protected abstract void SendInternal(byte[] bytes);

@@ -56,7 +56,6 @@
     <Compile Include="Amqp\IAmqpTransportConfiguration.cs" />
     <Compile Include="BufferedTransport.cs" />
     <Compile Include="CoreExtentions.cs" />
-    <Compile Include="AbstractTransportConfiguration.cs" />
     <Compile Include="ITransport.cs" />
     <Compile Include="GelfLevel.cs" />
     <Compile Include="GelfMessage.cs" />

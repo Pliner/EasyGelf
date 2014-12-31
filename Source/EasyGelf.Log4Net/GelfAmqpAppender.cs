@@ -38,7 +38,7 @@ namespace EasyGelf.Log4Net
                     ExchangeType = ExchangeType,
                     Queue = Queue,
                     RoutingKey = RoutingKey,
-                    SplitLargeMessages = false,
+                    MaxMessageSize = 50 * 1024
                 }));
         }
     }
