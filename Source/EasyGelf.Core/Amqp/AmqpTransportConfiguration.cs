@@ -7,6 +7,5 @@
         public string ExchangeType { get; set; }
         public string RoutingKey { get; set; }
         public string Queue { get; set; }
-        public int MaxMessageSize { get; set; }
     }
 }

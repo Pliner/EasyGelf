@@ -4,7 +4,7 @@ namespace EasyGelf.Core
 {
     public interface ITransport
     {
-        void Send([NotNull]byte[] bytes);
+        void Send([NotNull]GelfMessage message);
         void Close();
     }
 }

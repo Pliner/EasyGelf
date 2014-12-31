@@ -5,7 +5,7 @@ namespace EasyGelf.Core
 {
     public class BufferedTransport : ITransport
     {
-        private readonly BlockingCollection<byte[]> bytesToSend = new BlockingCollection<byte[]>();
+        private readonly BlockingCollection<GelfMessage> bytesToSend = new BlockingCollection<GelfMessage>();
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         public BufferedTransport(ITransport transport)
@@ -26,9 +26,9 @@ namespace EasyGelf.Core
                 }) {IsBackground = true, Name = "EasyGelf Buffered Transport Thread"}.Start();
         }
 
-        public void Send(byte[] bytes)
+        public void Send(GelfMessage message)
         {
-            bytesToSend.Add(bytes, cancellationTokenSource.Token);
+            bytesToSend.Add(message, cancellationTokenSource.Token);
         }
 
         public void Close()

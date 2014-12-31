@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using EasyGelf.Core;
+using EasyGelf.Core.Encoders;
 using EasyGelf.Core.Udp;
 using JetBrains.Annotations;
 
@@ -14,11 +15,12 @@ namespace EasyGelf.Log4Net
 
         protected override ITransport InitializeTransport()
         {
-            return new UdpTransport(new UdpTransportConfiguration
-            {
-                MaxMessageSize = 1024,
-                Host = new IPEndPoint(RemoteAddress, RemotePort)
-            });
+            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(1024));
+            var configuration = new UdpTransportConfiguration
+                {
+                    Host = new IPEndPoint(RemoteAddress, RemotePort),
+                };
+            return new UdpTransport(configuration, encoder);
         }
     }
 }

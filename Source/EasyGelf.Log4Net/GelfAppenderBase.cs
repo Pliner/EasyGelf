@@ -46,7 +46,7 @@ namespace EasyGelf.Log4Net
             try
             {
                 var renderedEvent = RenderLoggingEvent(loggingEvent);
-                var gelfMessage = new GelfMessage
+                var message = new GelfMessage
                 {
                     Level = loggingEvent.Level.ToGelf(),
                     Host = Environment.MachineName,
@@ -55,8 +55,7 @@ namespace EasyGelf.Log4Net
                     ShortMessage = renderedEvent.Truncate(200),
                     AdditionalFields = new Dictionary<string, string>()
                 };
-                var serializedGelfMessage = gelfMessage.Serialize();
-                transport.Send(Encoding.GetBytes(serializedGelfMessage).GZip());
+                transport.Send(message);
             }
             catch (Exception exception)
             {

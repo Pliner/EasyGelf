@@ -1,32 +1,32 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.IO;
 
-namespace EasyGelf.Core
+namespace EasyGelf.Core.Encoders
 {
-    public abstract class AbstractTransport : ITransport
+    public class ChunkingEncoder : ITransportEncoder
     {
         private const int HeaderSize = 12;
+        private readonly int maxSize;
 
-        private readonly IAbstractTransportConfiguration configuration;
-        
-        protected AbstractTransport(IAbstractTransportConfiguration configuration)
+        public ChunkingEncoder(int maxSize)
         {
-            this.configuration = configuration;
+            this.maxSize = maxSize;
         }
 
-        public void Send(byte[] bytes)
+        public IEnumerable<byte[]> Encode(byte[] bytes)
         {
-            if (bytes.Length <= configuration.MaxMessageSize)
-                SendInternal(bytes);
+            if (bytes.Length <= maxSize)
+                yield return bytes;
             else
             {
-                var messageChunkSize = configuration.MaxMessageSize - HeaderSize;
+                var messageChunkSize = maxSize - HeaderSize;
                 var chunksCount = bytes.Length / messageChunkSize + 1;
                 var remainingBytes = bytes.Length;
                 var messageId = bytes.GenerateGelfId();
                 for (var chunkSequenceNumber = 0; chunkSequenceNumber < chunksCount; ++chunkSequenceNumber)
                 {
-                    var chunkOffset = chunkSequenceNumber*messageChunkSize;
+                    var chunkOffset = chunkSequenceNumber * messageChunkSize;
                     var chunkBytes = Math.Min(messageChunkSize, remainingBytes);
                     using (var stream = new MemoryStream(messageChunkSize))
                     {
@@ -36,15 +36,11 @@ namespace EasyGelf.Core
                         stream.WriteByte((byte)chunkSequenceNumber);
                         stream.WriteByte((byte)chunksCount);
                         stream.Write(bytes, chunkOffset, chunkBytes);
-                        SendInternal(stream.ToArray());
+                        yield return stream.ToArray();
                     }
                     remainingBytes -= chunkBytes;
                 }
             }
         }
-
-        protected abstract void SendInternal(byte[] bytes);
-
-        public abstract void Close();
     }
 }

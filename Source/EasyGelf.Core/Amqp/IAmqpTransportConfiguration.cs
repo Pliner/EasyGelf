@@ -2,7 +2,7 @@
 
 namespace EasyGelf.Core.Amqp
 {
-    public interface IAmqpTransportConfiguration : IAbstractTransportConfiguration
+    public interface IAmqpTransportConfiguration
     {
         [NotNull]
         string ConnectionUri { get; }

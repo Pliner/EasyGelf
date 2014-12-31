@@ -1,5 +1,6 @@
 ﻿using EasyGelf.Core;
 using EasyGelf.Core.Amqp;
+using EasyGelf.Core.Encoders;
 using JetBrains.Annotations;
 
 namespace EasyGelf.Log4Net
@@ -31,15 +32,16 @@ namespace EasyGelf.Log4Net
 
         protected override ITransport InitializeTransport()
         {
-            return new BufferedTransport(new AmqpTransport(new AmqpTransportConfiguration
+            var configuration = new AmqpTransportConfiguration
                 {
-                    ConnectionUri = ConnectionUri,
-                    Exchange = Exchange,
-                    ExchangeType = ExchangeType,
-                    Queue = Queue,
-                    RoutingKey = RoutingKey,
-                    MaxMessageSize = 50 * 1024
-                }));
+                    ConnectionUri = ConnectionUri, 
+                    Exchange = Exchange, 
+                    ExchangeType = ExchangeType, 
+                    Queue = Queue, 
+                    RoutingKey = RoutingKey
+                };
+            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(50*1024));
+            return new BufferedTransport(new AmqpTransport(configuration, encoder));
         }
     }
 }

@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using EasyGelf.Core.Encoders;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Framing;
 
 namespace EasyGelf.Core.Amqp
 {
-    public sealed class AmqpTransport : AbstractTransport
+    public sealed class AmqpTransport : ITransport
     {
         private readonly IAmqpTransportConfiguration configuration;
+        private readonly ITransportEncoder encoder;
         private IConnection connection;
         private IModel channel;
 
-        public AmqpTransport(IAmqpTransportConfiguration configuration) : base(configuration)
+        public AmqpTransport(IAmqpTransportConfiguration configuration, ITransportEncoder encoder)
         {
             this.configuration = configuration;
+            this.encoder = encoder;
         }
 
         private bool IsConnectionDone()
@@ -48,13 +52,17 @@ namespace EasyGelf.Core.Amqp
             }
         }
 
-        protected override void SendInternal(byte[] bytes)
+        public void Send(GelfMessage message)
         {
-            if (IsConnectionDone())
+            if (!IsConnectionDone())
+                return;
+            foreach (var bytes in encoder.Encode(Encoding.UTF8.GetBytes(message.Serialize())))
+            {
                 channel.BasicPublish(configuration.Exchange, configuration.RoutingKey, false, false, new BasicProperties {DeliveryMode = 1}, bytes);
+            }
         }
 
-        public override void Close()
+        public void Close()
         {
             CoreExtentions.SafeDo(channel.Close);
             CoreExtentions.SafeDo(connection.Close);

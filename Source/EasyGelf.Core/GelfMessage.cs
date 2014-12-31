@@ -13,5 +13,4 @@ namespace EasyGelf.Core
         public GelfLevel Level { get; set; }
         public Dictionary<string, string> AdditionalFields { get; set; }
     }
-
 }

@@ -1,25 +1,31 @@
 ﻿using System.Net.Sockets;
+using System.Text;
+using EasyGelf.Core.Encoders;
 
 namespace EasyGelf.Core.Udp
 {
-    public sealed class UdpTransport : AbstractTransport
+    public sealed class UdpTransport : ITransport
     {
         private readonly IUdpTransportConfiguration configuration;
+        private readonly ITransportEncoder encoder;
         private readonly UdpClient udpClient;
 
-        public UdpTransport(IUdpTransportConfiguration configuration)
-            : base(configuration)
+        public UdpTransport(IUdpTransportConfiguration configuration, ITransportEncoder encoder)
         {
             this.configuration = configuration;
+            this.encoder = encoder;
             udpClient = new UdpClient();
         }
 
-        protected override void SendInternal(byte[] bytes)
+        public void Send(GelfMessage message)
         {
-            udpClient.Send(bytes, bytes.Length, configuration.Host);
+            foreach (var bytes in encoder.Encode(Encoding.UTF8.GetBytes(message.Serialize())))
+            {
+                udpClient.Send(bytes, bytes.Length, configuration.Host);   
+            }
         }
 
-        public override void Close()
+        public void Close()
         {
             udpClient.Close();
         }
