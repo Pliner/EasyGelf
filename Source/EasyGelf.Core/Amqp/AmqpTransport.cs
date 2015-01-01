@@ -9,12 +9,12 @@ namespace EasyGelf.Core.Amqp
 {
     public sealed class AmqpTransport : ITransport
     {
-        private readonly IAmqpTransportConfiguration configuration;
+        private readonly AmqpTransportConfiguration configuration;
         private readonly ITransportEncoder encoder;
         private IConnection connection;
         private IModel channel;
 
-        public AmqpTransport(IAmqpTransportConfiguration configuration, ITransportEncoder encoder)
+        public AmqpTransport(AmqpTransportConfiguration configuration, ITransportEncoder encoder)
         {
             this.configuration = configuration;
             this.encoder = encoder;

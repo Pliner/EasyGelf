@@ -6,11 +6,11 @@ namespace EasyGelf.Core.Udp
 {
     public sealed class UdpTransport : ITransport
     {
-        private readonly IUdpTransportConfiguration configuration;
+        private readonly UdpTransportConfiguration configuration;
         private readonly ITransportEncoder encoder;
         private readonly UdpClient udpClient;
 
-        public UdpTransport(IUdpTransportConfiguration configuration, ITransportEncoder encoder)
+        public UdpTransport(UdpTransportConfiguration configuration, ITransportEncoder encoder)
         {
             this.configuration = configuration;
             this.encoder = encoder;

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace EasyGelf.Core
 {
-    public sealed class GelfMessageBuilder : IGelfMessageBuilder
+    public sealed class GelfMessageBuilder
     {
         private readonly Dictionary<string, string> additionalFields = new Dictionary<string, string>();
         private readonly string message;
@@ -11,30 +12,42 @@ namespace EasyGelf.Core
         private DateTime? timestamp;
         private GelfLevel? level;
 
-        public GelfMessageBuilder(string message, string host)
+        public GelfMessageBuilder([NotNull]string message, [NotNull]string host)
         {
+            if (string.IsNullOrEmpty(message))
+                throw new ArgumentNullException("message");
+            if (string.IsNullOrEmpty(host))
+                throw new ArgumentNullException("message");
             this.message = message;
             this.host = host;
         }
 
-        public IGelfMessageBuilder SetAdditionalField(string key, string value)
+        [NotNull]
+        public GelfMessageBuilder SetAdditionalField([NotNull]string key, [NotNull]string value)
         {
+            if(string.IsNullOrEmpty(key))
+                throw new ArgumentNullException("key");
+            if (string.IsNullOrEmpty(value))
+                throw new ArgumentNullException("value");
             additionalFields.Add(key, value);
             return this;
         }
 
-        public IGelfMessageBuilder SetTimestamp(DateTime value)
+        [NotNull]
+        public GelfMessageBuilder SetTimestamp(DateTime value)
         {
             timestamp = value;
             return this;
         }
 
-        public IGelfMessageBuilder SetLevel(GelfLevel value)
+        [NotNull]
+        public GelfMessageBuilder SetLevel(GelfLevel value)
         {
             level = value;
             return this;
         }
 
+        [NotNull]
         public GelfMessage ToMessage()
         {
             if(timestamp == null)
