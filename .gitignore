@@ -44,3 +44,5 @@ Temporary Items
 obj
 bin
 packages
+/Package/EasyGelf.Log4Net/*.nupkg
+/Package/EasyGelf.Log4Net/lib/net40

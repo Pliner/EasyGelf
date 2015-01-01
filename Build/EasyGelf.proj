@@ -17,7 +17,7 @@
 
     <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 
-    <Target Name="Default" DependsOnTargets="Version; Build; Merge;" />
+    <Target Name="Default" DependsOnTargets="Version; Build; Merge; PackageLog4Net" />
 
     <Target Name="Version">
         <FileUpdate Files="$(Source)\Version.cs"
@@ -42,4 +42,32 @@
     </Target>
 
     <!-- Packaging -->
-                                                                   </Project>
+
+    <Target Name="PackageLog4Net" DependsOnTargets="Merge">
+
+        <ItemGroup>
+            <FilesToDelete Include="$(Package)\EasyGelf.Log4Net\*.nupkg"  />
+        </ItemGroup>
+      
+        <Delete Files="@(FilesToDelete)" />
+    
+        <Copy SourceFiles="$(OutputDir)\EasyGelf.Log4Net.dll" DestinationFolder="$(Package)\EasyGelf.Log4Net\lib\net40" />
+        
+        <GetAssemblyIdentity AssemblyFiles="$(OutputDir)\EasyGelf.Log4Net.dll">
+            <Output TaskParameter="Assemblies" ItemName="AsmInfo" />
+        </GetAssemblyIdentity>        
+        
+        <XmlUpdate
+            Namespace="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"
+            XmlFileName="$(Package)\EasyGelf.Log4Net\EasyGelf.Log4Net.nuspec"
+            XPath="/package/metadata/version"
+            Value="%(AsmInfo.Version)" />        
+        
+        <Exec WorkingDirectory="$(Package)\EasyGelf.Log4Net" Command="$(NuGet)\NuGet.exe pack $(Package)\EasyGelf.Log4Net\EasyGelf.Log4Net.nuspec" />
+
+        <Message Text="##teamcity[buildNumber '%(AsmInfo.Version)']" />
+    </Target>
+
+
+                                                                 
+</Project>
