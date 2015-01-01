@@ -45,6 +45,9 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="Core\Encoders\ChunkingEncoderTests.cs" />
+    <Compile Include="Core\Encoders\CompositeEncoderTests.cs" />
+    <Compile Include="Core\Encoders\GZipEncoderTests.cs" />
     <Compile Include="GelfMessageSerializerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
