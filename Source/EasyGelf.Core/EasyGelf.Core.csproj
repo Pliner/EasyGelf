@@ -58,6 +58,8 @@
     <Compile Include="CoreExtentions.cs" />
     <Compile Include="Encoders\ChunkingEncoder.cs" />
     <Compile Include="Encoders\CompositeEncoder.cs" />
+    <Compile Include="GelfMessageBuilder.cs" />
+    <Compile Include="IGelfMessageBuilder.cs" />
     <Compile Include="ITransport.cs" />
     <Compile Include="GelfLevel.cs" />
     <Compile Include="GelfMessage.cs" />

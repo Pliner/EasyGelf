@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.IO.Compression;
-using EasyGelf.Core;
+﻿using EasyGelf.Core;
 using log4net.Core;
 
 namespace EasyGelf.Log4Net

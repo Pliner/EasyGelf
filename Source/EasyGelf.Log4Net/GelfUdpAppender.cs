@@ -10,6 +10,7 @@ namespace EasyGelf.Log4Net
     {
         [UsedImplicitly]
         public IPAddress RemoteAddress { get; set; }
+
         [UsedImplicitly]
         public int RemotePort { get; set; }
 

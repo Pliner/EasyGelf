@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -32,17 +30,6 @@ namespace EasyGelf.Core
                        : message;
         }
 
-        public static byte[] GZip(this byte[] bytes)
-        {
-            using (var input = new MemoryStream(bytes))
-            using (var output = new MemoryStream())
-            {
-                using (var compressed = new GZipStream(output, CompressionMode.Compress))
-                    input.CopyTo(compressed);
-                return output.ToArray();
-            }
-        }
-
         [NotNull]
         public static string Serialize([NotNull]this GelfMessage message)
         {
@@ -56,6 +43,12 @@ namespace EasyGelf.Core
                     {"timestamp", duration.TotalSeconds},
                     {"level", (int)message.Level}
                 };
+            foreach (var additionalField in message.AdditionalFields)
+            {
+                var key = additionalField.Key;
+                var value = additionalField.Value;
+                result.Add(key.StartsWith("_") ? key : "_" + key, value);
+            }
             return result.ToString(Formatting.None);
         }
 

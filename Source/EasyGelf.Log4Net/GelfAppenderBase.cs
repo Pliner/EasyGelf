@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using EasyGelf.Core;
 using JetBrains.Annotations;
@@ -13,11 +12,11 @@ namespace EasyGelf.Log4Net
         private ITransport transport;
 
         [UsedImplicitly]
-        public Encoding Encoding { get; set; }
+        public string Facility { get; set; }
 
         protected GelfAppenderBase()
         {
-            Encoding = Encoding.UTF8;
+            Facility = "gelf";
         }
 
         public override void ActivateOptions()
@@ -46,16 +45,14 @@ namespace EasyGelf.Log4Net
             try
             {
                 var renderedEvent = RenderLoggingEvent(loggingEvent);
-                var message = new GelfMessage
-                {
-                    Level = loggingEvent.Level.ToGelf(),
-                    Host = Environment.MachineName,
-                    Timestamp = loggingEvent.TimeStamp,
-                    FullMessage = renderedEvent,
-                    ShortMessage = renderedEvent.Truncate(200),
-                    AdditionalFields = new Dictionary<string, string>()
-                };
-                transport.Send(message);
+                var messageBuilder = new GelfMessageBuilder(renderedEvent, Environment.MachineName)
+                    .SetLevel(loggingEvent.Level.ToGelf())
+                    .SetTimestamp(loggingEvent.TimeStamp)
+                    .SetAdditionalField("facility", Facility)
+                    .SetAdditionalField("loggerName", loggingEvent.LoggerName)
+                    .SetAdditionalField("threadName", loggingEvent.ThreadName);
+
+                transport.Send(messageBuilder.ToMessage());
             }
             catch (Exception exception)
             {
