@@ -5,6 +5,11 @@ namespace EasyGelf.Core
 {
     public sealed class GelfMessage
     {
+        public GelfMessage()
+        {
+            AdditionalFields = new Dictionary<string, string>();
+        }
+
         public string Version { get { return "1.1"; } }
         public string Host { get; set; }
         public string ShortMessage { get; set; }
