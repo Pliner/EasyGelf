@@ -12,15 +12,21 @@ namespace EasyGelf.Core
         {
             new Thread(() =>
                 {
-                    foreach (var bytes in bytesToSend.GetConsumingEnumerable(cancellationTokenSource.Token))
+                    try
                     {
-                        try
+                        foreach (var bytes in bytesToSend.GetConsumingEnumerable(cancellationTokenSource.Token))
                         {
-                            transport.Send(bytes);
+                            try
+                            {
+                                transport.Send(bytes);  
+                            }
+                            catch
+                            {
+                            }
                         }
-                        catch
-                        {
-                        }
+                    }
+                    catch
+                    {
                     }
                     CoreExtentions.SafeDo(transport.Close);
                 }) {IsBackground = true, Name = "EasyGelf Buffered Transport Thread"}.Start();
