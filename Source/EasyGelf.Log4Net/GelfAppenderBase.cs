@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using EasyGelf.Core;
 using JetBrains.Annotations;
 using log4net.Appender;
@@ -14,9 +13,17 @@ namespace EasyGelf.Log4Net
         [UsedImplicitly]
         public string Facility { get; set; }
 
+        [UsedImplicitly]
+        public bool IncludeSource { get; set; }
+
+        [UsedImplicitly]
+        public string Host { get; set; }
+
         protected GelfAppenderBase()
         {
             Facility = "gelf";
+            IncludeSource = true;
+            Host = Environment.MachineName;
         }
 
         public override void ActivateOptions()
@@ -45,13 +52,23 @@ namespace EasyGelf.Log4Net
             try
             {
                 var renderedEvent = RenderLoggingEvent(loggingEvent);
-                var messageBuilder = new GelfMessageBuilder(renderedEvent, Environment.MachineName)
+                var messageBuilder = new GelfMessageBuilder(renderedEvent, Host)
                     .SetLevel(loggingEvent.Level.ToGelf())
                     .SetTimestamp(loggingEvent.TimeStamp)
                     .SetAdditionalField("facility", Facility)
                     .SetAdditionalField("loggerName", loggingEvent.LoggerName)
                     .SetAdditionalField("threadName", loggingEvent.ThreadName);
-
+                if (IncludeSource)
+                {
+                    var locationInformation = loggingEvent.LocationInformation;
+                    if (locationInformation != null)
+                    {
+                        messageBuilder.SetAdditionalField("sourceFileName", locationInformation.FileName)
+                            .SetAdditionalField("sourceClassName", locationInformation.ClassName)
+                            .SetAdditionalField("sourceMethodName", locationInformation.MethodName)
+                            .SetAdditionalField("sourceLineNumber", locationInformation.LineNumber);
+                    }
+                }
                 transport.Send(messageBuilder.ToMessage());
             }
             catch (Exception exception)

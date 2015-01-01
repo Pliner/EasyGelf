@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EasyGelf.Core
 {
-    public class GelfMessageBuilder : IGelfMessageBuilder
+    public sealed class GelfMessageBuilder : IGelfMessageBuilder
     {
         private readonly Dictionary<string, string> additionalFields = new Dictionary<string, string>();
         private readonly string message;

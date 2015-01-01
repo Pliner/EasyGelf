@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace EasyGelf.Core.Encoders
 {
-    public class CompositeEncoder : ITransportEncoder
+    public sealed class CompositeEncoder : ITransportEncoder
     {
         private readonly ITransportEncoder[] encoders;
 

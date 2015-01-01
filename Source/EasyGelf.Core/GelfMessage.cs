@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EasyGelf.Core
 {
-    public class GelfMessage
+    public sealed class GelfMessage
     {
         public string Version { get { return "1.1"; } }
         public string Host { get; set; }

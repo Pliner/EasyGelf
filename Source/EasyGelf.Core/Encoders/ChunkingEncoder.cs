@@ -4,7 +4,7 @@ using System.IO;
 
 namespace EasyGelf.Core.Encoders
 {
-    public class ChunkingEncoder : ITransportEncoder
+    public sealed class ChunkingEncoder : ITransportEncoder
     {
         private const int HeaderSize = 12;
         private readonly int maxSize;

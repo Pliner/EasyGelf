@@ -4,7 +4,7 @@ using System.IO.Compression;
 
 namespace EasyGelf.Core.Encoders
 {
-    public class GZipEncoder : ITransportEncoder
+    public sealed class GZipEncoder : ITransportEncoder
     {
         public IEnumerable<byte[]> Encode(byte[] bytes)
         {

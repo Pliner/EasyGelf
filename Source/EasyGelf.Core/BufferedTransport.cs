@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace EasyGelf.Core
 {
-    public class BufferedTransport : ITransport
+    public sealed class BufferedTransport : ITransport
     {
         private readonly BlockingCollection<GelfMessage> bytesToSend = new BlockingCollection<GelfMessage>();
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
