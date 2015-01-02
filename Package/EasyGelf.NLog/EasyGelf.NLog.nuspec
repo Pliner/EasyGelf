@@ -10,7 +10,7 @@
     <licenseUrl>https://github.com/Pliner/EasyGelf/blob/master/license.txt</licenseUrl>
     <projectUrl>https://github.com/Pliner/EasyGelf</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>GELF NLog appenders</description>
+    <description>GELF NLog targets</description>
     <releaseNotes>
     </releaseNotes>
     <copyright>Copyright Yury Pliner 2015</copyright>
