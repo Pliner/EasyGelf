@@ -10,6 +10,12 @@ namespace EasyGelf.Log4Net
     {
         private const int UdpMessageSize = 1024;
 
+        public GelfUdpAppender()
+        {
+            RemoteAddress = IPAddress.Loopback;
+            RemotePort = 12201;
+        }
+
         [UsedImplicitly]
         public IPAddress RemoteAddress { get; set; }
 
