@@ -60,18 +60,18 @@ namespace EasyGelf.Log4Net
                 var messageBuilder = new GelfMessageBuilder(renderedEvent, HostName)
                     .SetLevel(loggingEvent.Level.ToGelf())
                     .SetTimestamp(loggingEvent.TimeStamp)
-                    .SetAdditionalField("facility", Facility)
-                    .SetAdditionalField("loggerName", loggingEvent.LoggerName)
-                    .SetAdditionalField("threadName", loggingEvent.ThreadName);
+                    .SetAdditionalField(GelfAdditionalFields.Facility, Facility)
+                    .SetAdditionalField(GelfAdditionalFields.LoggerName, loggingEvent.LoggerName)
+                    .SetAdditionalField(GelfAdditionalFields.ThreadName, loggingEvent.ThreadName);
                 if (IncludeSource)
                 {
                     var locationInformation = loggingEvent.LocationInformation;
                     if (locationInformation != null)
                     {
-                        messageBuilder.SetAdditionalField("sourceFileName", locationInformation.FileName)
-                            .SetAdditionalField("sourceClassName", locationInformation.ClassName)
-                            .SetAdditionalField("sourceMethodName", locationInformation.MethodName)
-                            .SetAdditionalField("sourceLineNumber", locationInformation.LineNumber);
+                        messageBuilder.SetAdditionalField(GelfAdditionalFields.SourceFileName, locationInformation.FileName)
+                            .SetAdditionalField(GelfAdditionalFields.SourceClassName, locationInformation.ClassName)
+                            .SetAdditionalField(GelfAdditionalFields.SourceMethodName, locationInformation.MethodName)
+                            .SetAdditionalField(GelfAdditionalFields.SourceLineNumber, locationInformation.LineNumber);
                     }
                 }
                 transport.Send(messageBuilder.ToMessage());

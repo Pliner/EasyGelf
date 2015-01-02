@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using EasyGelf.Core;
 using JetBrains.Annotations;
 using NLog;
@@ -20,11 +21,15 @@ namespace EasyGelf.NLog
         [UsedImplicitly]
         public bool UseBuffering { get; set; }
 
+        [UsedImplicitly]
+        public bool IncludeSource { get; set; }
+
         protected GelfTargetBase()
         {
             Facility = "gelf";
             HostName = Environment.MachineName;
             UseBuffering = true;
+            IncludeSource = true;
         }
 
         protected abstract ITransport InitializeTransport();
@@ -37,9 +42,19 @@ namespace EasyGelf.NLog
                 var messageBuilder = new GelfMessageBuilder(renderedEvent, HostName)
                     .SetLevel(ToGelf(loggingEvent.Level))
                     .SetTimestamp(loggingEvent.TimeStamp)
-                    .SetAdditionalField("facility", Facility)
-                    .SetAdditionalField("loggerName", loggingEvent.LoggerName);
-               
+                    .SetAdditionalField(GelfAdditionalFields.Facility, Facility)
+                    .SetAdditionalField(GelfAdditionalFields.LoggerName, loggingEvent.LoggerName);
+                if (IncludeSource)
+                {
+                    var userStackFrame = loggingEvent.UserStackFrame;
+                    if (userStackFrame != null)
+                    {
+                        var fileName = userStackFrame.GetFileName();
+                        if (!string.IsNullOrEmpty(fileName))
+                            messageBuilder.SetAdditionalField(GelfAdditionalFields.SourceFileName, fileName);
+                        messageBuilder.SetAdditionalField(GelfAdditionalFields.SourceLineNumber, userStackFrame.GetFileLineNumber().ToString(CultureInfo.InvariantCulture));
+                    }
+                }
                 transport.Send(messageBuilder.ToMessage());
             }
             catch (Exception exception)
