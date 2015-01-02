@@ -19,11 +19,15 @@ namespace EasyGelf.Log4Net
         [UsedImplicitly]
         public string Host { get; set; }
 
+        [UsedImplicitly]
+        public bool UseBuffering { get; set; }
+
         protected GelfAppenderBase()
         {
             Facility = "gelf";
             IncludeSource = true;
             Host = Environment.MachineName;
+            UseBuffering = true;
         }
 
         public override void ActivateOptions()
@@ -31,11 +35,12 @@ namespace EasyGelf.Log4Net
             base.ActivateOptions();
             try
             {
-                transport = InitializeTransport();
+                var initializedTransport = InitializeTransport();
+                transport = UseBuffering ? new BufferedTransport(initializedTransport) : initializedTransport;
             }
             catch (Exception exception)
             {
-                ErrorHandler.Error("Failed to create UdpTransport", exception);
+                ErrorHandler.Error("Failed to create Transport", exception);
                 throw;
             }
         }

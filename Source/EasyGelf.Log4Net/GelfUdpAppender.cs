@@ -8,6 +8,8 @@ namespace EasyGelf.Log4Net
 {
     public sealed class GelfUdpAppender : GelfAppenderBase
     {
+        private const int UdpMessageSize = 1024;
+
         [UsedImplicitly]
         public IPAddress RemoteAddress { get; set; }
 
@@ -16,7 +18,7 @@ namespace EasyGelf.Log4Net
 
         protected override ITransport InitializeTransport()
         {
-            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(1024));
+            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(UdpMessageSize));
             var configuration = new UdpTransportConfiguration
                 {
                     Host = new IPEndPoint(RemoteAddress, RemotePort),

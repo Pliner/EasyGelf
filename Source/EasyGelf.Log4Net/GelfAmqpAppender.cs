@@ -7,6 +7,8 @@ namespace EasyGelf.Log4Net
 {
     public sealed class GelfAmqpAppender : GelfAppenderBase
     {
+        private const int AmqpMessageSize = 50*1024;
+
         public GelfAmqpAppender()
         {
             Exchange = "Gelf";
@@ -40,8 +42,8 @@ namespace EasyGelf.Log4Net
                     Queue = Queue, 
                     RoutingKey = RoutingKey
                 };
-            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(50*1024));
-            return new BufferedTransport(new AmqpTransport(configuration, encoder));
+            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(AmqpMessageSize));
+            return new AmqpTransport(configuration, encoder);
         }
     }
 }
