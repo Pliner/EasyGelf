@@ -14,8 +14,7 @@ namespace EasyGelf.Core.Encoders
 
         public IEnumerable<byte[]> Encode(byte[] bytes)
         {
-            var seed = (IEnumerable<byte[]>) new List<byte[]> {bytes};
-            return encoders.Aggregate(seed, (current, encoder) => current.SelectMany(encoder.Encode));
+            return encoders.Aggregate((IEnumerable<byte[]>) new List<byte[]> {bytes}, (current, encoder) => current.SelectMany(encoder.Encode));
         }
     }
 }

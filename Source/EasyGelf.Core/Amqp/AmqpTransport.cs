@@ -20,7 +20,7 @@ namespace EasyGelf.Core.Amqp
             this.encoder = encoder;
         }
 
-        private bool IsConnectionDone()
+        private bool TryRestoreConnection()
         {
             try
             {
@@ -54,11 +54,13 @@ namespace EasyGelf.Core.Amqp
 
         public void Send(GelfMessage message)
         {
-            if (!IsConnectionDone())
-                return;
-            foreach (var bytes in encoder.Encode(Encoding.UTF8.GetBytes(message.Serialize())))
+            if (TryRestoreConnection())
             {
-                channel.BasicPublish(configuration.Exchange, configuration.RoutingKey, false, false, new BasicProperties {DeliveryMode = 1}, bytes);
+                foreach (var bytes in encoder.Encode(Encoding.UTF8.GetBytes(message.Serialize())))
+                {
+                    channel.BasicPublish(configuration.Exchange, configuration.RoutingKey, false, false,
+                        new BasicProperties {DeliveryMode = 1}, bytes);
+                }
             }
         }
 
