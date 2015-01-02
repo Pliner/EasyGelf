@@ -17,7 +17,7 @@ namespace EasyGelf.Log4Net
         public bool IncludeSource { get; set; }
 
         [UsedImplicitly]
-        public string Host { get; set; }
+        public string HostName { get; set; }
 
         [UsedImplicitly]
         public bool UseBuffering { get; set; }
@@ -26,7 +26,7 @@ namespace EasyGelf.Log4Net
         {
             Facility = "gelf";
             IncludeSource = true;
-            Host = Environment.MachineName;
+            HostName = Environment.MachineName;
             UseBuffering = true;
         }
 
@@ -57,7 +57,7 @@ namespace EasyGelf.Log4Net
             try
             {
                 var renderedEvent = RenderLoggingEvent(loggingEvent);
-                var messageBuilder = new GelfMessageBuilder(renderedEvent, Host)
+                var messageBuilder = new GelfMessageBuilder(renderedEvent, HostName)
                     .SetLevel(loggingEvent.Level.ToGelf())
                     .SetTimestamp(loggingEvent.TimeStamp)
                     .SetAdditionalField("facility", Facility)

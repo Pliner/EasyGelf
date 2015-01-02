@@ -15,6 +15,7 @@ namespace EasyGelf.Log4Net
             Queue = "Gelf";
             ExchangeType = "fanout";
             RoutingKey = "#";
+            ConnectionUri = "amqp://";
         }
 
         [UsedImplicitly]

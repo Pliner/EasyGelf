@@ -9,7 +9,7 @@ Here is a list of supported statuses of popular .net logging library:
 
 ## Usage
 
-#Here is a minimal configuration:
+###Minimal configuration:
 
 ``` 
 <?xml version="1.0" encoding="utf-8"?>
@@ -35,5 +35,24 @@ Here is a list of supported statuses of popular .net logging library:
   </root>
 </log4net>
 ``` 
+
+###Additional configuration
+####Common
+
+* `includeSource` (default: `true`)
+  * Whether the source of the log message should be included
+
+* `hostName` (default: the machine name)
+  * The host name of the machine generating the logs
+
+* `facility` (default: `gelf`)
+  * The application specific name
+
+* `useBuffering` (default: `true`)
+  * Use background thread for IO
+ 
+
+
+
 
 
