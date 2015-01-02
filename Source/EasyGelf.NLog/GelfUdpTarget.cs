@@ -14,12 +14,12 @@ namespace EasyGelf.NLog
 
         public GelfUdpTarget()
         {
-            RemoteAddress = IPAddress.Loopback;
+            RemoteAddress = IPAddress.Loopback.ToString();
             RemotePort = 12201;
         }
 
         [UsedImplicitly]
-        public IPAddress RemoteAddress { get; set; }
+        public string RemoteAddress { get; set; }
 
         [UsedImplicitly]
         public int RemotePort { get; set; }
@@ -27,9 +27,10 @@ namespace EasyGelf.NLog
         protected override ITransport InitializeTransport()
         {
             var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(UdpMessageSize));
+            var removeIpAddress = IPAddress.Parse(RemoteAddress);
             var configuration = new UdpTransportConfiguration
                 {
-                    Host = new IPEndPoint(RemoteAddress, RemotePort),
+                    Host = new IPEndPoint(removeIpAddress, RemotePort),
                 };
             return new UdpTransport(configuration, encoder);
         }

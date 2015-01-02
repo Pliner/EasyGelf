@@ -4,21 +4,21 @@ Goals: to support up to date version of Gelf and provide reliable integration wi
 
 Here is a list of supported statuses of popular .net logging library: log4net and NLog.
 
-## Usage
+## Usage(log4net)
 
 ###Minimal configuration:
 
 ``` 
 <?xml version="1.0" encoding="utf-8"?>
 <log4net>
-  <appender name="EasyGelfUdpAppender" type=" EasyGelf.Log4Net.GelfUdpAppender, EasyGelf.Log4Net">
+  <appender name="GelfUdpAppender" type=" EasyGelf.Log4Net.GelfUdpAppender, EasyGelf.Log4Net">
     <remoteAddress value="127.0.0.1" />
     <remotePort value="12201" />   
     <layout type="log4net.Layout.PatternLayout">
       <conversionPattern value="%message%newline" />
     </layout>
   </appender>
-  <appender name="EasyGelfAmqpAppender" type=" EasyGelf.Log4Net.GelfAmqpAppender, EasyGelf.Log4Net">
+  <appender name="GelfAmqpAppender" type=" EasyGelf.Log4Net.GelfAmqpAppender, EasyGelf.Log4Net">
     <connectionUri value="amqp://" />
     <!-- Will connect to localhost with default amqp credentials-->
     <layout type="log4net.Layout.PatternLayout">
@@ -27,8 +27,8 @@ Here is a list of supported statuses of popular .net logging library: log4net an
   </appender>
   <root>
     <level value="ALL" />
-    <appender-ref ref="EasyGelfUdpAppender" />
-    <appender-ref ref="EasyGelfAmqpAppender" />
+    <appender-ref ref="GelfUdpAppender" />
+    <appender-ref ref="GelfAmqpAppender" />
   </root>
 </log4net>
 ``` 
@@ -50,6 +50,25 @@ Here is a list of supported statuses of popular .net logging library: log4net an
  
 
 
+## Usage(NLog)
 
+###Minimal configuration:
+
+```
+<?xml version="1.0" encoding="utf-8" ?>
+<nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <extensions>
+    <add assembly="EasyGelf.NLog"/>
+  </extensions>
+  <targets>
+    <target name="GelfUdp" xsi:type="GelfUdp"/>
+  </targets>
+  <rules>
+    <logger name="*" minlevel="Info" writeTo="GelfUdp" />
+  </rules>
+</nlog>
+
+```
 
 
