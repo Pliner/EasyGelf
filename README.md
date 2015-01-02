@@ -31,24 +31,7 @@ Now log4net and NLog are supported.
     <appender-ref ref="GelfAmqpAppender" />
   </root>
 </log4net>
-``` 
-
-###Additional configuration
-####Common
-
-* `includeSource` (default: `true`)
-  * Whether the source of the log message should be included
-
-* `hostName` (default: the machine name)
-  * The host name of the machine generating the logs
-
-* `facility` (default: `gelf`)
-  * The application specific name
-
-* `useBuffering` (default: `true`)
-  * Use background thread for IO
- 
-
+```                                
 
 ## Usage(NLog)
 
@@ -70,5 +53,23 @@ Now log4net and NLog are supported.
 </nlog>
 
 ```
+
+
+
+##Additional configuration
+###Common
+
+* `includeSource` (default: `true`)
+  * Whether the source of the log message should be included
+
+* `hostName` (default: the machine name)
+  * The host name of the machine generating the logs
+
+* `facility` (default: `gelf`)
+  * The application specific name
+
+* `useBuffering` (default: `true`)
+  * Use background thread for IO
+ 
 
 
