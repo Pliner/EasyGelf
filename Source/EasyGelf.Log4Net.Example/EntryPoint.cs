@@ -8,19 +8,16 @@ namespace EasyGelf.Log4Net.Example
 {
     public static class EntryPoint
     {
-        private static readonly ILog log = LogManager.GetLogger("ExampleLog");
+        private static readonly ILog Log = LogManager.GetLogger("ExampleLog");
 
-        public static void Main(string[] args)
+        public static void Main()
         {
             ConfigureLogging();
-            var isRunning = true;
-            Console.CancelKeyPress += (sender, eventArgs) =>
-                {
-                    isRunning = false;
-                };
-            while (isRunning)
+            var cancelationTokenSource = new CancellationTokenSource();
+            Console.CancelKeyPress += (sender, eventArgs) => cancelationTokenSource.Cancel();
+            while (!cancelationTokenSource.IsCancellationRequested)
             {
-                log.Info("I'm alive");
+                Log.Info("I'm alive");
                 Thread.Sleep(TimeSpan.FromSeconds(0.5));
             }
         }
