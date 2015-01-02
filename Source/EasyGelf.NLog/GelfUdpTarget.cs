@@ -26,7 +26,7 @@ namespace EasyGelf.NLog
 
         protected override ITransport InitializeTransport()
         {
-            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(UdpMessageSize));
+            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(new MessageBasedIdGenerator(), UdpMessageSize));
             var removeIpAddress = IPAddress.Parse(RemoteAddress);
             var configuration = new UdpTransportConfiguration
                 {

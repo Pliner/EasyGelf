@@ -43,7 +43,7 @@ namespace EasyGelf.Log4Net
                     Queue = Queue, 
                     RoutingKey = RoutingKey
                 };
-            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(AmqpMessageSize));
+            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(new MessageBasedIdGenerator(), AmqpMessageSize));
             return new AmqpTransport(configuration, encoder);
         }
     }

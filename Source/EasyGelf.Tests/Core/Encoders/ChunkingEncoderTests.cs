@@ -7,13 +7,13 @@ namespace EasyGelf.Tests.Core.Encoders
     [TestFixture]
     public class ChunkingEncoderTests
     {
-        private static readonly int maxSize = 32;
+        private const int MaxSize = 32;
         private ChunkingEncoder chunkingEncoder;
 
         [SetUp]
         public void SetUp()
         {
-            chunkingEncoder = new ChunkingEncoder(maxSize);
+            chunkingEncoder = new ChunkingEncoder(new MessageBasedIdGenerator(), MaxSize);
         }
 
         [Test]

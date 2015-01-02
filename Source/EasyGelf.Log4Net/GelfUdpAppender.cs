@@ -24,7 +24,7 @@ namespace EasyGelf.Log4Net
 
         protected override ITransport InitializeTransport()
         {
-            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(UdpMessageSize));
+            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(new MessageBasedIdGenerator(), UdpMessageSize));
             var configuration = new UdpTransportConfiguration
                 {
                     Host = new IPEndPoint(RemoteAddress, RemotePort),
