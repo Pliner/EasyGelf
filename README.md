@@ -2,10 +2,7 @@ EasyGelf
 ========
 Goals: to support up to date version of Gelf and provide reliable integration with popular .Net logging libraries.
 
-Here is a list of supported statuses of popular .net logging library:
-1. Apache log4net(fully supported)
-2. NLog(not supported, in future plans)
-
+Here is a list of supported statuses of popular .net logging library: log4net and NLog.
 
 ## Usage
 
