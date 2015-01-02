@@ -17,7 +17,7 @@
 
     <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 
-    <Target Name="Default" DependsOnTargets="Version; Build; Merge; PackageLog4Net" />
+    <Target Name="Default" DependsOnTargets="Version; Build; MergeLog4Net; PackageLog4Net; MergeNLog; PackageNLog" />
 
     <Target Name="Version">
         <FileUpdate Files="$(Source)\Version.cs"
@@ -35,15 +35,21 @@
         <MSBuild Projects="@(ProjectToBuild)" Targets="Clean;Rebuild"/>
     </Target>
 
-    <Target Name="Merge" DependsOnTargets="Build">
+    <Target Name="MergeLog4Net" DependsOnTargets="Build">
       <Exec 
           WorkingDirectory="$(OutputDir)" 
           Command="$(ILRepack) /internalize /out:$(OutputDir)\EasyGelf.Log4Net.dll $(OutputDir)\EasyGelf.Log4Net.dll $(OutputDir)\EasyGelf.Core.dll $(OutputDir)\RabbitMQ.Client.dll $(OutputDir)\Newtonsoft.Json.dll $(OutputDir)\JetBrains.Annotations.dll" />
     </Target>
+    <Target Name="MergeNLog" DependsOnTargets="Build">
+      <Exec 
+          WorkingDirectory="$(OutputDir)" 
+          Command="$(ILRepack) /internalize /out:$(OutputDir)\EasyGelf.NLog.dll $(OutputDir)\EasyGelf.NLog.dll $(OutputDir)\EasyGelf.Core.dll $(OutputDir)\RabbitMQ.Client.dll $(OutputDir)\Newtonsoft.Json.dll $(OutputDir)\JetBrains.Annotations.dll" />
+    </Target>
+
 
     <!-- Packaging -->
 
-    <Target Name="PackageLog4Net" DependsOnTargets="Merge">
+    <Target Name="PackageLog4Net" DependsOnTargets="MergeLog4Net">
 
         <ItemGroup>
             <FilesToDelete Include="$(Package)\EasyGelf.Log4Net\*.nupkg"  />
@@ -68,6 +74,32 @@
         <Message Text="##teamcity[buildNumber '%(AsmInfo.Version)']" />
     </Target>
 
+
+
+    <Target Name="PackageNLog" DependsOnTargets="MergeNLog">
+
+        <ItemGroup>
+            <FilesToDelete Include="$(Package)\EasyGelf.NLog\*.nupkg"  />
+        </ItemGroup>
+      
+        <Delete Files="@(FilesToDelete)" />
+    
+        <Copy SourceFiles="$(OutputDir)\EasyGelf.NLog.dll" DestinationFolder="$(Package)\EasyGelf.NLog\lib\net40" />
+        
+        <GetAssemblyIdentity AssemblyFiles="$(OutputDir)\EasyGelf.NLog.dll">
+            <Output TaskParameter="Assemblies" ItemName="AsmInfo" />
+        </GetAssemblyIdentity>        
+        
+        <XmlUpdate
+            Namespace="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"
+            XmlFileName="$(Package)\EasyGelf.NLog\EasyGelf.NLog.nuspec"
+            XPath="/package/metadata/version"
+            Value="%(AsmInfo.Version)" />        
+        
+        <Exec WorkingDirectory="$(Package)\EasyGelf.NLog" Command="$(NuGet)\NuGet.exe pack $(Package)\EasyGelf.NLog\EasyGelf.NLog.nuspec" />
+
+        <Message Text="##teamcity[buildNumber '%(AsmInfo.Version)']" />
+    </Target>
 
                                                                  
 </Project>

@@ -1,21 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
-    <id>EasyGelf.Log4Net</id>
+    <id>EasyGelf.NLog</id>
     <!-- Version gets updated from EasyGelf.dll version number during the build's packaging process -->
     <version>0.3.0.0</version>
-    <title>EasyGelf.Log4Net</title>
+    <title>EasyGelf.NLog</title>
     <authors>Yury Pliner</authors>
     <owners>Yury Pliner</owners>
     <licenseUrl>https://github.com/Pliner/EasyGelf/blob/master/license.txt</licenseUrl>
     <projectUrl>https://github.com/Pliner/EasyGelf</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>GELF log4net appenders</description>
+    <description>GELF NLog appenders</description>
     <releaseNotes>
     </releaseNotes>
     <copyright>Copyright Yury Pliner 2015</copyright>
     <dependencies>
-      <dependency id="log4net" version="[2.0.3,]" />
+      <dependency id="NLog" version="[3.2.0.0,]" />
     </dependencies>
   </metadata>
 </package>

@@ -29,7 +29,7 @@ namespace EasyGelf.NLog
 
         protected abstract ITransport InitializeTransport();
 
-        public void WriteLogEventInfo(LogEventInfo loggingEvent)
+        protected override void Write(LogEventInfo loggingEvent)
         {
             try
             {
@@ -74,28 +74,18 @@ namespace EasyGelf.NLog
         }
 
 
-        private GelfLevel ToGelf(LogLevel level)
+        private static GelfLevel ToGelf(LogLevel level)
         {
             if (level == LogLevel.Debug)
-            {
                 return GelfLevel.Debug;
-            }
             if (level == LogLevel.Fatal)
-            {
                 return GelfLevel.Critical;
-            }
             if (level == LogLevel.Info)
-            {
                 return GelfLevel.Informational;
-            }
             if (level == LogLevel.Trace)
-            {
                 return GelfLevel.Informational;
-            }
             if (level == LogLevel.Warn)
-            {
                 return GelfLevel.Warning;
-            }
             return GelfLevel.Error;
         }
     }

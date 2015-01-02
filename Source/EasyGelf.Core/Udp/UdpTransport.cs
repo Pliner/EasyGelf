@@ -8,26 +8,26 @@ namespace EasyGelf.Core.Udp
     {
         private readonly UdpTransportConfiguration configuration;
         private readonly ITransportEncoder encoder;
-        private readonly UdpClient udpClient;
 
         public UdpTransport(UdpTransportConfiguration configuration, ITransportEncoder encoder)
         {
             this.configuration = configuration;
             this.encoder = encoder;
-            udpClient = new UdpClient();
         }
 
         public void Send(GelfMessage message)
         {
-            foreach (var bytes in encoder.Encode(Encoding.UTF8.GetBytes(message.Serialize())))
+            using (var udpClient = new UdpClient())
             {
-                udpClient.Send(bytes, bytes.Length, configuration.Host);   
+                foreach (var bytes in encoder.Encode(Encoding.UTF8.GetBytes(message.Serialize())))
+                {
+                    udpClient.Send(bytes, bytes.Length, configuration.Host);
+                }
             }
         }
 
         public void Close()
         {
-            udpClient.Close();
         }
     }
 }
