@@ -2,7 +2,7 @@ EasyGelf
 ========
 Goals: to support up to date version of Gelf and provide reliable integration with popular .Net logging libraries.
 
-Here is a list of supported statuses of popular .net logging library: log4net and NLog.
+Now log4net and NLog are supported.
 
 ## Usage(log4net)
 
@@ -62,7 +62,7 @@ Here is a list of supported statuses of popular .net logging library: log4net an
     <add assembly="EasyGelf.NLog"/>
   </extensions>
   <targets>
-    <target name="GelfUdp" xsi:type="GelfUdp"/>
+    <target name="GelfUdp" xsi:type="GelfUdp" facility="Easy Gelf Example Application" remoteAddress="127.0.0.1" remotePort="12201"/>
   </targets>
   <rules>
     <logger name="*" minlevel="Info" writeTo="GelfUdp" />

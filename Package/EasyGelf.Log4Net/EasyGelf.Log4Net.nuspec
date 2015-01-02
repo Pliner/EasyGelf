@@ -3,7 +3,7 @@
   <metadata>
     <id>EasyGelf.Log4Net</id>
     <!-- Version gets updated from EasyGelf.dll version number during the build's packaging process -->
-    <version>0.3.0.0</version>
+    <version>0.3.1.0</version>
     <title>EasyGelf.Log4Net</title>
     <authors>Yury Pliner</authors>
     <owners>Yury Pliner</owners>
