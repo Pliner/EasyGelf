@@ -66,16 +66,8 @@ namespace EasyGelf.NLog
         protected override void InitializeTarget()
         {
             base.InitializeTarget();
-            try
-            {
-                var initializedTransport = InitializeTransport();
-                transport = UseBuffering ? new BufferedTransport(initializedTransport) : initializedTransport;
-            }
-            catch (Exception exception)
-            {
-                InternalLogger.Error("Failed to initialize transport", exception);
-                throw;
-            }
+            var initializedTransport = InitializeTransport();
+            transport = UseBuffering ? new BufferedTransport(initializedTransport) : initializedTransport;
         }
 
         protected override void CloseTarget()
