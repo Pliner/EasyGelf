@@ -61,6 +61,8 @@
     <Compile Include="GelfAdditionalFields.cs" />
     <Compile Include="GelfMessageBuilder.cs" />
     <Compile Include="Encoders\IChunkedMessageIdGenerator.cs" />
+    <Compile Include="GelfMessageSerializer.cs" />
+    <Compile Include="IGelfMessageSerializer.cs" />
     <Compile Include="ITransport.cs" />
     <Compile Include="GelfLevel.cs" />
     <Compile Include="GelfMessage.cs" />

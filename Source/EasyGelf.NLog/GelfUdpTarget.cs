@@ -32,7 +32,7 @@ namespace EasyGelf.NLog
                 {
                     Host = new IPEndPoint(removeIpAddress, RemotePort),
                 };
-            return new UdpTransport(configuration, encoder);
+            return new UdpTransport(configuration, encoder, new GelfMessageSerializer());
         }
     }
 }

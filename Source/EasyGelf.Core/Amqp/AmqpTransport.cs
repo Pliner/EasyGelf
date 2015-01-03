@@ -13,13 +13,15 @@ namespace EasyGelf.Core.Amqp
 
         private readonly AmqpTransportConfiguration configuration;
         private readonly ITransportEncoder encoder;
+        private readonly IGelfMessageSerializer messageSerializer;
         private IConnection connection;
         private IModel channel;
 
-        public AmqpTransport(AmqpTransportConfiguration configuration, ITransportEncoder encoder)
+        public AmqpTransport(AmqpTransportConfiguration configuration, ITransportEncoder encoder, IGelfMessageSerializer messageSerializer)
         {
             this.configuration = configuration;
             this.encoder = encoder;
+            this.messageSerializer = messageSerializer;
         }
 
         private bool TryRestoreConnection()
@@ -60,7 +62,7 @@ namespace EasyGelf.Core.Amqp
             {
                 if (TryRestoreConnection())
                 {
-                    foreach (var bytes in encoder.Encode(Encoding.UTF8.GetBytes(message.Serialize())))
+                    foreach (var bytes in encoder.Encode(messageSerializer.Serialize(message)))
                     {
                         channel.BasicPublish(configuration.Exchange, configuration.RoutingKey, false, false,
                                              new BasicProperties {DeliveryMode = 1}, bytes);

@@ -8,18 +8,20 @@ namespace EasyGelf.Core.Udp
     {
         private readonly UdpTransportConfiguration configuration;
         private readonly ITransportEncoder encoder;
+        private readonly IGelfMessageSerializer messageSerializer;
 
-        public UdpTransport(UdpTransportConfiguration configuration, ITransportEncoder encoder)
+        public UdpTransport(UdpTransportConfiguration configuration, ITransportEncoder encoder, IGelfMessageSerializer messageSerializer)
         {
             this.configuration = configuration;
             this.encoder = encoder;
+            this.messageSerializer = messageSerializer;
         }
 
         public void Send(GelfMessage message)
         {
             using (var udpClient = new UdpClient())
             {
-                foreach (var bytes in encoder.Encode(Encoding.UTF8.GetBytes(message.Serialize())))
+                foreach (var bytes in encoder.Encode(messageSerializer.Serialize(message)))
                 {
                     udpClient.Send(bytes, bytes.Length, configuration.Host);
                 }

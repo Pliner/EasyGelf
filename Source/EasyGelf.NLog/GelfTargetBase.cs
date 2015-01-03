@@ -81,7 +81,6 @@ namespace EasyGelf.NLog
         protected override void CloseTarget()
         {
             base.CloseTarget();
-
             if (transport == null)
                 return;
             CoreExtentions.SafeDo(transport.Close);

@@ -29,7 +29,7 @@ namespace EasyGelf.Log4Net
                 {
                     Host = new IPEndPoint(RemoteAddress, RemotePort),
                 };
-            return new UdpTransport(configuration, encoder);
+            return new UdpTransport(configuration, encoder, new GelfMessageSerializer());
         }
     }
 }
