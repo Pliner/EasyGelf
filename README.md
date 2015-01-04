@@ -1,4 +1,4 @@
-EasyGelf(The latest version is 0.3.2.0)
+EasyGelf(The latest version is 0.3.3.0)
 ========
 Goals: to support up to date version of Gelf and provide reliable integration with popular .Net logging libraries.
 
@@ -45,10 +45,12 @@ Now log4net and NLog are supported.
     <add assembly="EasyGelf.NLog"/>
   </extensions>
   <targets>
-    <target name="GelfUdp" xsi:type="GelfUdp" facility="Easy Gelf Example Application" remoteAddress="127.0.0.1" remotePort="12201"/>
+    <target name="GelfUdp" xsi:type="GelfUdp" facility="Easy Gelf Example Application" remoteAddress="127.0.0.1" remotePort="12201" layout="${message}"/>
+    <target name="GelfAmqp" xsi:type="GelfAmqp" facility="Easy Gelf Example Application" connectionUri="amqp://" layout="${message}"/>
   </targets>
   <rules>
     <logger name="*" minlevel="Info" writeTo="GelfUdp" />
+    <logger name="*" minlevel="Info" writeTo="GelfAmqp" />
   </rules>
 </nlog>
 

@@ -48,6 +48,7 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="GelfAmqpTarget.cs" />
     <Compile Include="GelfTargetBase.cs" />
     <Compile Include="GelfUdpTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
