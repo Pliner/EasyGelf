@@ -19,15 +19,11 @@ namespace EasyGelf.Log4Net
         [UsedImplicitly]
         public string HostName { get; set; }
 
-        [UsedImplicitly]
-        public bool UseBuffering { get; set; }
-
         protected GelfAppenderBase()
         {
             Facility = "gelf";
             IncludeSource = true;
             HostName = Environment.MachineName;
-            UseBuffering = true;
         }
 
         public override void ActivateOptions()
@@ -35,13 +31,11 @@ namespace EasyGelf.Log4Net
             base.ActivateOptions();
             try
             {
-                var initializedTransport = InitializeTransport();
-                transport = UseBuffering ? new BufferedTransport(initializedTransport) : initializedTransport;
+                transport = new BufferedTransport(InitializeTransport());
             }
             catch (Exception exception)
             {
                 ErrorHandler.Error("Failed to create Transport", exception);
-                throw;
             }
         }
 

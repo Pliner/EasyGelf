@@ -1,5 +1,4 @@
 ﻿using System.Net.Sockets;
-using System.Text;
 using EasyGelf.Core.Encoders;
 
 namespace EasyGelf.Core.Udp

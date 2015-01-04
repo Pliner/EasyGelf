@@ -19,16 +19,12 @@ namespace EasyGelf.NLog
         public string HostName { get; set; }
 
         [UsedImplicitly]
-        public bool UseBuffering { get; set; }
-
-        [UsedImplicitly]
         public bool IncludeSource { get; set; }
 
         protected GelfTargetBase()
         {
             Facility = "gelf";
             HostName = Environment.MachineName;
-            UseBuffering = true;
             IncludeSource = true;
         }
 
@@ -66,8 +62,7 @@ namespace EasyGelf.NLog
         protected override void InitializeTarget()
         {
             base.InitializeTarget();
-            var initializedTransport = InitializeTransport();
-            transport = UseBuffering ? new BufferedTransport(initializedTransport) : initializedTransport;
+            transport = new BufferedTransport(InitializeTransport());
         }
 
         protected override void CloseTarget()
