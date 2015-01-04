@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading;
 using EasyGelf.Core.Encoders;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Framing;
@@ -9,8 +9,6 @@ namespace EasyGelf.Core.Amqp
 {
     public sealed class AmqpTransport : ITransport
     {
-        private readonly object lockery = new object();
-
         private readonly AmqpTransportConfiguration configuration;
         private readonly ITransportEncoder encoder;
         private readonly IGelfMessageSerializer messageSerializer;
@@ -28,56 +26,77 @@ namespace EasyGelf.Core.Amqp
         {
             try
             {
-                if (connection != null)
+                if (connection == null)
+                {
+                    var connectionFactory = new ConnectionFactory
+                        {
+                            Uri = configuration.ConnectionUri,
+                            AutomaticRecoveryEnabled = true,
+                            TopologyRecoveryEnabled = true,
+                            UseBackgroundThreadsForIO = true,
+                            RequestedHeartbeat = 10,
+                        };
+                    connection = connectionFactory.CreateConnection();
+                    channel = connection.CreateModel();
+                    channel.ExchangeDeclare(configuration.Exchange, configuration.ExchangeType, true);
+                    channel.QueueDeclare(configuration.Queue, true, false, false, new Dictionary<string, object>());
+                    channel.QueueBind(configuration.Queue, configuration.Exchange, configuration.RoutingKey);
                     return true;
-                var connectionFactory = new ConnectionFactory
-                {
-                    Uri = configuration.ConnectionUri,
-                    AutomaticRecoveryEnabled = true,
-                    TopologyRecoveryEnabled = true,
-                    UseBackgroundThreadsForIO = true,
-                    RequestedHeartbeat = 10,
-                };
-                connection = connectionFactory.CreateConnection();
-                channel = connection.CreateModel();
-                channel.ExchangeDeclare(configuration.Exchange, configuration.ExchangeType, true);
-                channel.QueueDeclare(configuration.Queue, true, false, false, new Dictionary<string, object>());
-                channel.QueueBind(configuration.Queue, configuration.Exchange, configuration.RoutingKey);
-                return true;
-            }
-            catch (Exception)
-            {
-                if (connection != null)
-                {
-                    connection.Close();
-                    connection = null;
                 }
+                return connection.IsOpen;
+            }
+            catch
+            {
+                if (channel != null)
+                    CoreExtentions.SafeDo(channel.Close);
+                channel = null;
+                if (connection != null)
+                    CoreExtentions.SafeDo(connection.Close);
+                connection = null;
                 return false;
-            }  
+            }
         }
 
         public void Send(GelfMessage message)
         {
-            lock (lockery)
+            SendInternal(message, DateTime.UtcNow);
+        }
+
+        private void SendInternal(GelfMessage message, DateTime started)
+        {
+            if (DateTime.UtcNow - started > configuration.ReconnectionTimeout)
+                return;
+            if (TryRestoreConnection())
             {
-                if (TryRestoreConnection())
+                try
                 {
                     foreach (var bytes in encoder.Encode(messageSerializer.Serialize(message)))
                     {
-                        channel.BasicPublish(configuration.Exchange, configuration.RoutingKey, false, false,
-                                             new BasicProperties {DeliveryMode = 1}, bytes);
+                        channel.BasicPublish(configuration.Exchange, configuration.RoutingKey, false, false, new BasicProperties { DeliveryMode = 1 }, bytes);
                     }
                 }
+                catch
+                {
+                    Thread.Sleep(50);
+                    SendInternal(message, started);
+                }
             }
+            else
+            {
+                Thread.Sleep(50);
+                SendInternal(message, started);
+            }
+
         }
 
         public void Close()
         {
-            lock (lockery)
-            {
+            if (channel != null)
                 CoreExtentions.SafeDo(channel.Close);
+            channel = null;
+            if(connection != null)
                 CoreExtentions.SafeDo(connection.Close);
-            }
+            connection = null;
         }
     }
 }

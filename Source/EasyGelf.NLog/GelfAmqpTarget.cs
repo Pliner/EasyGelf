@@ -1,4 +1,5 @@
-﻿using EasyGelf.Core;
+﻿using System;
+using EasyGelf.Core;
 using EasyGelf.Core.Amqp;
 using EasyGelf.Core.Encoders;
 using JetBrains.Annotations;
@@ -44,7 +45,8 @@ namespace EasyGelf.NLog
                     Exchange = Exchange,
                     ExchangeType = ExchangeType,
                     Queue = Queue,
-                    RoutingKey = RoutingKey
+                    RoutingKey = RoutingKey,
+                    ReconnectionTimeout = TimeSpan.FromSeconds(5)
                 };
             return new AmqpTransport(configuration, encoder, new GelfMessageSerializer());
         }
