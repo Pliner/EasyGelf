@@ -7,7 +7,10 @@ namespace EasyGelf.Core.Encoders
     public sealed class ChunkingEncoder : ITransportEncoder
     {
         private const int HeaderSize = 12;
+        private const int MaxChunkCount = 128;
+
         private readonly IChunkedMessageIdGenerator idGenerator;
+
         private readonly int maxSize;
 
         public ChunkingEncoder(IChunkedMessageIdGenerator idGenerator, int maxSize)
@@ -24,6 +27,8 @@ namespace EasyGelf.Core.Encoders
             {
                 var messageChunkSize = maxSize - HeaderSize;
                 var chunksCount = bytes.Length / messageChunkSize + 1;
+                if(chunksCount > MaxChunkCount)
+                    throw new ArgumentOutOfRangeException("bytes");
                 var remainingBytes = bytes.Length;
                 var messageId = idGenerator.GenerateId(bytes);
                 for (var chunkSequenceNumber = 0; chunkSequenceNumber < chunksCount; ++chunkSequenceNumber)
