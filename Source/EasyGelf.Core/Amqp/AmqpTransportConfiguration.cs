@@ -1,12 +1,9 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 namespace EasyGelf.Core.Amqp
 {
     public sealed class AmqpTransportConfiguration
     {
-        public TimeSpan ReconnectionTimeout { get; set; }
-
         [NotNull]
         public string ConnectionUri { get; set; }
 

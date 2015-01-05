@@ -15,7 +15,7 @@ namespace EasyGelf.Core.Udp
             this.configuration = configuration;
             this.encoder = encoder;
             this.messageSerializer = messageSerializer;
-            udpClient =  new UdpClient();
+            udpClient = new UdpClient();
         }
 
         public void Send(GelfMessage message)
@@ -28,9 +28,7 @@ namespace EasyGelf.Core.Udp
 
         public void Close()
         {
-            if (udpClient == null)
-                return;
-            CoreExtentions.SafeDo(udpClient.Close);
+            udpClient.SafeDispose();
             udpClient = null;
         }
     }

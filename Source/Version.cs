@@ -2,9 +2,10 @@
 using System.Reflection;
 
 // EasyGelf version number: <major>.<minor>.<non-breaking-feature>.<build>
-[assembly: AssemblyVersion("0.3.3.0")]
+[assembly: AssemblyVersion("0.3.4.0")]
 [assembly: CLSCompliant(true)]
 
+//0.3.4.0 Now retries are supported                                 
 //0.3.3.0 AmqpTarget for NLog                                 
 //0.3.2.0 Delete UseBuffering option. Now it's true forever.
 //0.3.1.0 UdpTarget RemoteAddress initialization 

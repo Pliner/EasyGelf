@@ -46,7 +46,6 @@ namespace EasyGelf.NLog
                     ExchangeType = ExchangeType,
                     Queue = Queue,
                     RoutingKey = RoutingKey,
-                    ReconnectionTimeout = TimeSpan.FromSeconds(5)
                 };
             return new AmqpTransport(configuration, encoder, new GelfMessageSerializer());
         }

@@ -5,20 +5,22 @@ namespace EasyGelf.Core
 {
     public sealed class BufferedTransport : ITransport
     {
-        private readonly BlockingCollection<GelfMessage> bytesToSend = new BlockingCollection<GelfMessage>();
+        private readonly BlockingCollection<GelfMessage> buffer = new BlockingCollection<GelfMessage>();
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
+        
         public BufferedTransport(ITransport transport)
         {
             new Thread(() =>
                 {
+                    var cancellationToken = cancellationTokenSource.Token;
                     try
                     {
-                        foreach (var bytes in bytesToSend.GetConsumingEnumerable(cancellationTokenSource.Token))
+                        GelfMessage mesage;
+                        while (buffer.TryTake(out mesage, -1, cancellationToken))
                         {
                             try
                             {
-                                transport.Send(bytes);  
+                                transport.Send(mesage);
                             }
                             catch
                             {
@@ -27,19 +29,30 @@ namespace EasyGelf.Core
                     }
                     catch
                     {
+                        GelfMessage message;
+                        while (buffer.TryTake(out message))
+                        {
+                            try
+                            {
+                                transport.Send(message);
+                            }
+                            catch
+                            {
+                            }
+                        }
                     }
-                    CoreExtentions.SafeDo(transport.Close);
+                    transport.Close();
                 }) {IsBackground = true, Name = "EasyGelf Buffered Transport Thread"}.Start();
         }
 
         public void Send(GelfMessage message)
         {
-            bytesToSend.Add(message, cancellationTokenSource.Token);
+            buffer.Add(message, cancellationTokenSource.Token);
         }
 
         public void Close()
         {
-            bytesToSend.CompleteAdding();
+            buffer.CompleteAdding();
             cancellationTokenSource.Cancel();
         }
     }

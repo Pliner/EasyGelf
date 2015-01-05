@@ -19,11 +19,23 @@ namespace EasyGelf.Log4Net
         [UsedImplicitly]
         public string HostName { get; set; }
 
+        [UsedImplicitly]
+        public bool UseRetry { get; set; }
+
+        [UsedImplicitly]
+        public int RetryCount { get; set; }
+
+        [UsedImplicitly]
+        public TimeSpan RetryDelay { get; set; }
+
         protected GelfAppenderBase()
         {
             Facility = "gelf";
             IncludeSource = true;
             HostName = Environment.MachineName;
+            UseRetry = true;
+            RetryCount = 5;
+            RetryDelay = TimeSpan.FromMilliseconds(50);
         }
 
         public override void ActivateOptions()
@@ -31,7 +43,8 @@ namespace EasyGelf.Log4Net
             base.ActivateOptions();
             try
             {
-                transport = new BufferedTransport(InitializeTransport());
+                var mainTransport = InitializeTransport();
+                transport = new BufferedTransport(UseRetry ? new RetryingTransport(mainTransport, RetryCount, RetryDelay) : mainTransport);
             }
             catch (Exception exception)
             {
@@ -81,9 +94,8 @@ namespace EasyGelf.Log4Net
             base.OnClose();
             if (transport == null)
                 return;
-            CoreExtentions.SafeDo(transport.Close);
+            transport.Close();
             transport = null;
         }
-
     }
 }

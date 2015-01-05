@@ -43,7 +43,6 @@ namespace EasyGelf.Log4Net
                     ExchangeType = ExchangeType, 
                     Queue = Queue, 
                     RoutingKey = RoutingKey,
-                    ReconnectionTimeout = TimeSpan.FromSeconds(5)
                 };
             var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(new MessageBasedIdGenerator(), AmqpMessageSize));
             return new AmqpTransport(configuration, encoder, new GelfMessageSerializer());

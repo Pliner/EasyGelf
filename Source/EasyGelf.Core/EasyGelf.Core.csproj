@@ -69,6 +69,7 @@
     <Compile Include="Encoders\ITransportEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Encoders\GZipEncoder.cs" />
+    <Compile Include="RetryingTransport.cs" />
     <Compile Include="Udp\UdpTransport.cs" />
     <Compile Include="Udp\UdpTransportConfiguration.cs" />
   </ItemGroup>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using EasyGelf.Core.Encoders;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Framing;
@@ -47,11 +46,9 @@ namespace EasyGelf.Core.Amqp
             }
             catch
             {
-                if (channel != null)
-                    CoreExtentions.SafeDo(channel.Close);
+                channel.SafeDispose();
                 channel = null;
-                if (connection != null)
-                    CoreExtentions.SafeDo(connection.Close);
+                connection.SafeDispose();
                 connection = null;
                 return false;
             }
@@ -59,43 +56,22 @@ namespace EasyGelf.Core.Amqp
 
         public void Send(GelfMessage message)
         {
-            SendInternal(message, DateTime.UtcNow);
-        }
-
-        private void SendInternal(GelfMessage message, DateTime started)
-        {
-            if (DateTime.UtcNow - started > configuration.ReconnectionTimeout)
-                return;
             if (TryRestoreConnection())
             {
-                try
+                foreach (var bytes in encoder.Encode(messageSerializer.Serialize(message)))
                 {
-                    foreach (var bytes in encoder.Encode(messageSerializer.Serialize(message)))
-                    {
-                        channel.BasicPublish(configuration.Exchange, configuration.RoutingKey, false, false, new BasicProperties { DeliveryMode = 1 }, bytes);
-                    }
-                }
-                catch
-                {
-                    Thread.Sleep(50);
-                    SendInternal(message, started);
+                    channel.BasicPublish(configuration.Exchange, configuration.RoutingKey, false, false, new BasicProperties {DeliveryMode = 1}, bytes);
                 }
             }
             else
-            {
-                Thread.Sleep(50);
-                SendInternal(message, started);
-            }
-
+                throw new InvalidOperationException();
         }
 
         public void Close()
         {
-            if (channel != null)
-                CoreExtentions.SafeDo(channel.Close);
+            channel.SafeDispose();
             channel = null;
-            if(connection != null)
-                CoreExtentions.SafeDo(connection.Close);
+            connection.SafeDispose();
             connection = null;
         }
     }

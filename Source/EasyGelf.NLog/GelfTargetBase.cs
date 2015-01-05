@@ -20,12 +20,24 @@ namespace EasyGelf.NLog
 
         [UsedImplicitly]
         public bool IncludeSource { get; set; }
+       
+        [UsedImplicitly]
+        public bool UseRetry { get; set; }
 
+        [UsedImplicitly]
+        public int RetryCount { get; set; }
+
+        [UsedImplicitly]
+        public TimeSpan RetryDelay { get; set; }
+        
         protected GelfTargetBase()
         {
             Facility = "gelf";
             HostName = Environment.MachineName;
             IncludeSource = true;
+            UseRetry = true;
+            RetryCount = 5;
+            RetryDelay = TimeSpan.FromMilliseconds(50);
         }
 
         protected abstract ITransport InitializeTransport();
@@ -62,7 +74,8 @@ namespace EasyGelf.NLog
         protected override void InitializeTarget()
         {
             base.InitializeTarget();
-            transport = new BufferedTransport(InitializeTransport());
+            var mainTransport = InitializeTransport();
+            transport = new BufferedTransport(UseRetry ? new RetryingTransport(mainTransport, RetryCount, RetryDelay) : mainTransport);
         }
 
         protected override void CloseTarget()
@@ -70,7 +83,7 @@ namespace EasyGelf.NLog
             base.CloseTarget();
             if (transport == null)
                 return;
-            CoreExtentions.SafeDo(transport.Close);
+            transport.Close();
             transport = null;
         }
 

@@ -1,4 +1,4 @@
-EasyGelf(The latest version is 0.3.3.0)
+EasyGelf(The latest version is 0.3.4.0)
 ========
 Goals: to support up to date version of Gelf and provide reliable integration with popular .Net logging libraries.
 
@@ -69,6 +69,11 @@ Now log4net and NLog are supported.
 
 * `facility` (default: `gelf`)
   * The application specific name
- 
 
+* `useRetry` (default: `true`)
+  * Allow to retry send log message
+  * `retryCount` (default: 5) 
+	* Count of retry attemps 
+  * `retryDelay` (default: 50ms)
+	* Pause between retry attempts	
 
