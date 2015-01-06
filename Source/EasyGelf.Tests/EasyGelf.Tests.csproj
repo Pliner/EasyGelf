@@ -51,6 +51,7 @@
     <Compile Include="Core\Encoders\ChunkingEncoderTests.cs" />
     <Compile Include="Core\Encoders\CompositeEncoderTests.cs" />
     <Compile Include="Core\Encoders\GZipEncoderTests.cs" />
+    <Compile Include="Core\RetryTransportTests.cs" />
     <Compile Include="GelfMessageSerializerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
