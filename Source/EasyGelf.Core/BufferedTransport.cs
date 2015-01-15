@@ -7,7 +7,8 @@ namespace EasyGelf.Core
     {
         private readonly BlockingCollection<GelfMessage> buffer = new BlockingCollection<GelfMessage>();
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        
+        private readonly ManualResetEventSlim stopEvent = new ManualResetEventSlim(false);
+
         public BufferedTransport(ITransport transport)
         {
             new Thread(() =>
@@ -42,6 +43,7 @@ namespace EasyGelf.Core
                         }
                     }
                     transport.Close();
+                    stopEvent.Set();
                 }) {IsBackground = true, Name = "EasyGelf Buffered Transport Thread"}.Start();
         }
 
@@ -54,6 +56,8 @@ namespace EasyGelf.Core
         {
             buffer.CompleteAdding();
             cancellationTokenSource.Cancel();
+            stopEvent.Wait();
+            stopEvent.Dispose();
         }
     }
 }

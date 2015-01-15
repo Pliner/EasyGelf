@@ -24,13 +24,14 @@ namespace EasyGelf.Core
                 try
                 {
                     transport.Send(message);
+                    break;
                 }
                 catch(Exception)
                 {
+                    sendRetryCount--;
                     if(sendRetryCount <= 0)
                         throw;
                     Thread.Sleep(retryDelay);
-                    sendRetryCount--;
                 }
             }
         }
