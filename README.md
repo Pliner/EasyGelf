@@ -1,4 +1,4 @@
-EasyGelf(The latest version is 0.3.4.0)
+EasyGelf(The latest version is 0.3.5.0)
 ========
 Goals: to support up to date version of Gelf and provide reliable integration with popular .Net logging libraries.
 
