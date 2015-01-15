@@ -48,6 +48,7 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="Core\CoreExtentionsTests.cs" />
     <Compile Include="Core\Encoders\ChunkingEncoderTests.cs" />
     <Compile Include="Core\Encoders\CompositeEncoderTests.cs" />
     <Compile Include="Core\Encoders\GZipEncoderTests.cs" />

@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 
 namespace EasyGelf.Core.Encoders
 {
+    //TODO Simplify message id generator
     public sealed class MessageBasedIdGenerator : IChunkedMessageIdGenerator
     {
         public byte[] GenerateId(byte[] message)
