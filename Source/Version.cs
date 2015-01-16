@@ -2,9 +2,10 @@
 using System.Reflection;
 
 // EasyGelf version number: <major>.<minor>.<non-breaking-feature>.<build>
-[assembly: AssemblyVersion("0.3.5.0")]
+[assembly: AssemblyVersion("0.3.6.0")]
 [assembly: CLSCompliant(true)]
 
+//0.3.6.0 IncludeStackTrace option                                
 //0.3.5.0 RemoteAddress could be dns name                                 
 //0.3.4.0 Now retries are supported                                 
 //0.3.3.0 AmqpTarget for NLog                                 

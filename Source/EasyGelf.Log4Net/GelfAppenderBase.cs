@@ -28,6 +28,9 @@ namespace EasyGelf.Log4Net
         [UsedImplicitly]
         public TimeSpan RetryDelay { get; set; }
 
+        [UsedImplicitly]
+        public bool IncludeStackTrace { get; set; }
+
         protected GelfAppenderBase()
         {
             Facility = "gelf";
@@ -36,6 +39,7 @@ namespace EasyGelf.Log4Net
             UseRetry = true;
             RetryCount = 5;
             RetryDelay = TimeSpan.FromMilliseconds(50);
+            IncludeStackTrace = true;
         }
 
         public override void ActivateOptions()
@@ -79,6 +83,19 @@ namespace EasyGelf.Log4Net
                             .SetAdditionalField(GelfAdditionalFields.SourceClassName, locationInformation.ClassName)
                             .SetAdditionalField(GelfAdditionalFields.SourceMethodName, locationInformation.MethodName)
                             .SetAdditionalField(GelfAdditionalFields.SourceLineNumber, locationInformation.LineNumber);
+                    }
+                }
+                if (IncludeStackTrace)
+                {
+                    var exception = loggingEvent.ExceptionObject;
+                    if (exception != null)
+                    {
+                        var exceptionMessage = exception.Message;
+                        if (!string.IsNullOrEmpty(exceptionMessage))
+                            messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionMessage, exceptionMessage);
+                        var exceptionStackTrace = exception.StackTrace;
+                        if (!string.IsNullOrEmpty(exceptionStackTrace))
+                            messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionStackTrace, exceptionMessage);
                     }
                 }
                 transport.Send(messageBuilder.ToMessage());

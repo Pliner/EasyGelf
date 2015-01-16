@@ -29,7 +29,10 @@ namespace EasyGelf.NLog
 
         [UsedImplicitly]
         public TimeSpan RetryDelay { get; set; }
-        
+
+        [UsedImplicitly]
+        public bool IncludeStackTrace { get; set; }
+
         protected GelfTargetBase()
         {
             Facility = "gelf";
@@ -38,6 +41,7 @@ namespace EasyGelf.NLog
             UseRetry = true;
             RetryCount = 5;
             RetryDelay = TimeSpan.FromMilliseconds(50);
+            IncludeStackTrace = true;
         }
 
         protected abstract ITransport InitializeTransport();
@@ -61,6 +65,19 @@ namespace EasyGelf.NLog
                         if (!string.IsNullOrEmpty(fileName))
                             messageBuilder.SetAdditionalField(GelfAdditionalFields.SourceFileName, fileName);
                         messageBuilder.SetAdditionalField(GelfAdditionalFields.SourceLineNumber, userStackFrame.GetFileLineNumber().ToString(CultureInfo.InvariantCulture));
+                    }
+                }
+                if (IncludeStackTrace)
+                {
+                    var exception = loggingEvent.Exception;
+                    if (exception != null)
+                    {
+                        var exceptionMessage = exception.Message;
+                        if(!string.IsNullOrEmpty(exceptionMessage))
+                            messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionMessage, exceptionMessage);
+                        var exceptionStackTrace = exception.StackTrace;
+                        if (!string.IsNullOrEmpty(exceptionStackTrace))
+                            messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionStackTrace, exceptionMessage);
                     }
                 }
                 transport.Send(messageBuilder.ToMessage());

@@ -9,5 +9,7 @@
         public const string SourceLineNumber = "sourceLineNumber";
         public const string SourceMethodName = "sourceMethodName";
         public const string SourceClassName = "sourceClassName";
+        public const string ExceptionMessage = "exceptionMessage";
+        public const string ExceptionStackTrace = "exceptionStackTrace";
     }
 }
