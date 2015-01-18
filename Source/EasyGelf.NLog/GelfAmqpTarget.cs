@@ -1,5 +1,4 @@
-﻿using System;
-using EasyGelf.Core;
+﻿using EasyGelf.Core;
 using EasyGelf.Core.Amqp;
 using EasyGelf.Core.Encoders;
 using JetBrains.Annotations;
@@ -10,8 +9,6 @@ namespace EasyGelf.NLog
     [Target("GelfAmqp")]
     public sealed class GelfAmqpTarget : GelfTargetBase
     {
-        private const int AmqpMessageSize = 50*1024;
-
         public GelfAmqpTarget()
         {
             Exchange = "Gelf";
@@ -20,7 +17,11 @@ namespace EasyGelf.NLog
             RoutingKey = "#";
             ConnectionUri = "amqp://";
             Persistent = true;
+            MessageSize = 50*1024;
         }
+
+        [UsedImplicitly]
+        public int MessageSize { get; set; }
 
         [UsedImplicitly]
         public string ConnectionUri { get; set; }
@@ -41,8 +42,8 @@ namespace EasyGelf.NLog
         public bool Persistent { get; set; }
 
         protected override ITransport InitializeTransport()
-        { 
-            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(new MessageBasedIdGenerator(), AmqpMessageSize));
+        {
+            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(new MessageBasedIdGenerator(), MessageSize));
             var configuration = new AmqpTransportConfiguration
                 {
                     ConnectionUri = ConnectionUri,

@@ -7,8 +7,6 @@ namespace EasyGelf.Log4Net
 {
     public sealed class GelfAmqpAppender : GelfAppenderBase
     {
-        private const int AmqpMessageSize = 50*1024;
-
         public GelfAmqpAppender()
         {
             Exchange = "Gelf";
@@ -17,7 +15,11 @@ namespace EasyGelf.Log4Net
             RoutingKey = "#";
             ConnectionUri = "amqp://";
             Persistent = true;
+            MessageSize = 50*1024;
         }
+
+        [UsedImplicitly]
+        public int MessageSize { get; set; }
 
         [UsedImplicitly]
         public string ConnectionUri { get; set; }
@@ -48,7 +50,7 @@ namespace EasyGelf.Log4Net
                     RoutingKey = RoutingKey,
                     Persistent = Persistent,
                 };
-            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(new MessageBasedIdGenerator(), AmqpMessageSize));
+            var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(new MessageBasedIdGenerator(), MessageSize));
             return new AmqpTransport(configuration, encoder, new GelfMessageSerializer());
         }
     }
