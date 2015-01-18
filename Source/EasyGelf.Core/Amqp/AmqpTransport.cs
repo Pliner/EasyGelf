@@ -25,10 +25,14 @@ namespace EasyGelf.Core.Amqp
         {
             EstablishConnection();
             foreach (var bytes in encoder.Encode(messageSerializer.Serialize(message)))
-                {
-                    channel.BasicPublish(configuration.Exchange, configuration.RoutingKey, false, false, new BasicProperties {DeliveryMode = 1}, bytes);
-                }
-         }
+            {
+                var basicProperties = new BasicProperties
+                    {
+                        DeliveryMode = configuration.Persistent ? (byte)2 : (byte)1
+                    };
+                channel.BasicPublish(configuration.Exchange, configuration.RoutingKey, false, false, basicProperties, bytes);
+            }
+        }
 
         public void Close()
         {

@@ -18,5 +18,7 @@ namespace EasyGelf.Core.Amqp
 
         [NotNull]
         public string Queue { get; set; }
+
+        public bool Persistent { get; set; }
     }
 }

@@ -19,6 +19,7 @@ namespace EasyGelf.NLog
             ExchangeType = "fanout";
             RoutingKey = "#";
             ConnectionUri = "amqp://";
+            Persistent = true;
         }
 
         [UsedImplicitly]
@@ -36,6 +37,9 @@ namespace EasyGelf.NLog
         [UsedImplicitly]
         public string Queue { get; set; }
 
+        [UsedImplicitly]
+        public bool Persistent { get; set; }
+
         protected override ITransport InitializeTransport()
         { 
             var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(new MessageBasedIdGenerator(), AmqpMessageSize));
@@ -46,6 +50,7 @@ namespace EasyGelf.NLog
                     ExchangeType = ExchangeType,
                     Queue = Queue,
                     RoutingKey = RoutingKey,
+                    Persistent = Persistent
                 };
             return new AmqpTransport(configuration, encoder, new GelfMessageSerializer());
         }
