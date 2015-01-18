@@ -2,7 +2,7 @@ EasyGelf(The latest version is 0.3.6.0)
 ========
 Goals: to support up to date version of Gelf and provide reliable integration with popular .Net logging libraries.
 
-Now log4net and NLog are supported.
+Now log4net and NLog are supported. Also Udp, Tcp and Amqp protocols are supported.
 
 ## Usage(log4net)
 
