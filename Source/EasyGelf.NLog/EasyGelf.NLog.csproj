@@ -50,6 +50,7 @@
     </Compile>
     <Compile Include="GelfAmqpTarget.cs" />
     <Compile Include="GelfTargetBase.cs" />
+    <Compile Include="GelfTcpTarget.cs" />
     <Compile Include="GelfUdpTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

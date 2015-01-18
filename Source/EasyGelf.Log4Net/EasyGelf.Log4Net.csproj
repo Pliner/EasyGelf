@@ -51,6 +51,7 @@
     <Compile Include="Extentions.cs" />
     <Compile Include="GelfAmqpAppender.cs" />
     <Compile Include="GelfAppenderBase.cs" />
+    <Compile Include="GelfTcpAppender.cs" />
     <Compile Include="GelfUdpAppender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

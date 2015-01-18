@@ -28,6 +28,8 @@ namespace EasyGelf.Core.Udp
 
         public void Close()
         {
+            if (udpClient == null)
+                return;
             udpClient.SafeDispose();
             udpClient = null;
         }

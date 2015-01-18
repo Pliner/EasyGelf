@@ -11,8 +11,8 @@ namespace EasyGelf.Core.Amqp
         private readonly AmqpTransportConfiguration configuration;
         private readonly ITransportEncoder encoder;
         private readonly IGelfMessageSerializer messageSerializer;
-        private IConnection connection;
         private IModel channel;
+        private IConnection connection;
 
         public AmqpTransport(AmqpTransportConfiguration configuration, ITransportEncoder encoder, IGelfMessageSerializer messageSerializer)
         {
@@ -21,51 +21,14 @@ namespace EasyGelf.Core.Amqp
             this.messageSerializer = messageSerializer;
         }
 
-        private bool TryRestoreConnection()
-        {
-            try
-            {
-                if (connection == null)
-                {
-                    var connectionFactory = new ConnectionFactory
-                        {
-                            Uri = configuration.ConnectionUri,
-                            AutomaticRecoveryEnabled = true,
-                            TopologyRecoveryEnabled = true,
-                            UseBackgroundThreadsForIO = true,
-                            RequestedHeartbeat = 10,
-                        };
-                    connection = connectionFactory.CreateConnection();
-                    channel = connection.CreateModel();
-                    channel.ExchangeDeclare(configuration.Exchange, configuration.ExchangeType, true);
-                    channel.QueueDeclare(configuration.Queue, true, false, false, new Dictionary<string, object>());
-                    channel.QueueBind(configuration.Queue, configuration.Exchange, configuration.RoutingKey);
-                    return true;
-                }
-                return connection.IsOpen;
-            }
-            catch
-            {
-                channel.SafeDispose();
-                channel = null;
-                connection.SafeDispose();
-                connection = null;
-                return false;
-            }
-        }
-
         public void Send(GelfMessage message)
         {
-            if (TryRestoreConnection())
-            {
-                foreach (var bytes in encoder.Encode(messageSerializer.Serialize(message)))
+            EstablishConnection();
+            foreach (var bytes in encoder.Encode(messageSerializer.Serialize(message)))
                 {
                     channel.BasicPublish(configuration.Exchange, configuration.RoutingKey, false, false, new BasicProperties {DeliveryMode = 1}, bytes);
                 }
-            }
-            else
-                throw new InvalidOperationException();
-        }
+         }
 
         public void Close()
         {
@@ -73,6 +36,41 @@ namespace EasyGelf.Core.Amqp
             channel = null;
             connection.SafeDispose();
             connection = null;
+        }
+
+        private void EstablishConnection()
+        {
+            try
+            {
+                if (connection != null)
+                {
+                    if (connection.IsOpen)
+                        return;
+                    throw new CannotConnectException(string.Format("Cannot connect to {0}", configuration.ConnectionUri));
+                }
+
+                var connectionFactory = new ConnectionFactory
+                    {
+                        Uri = configuration.ConnectionUri,
+                        AutomaticRecoveryEnabled = true,
+                        TopologyRecoveryEnabled = true,
+                        UseBackgroundThreadsForIO = true,
+                        RequestedHeartbeat = 10,
+                    };
+                connection = connectionFactory.CreateConnection();
+                channel = connection.CreateModel();
+                channel.ExchangeDeclare(configuration.Exchange, configuration.ExchangeType, true);
+                channel.QueueDeclare(configuration.Queue, true, false, false, new Dictionary<string, object>());
+                channel.QueueBind(configuration.Queue, configuration.Exchange, configuration.RoutingKey);
+            }
+            catch (Exception exception)
+            {
+                channel.SafeDispose();
+                channel = null;
+                connection.SafeDispose();
+                connection = null;
+                throw new CannotConnectException(string.Format("Cannot connect to {0}", configuration.ConnectionUri), exception);
+            }
         }
     }
 }
