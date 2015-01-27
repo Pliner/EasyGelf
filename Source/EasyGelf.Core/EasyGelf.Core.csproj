@@ -64,6 +64,9 @@
     <Compile Include="GelfMessageBuilder.cs" />
     <Compile Include="Encoders\IChunkedMessageIdGenerator.cs" />
     <Compile Include="GelfMessageSerializer.cs" />
+    <Compile Include="Http\HttpTransport.cs" />
+    <Compile Include="Http\HttpTransportConfiguration.cs" />
+    <Compile Include="SendFailedException.cs" />
     <Compile Include="IGelfMessageSerializer.cs" />
     <Compile Include="ITransport.cs" />
     <Compile Include="GelfLevel.cs" />
