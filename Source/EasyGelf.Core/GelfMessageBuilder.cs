@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 
 namespace EasyGelf.Core
 {
@@ -12,7 +11,7 @@ namespace EasyGelf.Core
         private DateTime? timestamp;
         private GelfLevel? level;
 
-        public GelfMessageBuilder([NotNull]string message, [NotNull]string host)
+        public GelfMessageBuilder(string message, string host)
         {
             if (string.IsNullOrEmpty(message))
                 throw new ArgumentNullException("message");
@@ -22,8 +21,7 @@ namespace EasyGelf.Core
             this.host = host;
         }
 
-        [NotNull]
-        public GelfMessageBuilder SetAdditionalField([NotNull]string key, [NotNull]string value)
+        public GelfMessageBuilder SetAdditionalField(string key, string value)
         {
             if(string.IsNullOrEmpty(key))
                 throw new ArgumentNullException("key");
@@ -33,21 +31,18 @@ namespace EasyGelf.Core
             return this;
         }
 
-        [NotNull]
         public GelfMessageBuilder SetTimestamp(DateTime value)
         {
             timestamp = value;
             return this;
         }
 
-        [NotNull]
         public GelfMessageBuilder SetLevel(GelfLevel value)
         {
             level = value;
             return this;
         }
 
-        [NotNull]
         public GelfMessage ToMessage()
         {
             if(timestamp == null)

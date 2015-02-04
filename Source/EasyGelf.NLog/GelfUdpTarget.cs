@@ -18,13 +18,10 @@ namespace EasyGelf.NLog
             MessageSize = 1024;
         }
 
-        [UsedImplicitly]
         public string RemoteAddress { get; set; }
 
-        [UsedImplicitly]
         public int RemotePort { get; set; }
 
-        [UsedImplicitly]
         public int MessageSize { get; set; }
 
         protected override ITransport InitializeTransport()

@@ -1,9 +1,7 @@
 ﻿using System.Linq;
 using System.Net;
 using EasyGelf.Core;
-using EasyGelf.Core.Encoders;
 using EasyGelf.Core.Tcp;
-using JetBrains.Annotations;
 using NLog.Targets;
 
 namespace EasyGelf.NLog
@@ -17,10 +15,8 @@ namespace EasyGelf.NLog
             RemotePort = 12201;
         }
 
-        [UsedImplicitly]
         public string RemoteAddress { get; set; }
 
-        [UsedImplicitly]
         public int RemotePort { get; set; }
 
         protected override ITransport InitializeTransport()

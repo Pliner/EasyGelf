@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using EasyGelf.Core;
-using JetBrains.Annotations;
 using NLog;
 using NLog.Common;
 using NLog.Targets;
@@ -12,25 +11,18 @@ namespace EasyGelf.NLog
     {
         private ITransport transport;
 
-        [UsedImplicitly]
         public string Facility { get; set; }
 
-        [UsedImplicitly]
         public string HostName { get; set; }
 
-        [UsedImplicitly]
         public bool IncludeSource { get; set; }
        
-        [UsedImplicitly]
         public bool UseRetry { get; set; }
 
-        [UsedImplicitly]
         public int RetryCount { get; set; }
 
-        [UsedImplicitly]
         public TimeSpan RetryDelay { get; set; }
 
-        [UsedImplicitly]
         public bool IncludeStackTrace { get; set; }
 
         protected GelfTargetBase()

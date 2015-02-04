@@ -2,7 +2,6 @@
 using EasyGelf.Core;
 using EasyGelf.Core.Encoders;
 using EasyGelf.Core.Udp;
-using JetBrains.Annotations;
 using System.Linq;
 
 namespace EasyGelf.Log4Net
@@ -16,13 +15,10 @@ namespace EasyGelf.Log4Net
             MessageSize = 1024;
         }
 
-        [UsedImplicitly]
         public int MessageSize { get; set; }
 
-        [UsedImplicitly]
         public string RemoteAddress { get; set; }
 
-        [UsedImplicitly]
         public int RemotePort { get; set; }
 
         protected override ITransport InitializeTransport()
