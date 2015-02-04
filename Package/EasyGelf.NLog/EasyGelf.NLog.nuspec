@@ -3,7 +3,7 @@
   <metadata>
     <id>EasyGelf.NLog</id>
     <!-- Version gets updated from EasyGelf.dll version number during the build's packaging process -->
-    <version>0.3.6.0</version>
+    <version>0.3.7.0</version>
     <title>EasyGelf.NLog</title>
     <authors>Yury Pliner</authors>
     <owners>Yury Pliner</owners>
