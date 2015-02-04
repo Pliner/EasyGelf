@@ -38,12 +38,12 @@
     <Target Name="MergeLog4Net" DependsOnTargets="Build">
       <Exec 
           WorkingDirectory="$(OutputDir)" 
-          Command="$(ILRepack) /internalize /out:$(OutputDir)\EasyGelf.Log4Net.dll $(OutputDir)\EasyGelf.Log4Net.dll $(OutputDir)\EasyGelf.Core.dll $(OutputDir)\RabbitMQ.Client.dll $(OutputDir)\Newtonsoft.Json.dll $(OutputDir)\JetBrains.Annotations.dll" />
+          Command="$(ILRepack) /internalize /out:$(OutputDir)\EasyGelf.Log4Net.dll $(OutputDir)\EasyGelf.Log4Net.dll $(OutputDir)\EasyGelf.Core.dll $(OutputDir)\RabbitMQ.Client.dll $(OutputDir)\Newtonsoft.Json.dll" />
     </Target>
     <Target Name="MergeNLog" DependsOnTargets="Build">
       <Exec 
           WorkingDirectory="$(OutputDir)" 
-          Command="$(ILRepack) /internalize /out:$(OutputDir)\EasyGelf.NLog.dll $(OutputDir)\EasyGelf.NLog.dll $(OutputDir)\EasyGelf.Core.dll $(OutputDir)\RabbitMQ.Client.dll $(OutputDir)\Newtonsoft.Json.dll $(OutputDir)\JetBrains.Annotations.dll" />
+          Command="$(ILRepack) /internalize /out:$(OutputDir)\EasyGelf.NLog.dll $(OutputDir)\EasyGelf.NLog.dll $(OutputDir)\EasyGelf.Core.dll $(OutputDir)\RabbitMQ.Client.dll $(OutputDir)\Newtonsoft.Json.dll" />
     </Target>
 
 
