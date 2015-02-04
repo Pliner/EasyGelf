@@ -1,4 +1,4 @@
-EasyGelf(The latest version is 0.3.6.0) [![Build status](https://ci.appveyor.com/api/projects/status/o7ni0ymhjhvcsn8u/branch/master?svg=true)](https://ci.appveyor.com/project/Pliner/easygelf/branch/master)
+EasyGelf(The latest version is 0.3.7.0) [![Build status](https://ci.appveyor.com/api/projects/status/o7ni0ymhjhvcsn8u/branch/master?svg=true)](https://ci.appveyor.com/project/Pliner/easygelf/branch/master)
 ========
 Goals: to support up to date version of Gelf and provide reliable integration with popular .Net logging libraries.
 
@@ -13,14 +13,15 @@ Now log4net and NLog are supported. Also Udp, Tcp and Amqp protocols are support
 <log4net>
   <appender name="GelfUdpAppender" type=" EasyGelf.Log4Net.GelfUdpAppender, EasyGelf.Log4Net">
     <remoteAddress value="127.0.0.1" />
-    <remotePort value="12201" />   
+    <remotePort value="12201" />
+    <facility value="Easy Gelf Example Application" />
     <layout type="log4net.Layout.PatternLayout">
       <conversionPattern value="%message%newline" />
     </layout>
   </appender>
   <appender name="GelfAmqpAppender" type=" EasyGelf.Log4Net.GelfAmqpAppender, EasyGelf.Log4Net">
     <connectionUri value="amqp://" />
-    <!-- Will connect to localhost with default amqp credentials-->
+    <facility value="Easy Gelf Example Application" />
     <layout type="log4net.Layout.PatternLayout">
       <conversionPattern value="%message%newline" />
     </layout>
