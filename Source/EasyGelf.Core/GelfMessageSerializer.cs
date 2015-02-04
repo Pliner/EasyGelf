@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace EasyGelf.Core
 {
@@ -10,7 +8,7 @@ namespace EasyGelf.Core
         public byte[] Serialize(GelfMessage message)
         {
             var duration = message.Timestamp.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0);
-            var result = new JObject
+            var result = new JsonObject
                 {
                     {"version", message.Version},
                     {"host", message.Host},
@@ -25,7 +23,7 @@ namespace EasyGelf.Core
                 var value = additionalField.Value;
                 result.Add(key.StartsWith("_") ? key : "_" + key, value);
             }
-            return Encoding.UTF8.GetBytes(result.ToString(Formatting.None));
+            return Encoding.UTF8.GetBytes(result.ToString());
         }
     }
 }

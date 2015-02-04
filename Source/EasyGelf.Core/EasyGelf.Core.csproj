@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="RabbitMQ.Client">
       <HintPath>..\packages\RabbitMQ.Client.3.4.0\lib\net35\RabbitMQ.Client.dll</HintPath>
     </Reference>
@@ -72,6 +69,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Encoders\GZipEncoder.cs" />
     <Compile Include="RetryingTransport.cs" />
+    <Compile Include="SimpleJson.cs" />
     <Compile Include="Tcp\TcpTransport.cs" />
     <Compile Include="Tcp\TcpTransportConfiguration.cs" />
     <Compile Include="Udp\UdpTransport.cs" />

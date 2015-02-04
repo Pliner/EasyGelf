@@ -33,7 +33,7 @@ namespace EasyGelf.Tests
                             "\"host\":\"example.org\"," +
                             "\"short_message\":\"A short message that helps you identify what is going on\"," +
                             "\"full_message\":\"Backtrace here\\n\\nmore stuff\"," +
-                            "\"timestamp\":1420070400.0," +
+                            "\"timestamp\":1420070400," +
                             "\"level\":1}", serializedMessage);
         }
 
@@ -58,7 +58,7 @@ namespace EasyGelf.Tests
                             "\"host\":\"example.org\"," +
                             "\"short_message\":\"Backtrace here\\n\\nmore stuff\"," +
                             "\"full_message\":\"Backtrace here\\n\\nmore stuff\"," +
-                            "\"timestamp\":1420070400.0," +
+                            "\"timestamp\":1420070400," +
                             "\"level\":1," +
                             "\"_facility\":\"facility\"," +
                             "\"_loggerName\":\"loggerName\"," +
