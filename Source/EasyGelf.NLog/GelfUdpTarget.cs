@@ -1,10 +1,9 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using EasyGelf.Core;
 using EasyGelf.Core.Encoders;
 using EasyGelf.Core.Udp;
-using JetBrains.Annotations;
 using NLog.Targets;
-using System.Linq;
 
 namespace EasyGelf.NLog
 {
@@ -15,7 +14,7 @@ namespace EasyGelf.NLog
         {
             RemoteAddress = IPAddress.Loopback.ToString();
             RemotePort = 12201;
-            MessageSize = 1024;
+            MessageSize = 8096;
         }
 
         public string RemoteAddress { get; set; }
@@ -32,7 +31,7 @@ namespace EasyGelf.NLog
                 .FirstOrDefault() ?? IPAddress.Loopback;
             var configuration = new UdpTransportConfiguration
                 {
-                    Host = new IPEndPoint(removeIpAddress, RemotePort),
+                    Host = new IPEndPoint(removeIpAddress, RemotePort)
                 };
             return new UdpTransport(configuration, encoder, new GelfMessageSerializer());
         }
