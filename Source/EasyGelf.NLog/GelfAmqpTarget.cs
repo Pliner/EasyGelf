@@ -1,7 +1,6 @@
 ﻿using EasyGelf.Core;
 using EasyGelf.Core.Amqp;
 using EasyGelf.Core.Encoders;
-using JetBrains.Annotations;
 using NLog.Targets;
 
 namespace EasyGelf.NLog

@@ -16,13 +16,13 @@ namespace EasyGelf.Core.Http
 
         public void Send(GelfMessage message)
         {
-            var request = WebRequest.CreateHttp(configuration.Uri);
+            var request = (HttpWebRequest)WebRequest.Create(configuration.Uri);
             using (var requestStream = request.GetRequestStream())
             using (var messageStream = new MemoryStream(messageSerializer.Serialize(message)))
                 messageStream.CopyTo(requestStream);
             request.Method = "POST";
             request.AllowAutoRedirect = false;
-            request.ReadWriteTimeout = request.Timeout = request.ContinueTimeout = configuration.Timeout;
+            request.ReadWriteTimeout = request.Timeout = configuration.Timeout;
             using (var response = (HttpWebResponse)request.GetResponse())
             {
                 if (response.StatusCode == HttpStatusCode.Accepted)

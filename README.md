@@ -1,4 +1,4 @@
-EasyGelf(The latest version is 0.3.8.0) [![Build status](https://ci.appveyor.com/api/projects/status/o7ni0ymhjhvcsn8u/branch/master?svg=true)](https://ci.appveyor.com/project/Pliner/easygelf/branch/master)
+EasyGelf(The latest version is 0.4.0.0) [![Build status](https://ci.appveyor.com/api/projects/status/o7ni0ymhjhvcsn8u/branch/master?svg=true)](https://ci.appveyor.com/project/Pliner/easygelf/branch/master)
 ========
 Goals: to support up to date version of Gelf and provide reliable integration with popular .Net logging libraries.
 
