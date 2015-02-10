@@ -2,9 +2,10 @@
 using System.Reflection;
 
 // EasyGelf version number: <major>.<minor>.<non-breaking-feature>.<build>
-[assembly: AssemblyVersion("0.3.7.0")]
+[assembly: AssemblyVersion("0.3.8.0")]
 [assembly: CLSCompliant(true)]
 
+//0.3.8.0 Inconsistent GelfMessage serialization, Increase default udp packet size                                
 //0.3.7.0 Remove JetBrains.Annotation and Newtonsoft.Json dependencies                                
 //0.3.6.0 IncludeStackTrace option                                
 //0.3.5.0 RemoteAddress could be dns name                                 

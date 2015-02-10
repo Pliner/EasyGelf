@@ -12,7 +12,7 @@ namespace EasyGelf.Log4Net
         {
             RemoteAddress = IPAddress.Loopback.ToString();
             RemotePort = 12201;
-            MessageSize = 1024;
+            MessageSize = 8096;
         }
 
         public int MessageSize { get; set; }

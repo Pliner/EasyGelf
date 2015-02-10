@@ -14,7 +14,7 @@ namespace EasyGelf.Core
                     {"host", message.Host},
                     {"short_message", message.ShortMessage},
                     {"full_message", message.FullMessage},
-                    {"timestamp", duration.TotalSeconds},
+                    {"timestamp", (long)duration.TotalSeconds},
                     {"level", (int)message.Level}
                 };
             foreach (var additionalField in message.AdditionalFields)
