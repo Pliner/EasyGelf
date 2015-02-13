@@ -2,9 +2,10 @@
 using System.Reflection;
 
 // EasyGelf version number: <major>.<minor>.<non-breaking-feature>.<build>
-[assembly: AssemblyVersion("0.4.0.0")]
+[assembly: AssemblyVersion("0.4.1.0")]
 [assembly: CLSCompliant(true)]
 
+//0.4.1.0 Bugfixes. A lot of potential ArgumentNullException                                
 //0.4.0.0 Downgrade to .Net 4.0 and log4net 1.2.10                                
 //0.3.8.0 Inconsistent GelfMessage serialization, Increase default udp packet size                                
 //0.3.7.0 Remove JetBrains.Annotation and Newtonsoft.Json dependencies                                

@@ -43,9 +43,7 @@ namespace EasyGelf.NLog
             try
             {
                 var renderedEvent = Layout.Render(loggingEvent);
-                var messageBuilder = new GelfMessageBuilder(renderedEvent, HostName)
-                    .SetLevel(ToGelf(loggingEvent.Level))
-                    .SetTimestamp(loggingEvent.TimeStamp)
+                var messageBuilder = new GelfMessageBuilder(renderedEvent, HostName, loggingEvent.TimeStamp, ToGelf(loggingEvent.Level))
                     .SetAdditionalField(GelfAdditionalFields.Facility, Facility)
                     .SetAdditionalField(GelfAdditionalFields.LoggerName, loggingEvent.LoggerName);
                 if (IncludeSource)
@@ -53,9 +51,7 @@ namespace EasyGelf.NLog
                     var userStackFrame = loggingEvent.UserStackFrame;
                     if (userStackFrame != null)
                     {
-                        var fileName = userStackFrame.GetFileName();
-                        if (!string.IsNullOrEmpty(fileName))
-                            messageBuilder.SetAdditionalField(GelfAdditionalFields.SourceFileName, fileName);
+                        messageBuilder.SetAdditionalField(GelfAdditionalFields.SourceFileName, userStackFrame.GetFileName());
                         messageBuilder.SetAdditionalField(GelfAdditionalFields.SourceLineNumber, userStackFrame.GetFileLineNumber().ToString(CultureInfo.InvariantCulture));
                     }
                 }
@@ -64,12 +60,8 @@ namespace EasyGelf.NLog
                     var exception = loggingEvent.Exception;
                     if (exception != null)
                     {
-                        var exceptionMessage = exception.Message;
-                        if(!string.IsNullOrEmpty(exceptionMessage))
-                            messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionMessage, exceptionMessage);
-                        var exceptionStackTrace = exception.StackTrace;
-                        if (!string.IsNullOrEmpty(exceptionStackTrace))
-                            messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionStackTrace, exceptionMessage);
+                        messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionMessage, exception.Message);
+                        messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionStackTrace, exception.StackTrace);
                     }
                 }
                 transport.Send(messageBuilder.ToMessage());

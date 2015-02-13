@@ -60,9 +60,7 @@ namespace EasyGelf.Log4Net
             try
             {
                 var renderedEvent = RenderLoggingEvent(loggingEvent);
-                var messageBuilder = new GelfMessageBuilder(renderedEvent, HostName)
-                    .SetLevel(loggingEvent.Level.ToGelf())
-                    .SetTimestamp(loggingEvent.TimeStamp)
+                var messageBuilder = new GelfMessageBuilder(renderedEvent, HostName, loggingEvent.TimeStamp, loggingEvent.Level.ToGelf())
                     .SetAdditionalField(GelfAdditionalFields.Facility, Facility)
                     .SetAdditionalField(GelfAdditionalFields.LoggerName, loggingEvent.LoggerName)
                     .SetAdditionalField(GelfAdditionalFields.ThreadName, loggingEvent.ThreadName);
@@ -82,12 +80,8 @@ namespace EasyGelf.Log4Net
                     var exception = loggingEvent.ExceptionObject;
                     if (exception != null)
                     {
-                        var exceptionMessage = exception.Message;
-                        if (!string.IsNullOrEmpty(exceptionMessage))
-                            messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionMessage, exceptionMessage);
-                        var exceptionStackTrace = exception.StackTrace;
-                        if (!string.IsNullOrEmpty(exceptionStackTrace))
-                            messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionStackTrace, exceptionMessage);
+                        messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionMessage, exception.Message);
+                        messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionStackTrace, exception.StackTrace);
                     }
                 }
                 transport.Send(messageBuilder.ToMessage());

@@ -41,9 +41,7 @@ namespace EasyGelf.Tests
         public void ShouldSerializeMessageWithAdditionalFields()
         {
             var dateTime = new DateTime(2015, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            var message = new GelfMessageBuilder("Backtrace here\n\nmore stuff", "example.org")
-                .SetTimestamp(dateTime)
-                .SetLevel(GelfLevel.Alert)
+            var message = new GelfMessageBuilder("Backtrace here\n\nmore stuff", "example.org", dateTime, GelfLevel.Alert)
                 .SetAdditionalField(GelfAdditionalFields.Facility, "facility")
                 .SetAdditionalField(GelfAdditionalFields.LoggerName, "loggerName")
                 .SetAdditionalField(GelfAdditionalFields.ThreadName, "threadName")
