@@ -14,7 +14,7 @@ namespace EasyGelf.Tests.Core
         public void ShouldSendMessage()
         {
             var countingTransport = new SuceedCountingTransport();
-            var bufferedTransport = new BufferedTransport(countingTransport);
+            var bufferedTransport = new BufferedTransport(new SilentLogger(), countingTransport);
             for (var i = 0; i < MessageCount; ++i)
             {
                 var message = new GelfMessage();
@@ -28,7 +28,7 @@ namespace EasyGelf.Tests.Core
         public void ShouldSkipMessageIfSendFailed()
         {
             var countingTransport = new FailCountingTransport();
-            var bufferedTransport = new BufferedTransport(countingTransport);
+            var bufferedTransport = new BufferedTransport(new SilentLogger(), countingTransport);
             for (var i = 0; i < MessageCount; ++i)
             {
                 var message = new GelfMessage();

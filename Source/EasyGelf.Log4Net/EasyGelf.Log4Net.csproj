@@ -47,6 +47,7 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="VerboseLogger.cs" />
     <Compile Include="Extentions.cs" />
     <Compile Include="GelfAmqpAppender.cs" />
     <Compile Include="GelfAppenderBase.cs" />

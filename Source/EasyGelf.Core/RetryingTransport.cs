@@ -5,12 +5,14 @@ namespace EasyGelf.Core
 {
     public class RetryingTransport : ITransport
     {
+        private readonly IEasyGelfLogger logger;
         private readonly ITransport transport;
         private readonly int retryCount;
         private readonly TimeSpan retryDelay;
 
-        public RetryingTransport(ITransport transport, int retryCount, TimeSpan retryDelay)
+        public RetryingTransport(IEasyGelfLogger logger, ITransport transport, int retryCount, TimeSpan retryDelay)
         {
+            this.logger = logger;
             this.transport = transport;
             this.retryCount = retryCount;
             this.retryDelay = retryDelay;
@@ -26,12 +28,13 @@ namespace EasyGelf.Core
                     transport.Send(message);
                     break;
                 }
-                catch(Exception)
+                catch(Exception exception)
                 {
                     sendRetryCount--;
                     if(sendRetryCount <= 0)
                         throw;
                     Thread.Sleep(retryDelay);
+                    logger.Error("Cannot send message. Retrying...", exception);
                 }
             }
         }

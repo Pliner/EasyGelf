@@ -31,7 +31,7 @@ namespace EasyGelf.Log4Net
 
         public bool Persistent { get; set; }
 
-        protected override ITransport InitializeTransport()
+        protected override ITransport InitializeTransport(IEasyGelfLogger logger)
         {
             var configuration = new AmqpTransportConfiguration
                 {

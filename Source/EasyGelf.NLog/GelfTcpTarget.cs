@@ -19,7 +19,7 @@ namespace EasyGelf.NLog
 
         public int RemotePort { get; set; }
 
-        protected override ITransport InitializeTransport()
+        protected override ITransport InitializeTransport(IEasyGelfLogger logger)
         {
             var removeIpAddress = Dns.GetHostAddresses(RemoteAddress)
                                      .Shuffle()

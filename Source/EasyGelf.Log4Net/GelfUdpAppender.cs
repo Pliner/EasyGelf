@@ -21,7 +21,7 @@ namespace EasyGelf.Log4Net
 
         public int RemotePort { get; set; }
 
-        protected override ITransport InitializeTransport()
+        protected override ITransport InitializeTransport(IEasyGelfLogger logger)
         {
             var remoteIpAddress = Dns.GetHostAddresses(RemoteAddress)
                 .Shuffle()

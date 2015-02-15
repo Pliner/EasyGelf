@@ -21,7 +21,7 @@ namespace EasyGelf.Tests.Core
             mockRepository = new MockRepository();
             mainTransport = mockRepository.StrictMultiMock<ITransport>();
             mainTransport.Replay();
-            retryingTransport = new RetryingTransport(mainTransport, retryCount, retryDelay);
+            retryingTransport = new RetryingTransport(new SilentLogger(), mainTransport, retryCount, retryDelay);
         }
 
         [Test]

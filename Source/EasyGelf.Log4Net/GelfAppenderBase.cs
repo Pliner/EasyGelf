@@ -8,6 +8,7 @@ namespace EasyGelf.Log4Net
     public abstract class GelfAppenderBase  : AppenderSkeleton
     {
         private ITransport transport;
+        private IEasyGelfLogger logger;
 
         public string Facility { get; set; }
 
@@ -23,10 +24,13 @@ namespace EasyGelf.Log4Net
 
         public bool IncludeStackTrace { get; set; }
 
+        public bool Verbose { get; set; }
+
         protected GelfAppenderBase()
         {
             Facility = "gelf";
             IncludeSource = true;
+            Verbose = false;
             HostName = Environment.MachineName;
             UseRetry = true;
             RetryCount = 5;
@@ -39,12 +43,13 @@ namespace EasyGelf.Log4Net
             base.ActivateOptions();
             try
             {
-                var mainTransport = InitializeTransport();
-                transport = new BufferedTransport(UseRetry ? new RetryingTransport(mainTransport, RetryCount, RetryDelay) : mainTransport);
+                logger = Verbose ? (IEasyGelfLogger)new VerboseLogger() : new SilentLogger();
+                var mainTransport = InitializeTransport(logger);
+                transport = new BufferedTransport(logger, UseRetry ? new RetryingTransport(logger, mainTransport, RetryCount, RetryDelay) : mainTransport);
             }
             catch (Exception exception)
             {
-                ErrorHandler.Error("Failed to create Transport", exception);
+                logger.Error("Failed to create Transport", exception);
             }
         }
 
@@ -53,7 +58,7 @@ namespace EasyGelf.Log4Net
             get { return true; }
         }
 
-        protected abstract ITransport InitializeTransport();
+        protected abstract ITransport InitializeTransport(IEasyGelfLogger logger);
 
         protected override void Append(LoggingEvent loggingEvent)
         {
@@ -88,7 +93,7 @@ namespace EasyGelf.Log4Net
             }
             catch (Exception exception)
             {
-                ErrorHandler.Error("Unable to send logging event to remote host", exception, ErrorCode.WriteFailure);
+                logger.Error("Unable to send logging event to remote host", exception);
             }
         }
 

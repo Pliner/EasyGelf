@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EasyGelf.Core.Http
+namespace EasyGelf.Core
 {
     public class SendFailedException : Exception
     {

@@ -61,6 +61,8 @@
     <Compile Include="GelfMessageSerializer.cs" />
     <Compile Include="Http\HttpTransport.cs" />
     <Compile Include="Http\HttpTransportConfiguration.cs" />
+    <Compile Include="IEasyGelfLogger.cs" />
+    <Compile Include="SilentLogger.cs" />
     <Compile Include="SendFailedException.cs" />
     <Compile Include="IGelfMessageSerializer.cs" />
     <Compile Include="ITransport.cs" />

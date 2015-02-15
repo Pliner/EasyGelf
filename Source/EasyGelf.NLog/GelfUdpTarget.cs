@@ -23,7 +23,7 @@ namespace EasyGelf.NLog
 
         public int MessageSize { get; set; }
 
-        protected override ITransport InitializeTransport()
+        protected override ITransport InitializeTransport(IEasyGelfLogger logger)
         {
             var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(new MessageBasedIdGenerator(), MessageSize.UdpMessageSize()));
             var removeIpAddress = Dns.GetHostAddresses(RemoteAddress)

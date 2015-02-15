@@ -33,7 +33,7 @@ namespace EasyGelf.NLog
 
         public bool Persistent { get; set; }
 
-        protected override ITransport InitializeTransport()
+        protected override ITransport InitializeTransport(IEasyGelfLogger logger)
         {
             var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(new MessageBasedIdGenerator(), MessageSize));
             var configuration = new AmqpTransportConfiguration

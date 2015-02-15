@@ -47,6 +47,7 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="VerboseLogger.cs" />
     <Compile Include="GelfAmqpTarget.cs" />
     <Compile Include="GelfTargetBase.cs" />
     <Compile Include="GelfTcpTarget.cs" />
@@ -57,6 +58,10 @@
     <ProjectReference Include="..\EasyGelf.Core\EasyGelf.Core.csproj">
       <Project>{b928d694-5633-4f00-b70f-23f6e5f3a2db}</Project>
       <Name>EasyGelf.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EasyGelf.Log4Net\EasyGelf.Log4Net.csproj">
+      <Project>{5B64942E-7197-4781-909C-E6AA5813AE9D}</Project>
+      <Name>EasyGelf.Log4Net</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,6 @@
 using System.Globalization;
 using EasyGelf.Core;
 using NLog;
-using NLog.Common;
 using NLog.Targets;
 
 namespace EasyGelf.NLog
@@ -10,6 +9,7 @@ namespace EasyGelf.NLog
     public abstract class GelfTargetBase : TargetWithLayout
     {
         private ITransport transport;
+        private IEasyGelfLogger logger;
 
         public string Facility { get; set; }
 
@@ -25,6 +25,8 @@ namespace EasyGelf.NLog
 
         public bool IncludeStackTrace { get; set; }
 
+        public bool Verbose { get; set; }
+
         protected GelfTargetBase()
         {
             Facility = "gelf";
@@ -34,9 +36,10 @@ namespace EasyGelf.NLog
             RetryCount = 5;
             RetryDelay = TimeSpan.FromMilliseconds(50);
             IncludeStackTrace = true;
+            Verbose = false;
         }
 
-        protected abstract ITransport InitializeTransport();
+        protected abstract ITransport InitializeTransport(IEasyGelfLogger logger);
 
         protected override void Write(LogEventInfo loggingEvent)
         {
@@ -68,15 +71,16 @@ namespace EasyGelf.NLog
             }
             catch (Exception exception)
             {
-                InternalLogger.Error("Failed to send message", exception);
+                logger.Error("Failed to send message", exception);
             }
         }
 
         protected override void InitializeTarget()
         {
             base.InitializeTarget();
-            var mainTransport = InitializeTransport();
-            transport = new BufferedTransport(UseRetry ? new RetryingTransport(mainTransport, RetryCount, RetryDelay) : mainTransport);
+            logger = Verbose ? (IEasyGelfLogger)new VerboseLogger() : new SilentLogger();
+            var mainTransport = InitializeTransport(logger);
+            transport = new BufferedTransport(logger, UseRetry ? new RetryingTransport(logger, mainTransport, RetryCount, RetryDelay) : mainTransport);
         }
 
         protected override void CloseTarget()
@@ -99,9 +103,7 @@ namespace EasyGelf.NLog
                 return GelfLevel.Informational;
             if (level == LogLevel.Trace)
                 return GelfLevel.Informational;
-            if (level == LogLevel.Warn)
-                return GelfLevel.Warning;
-            return GelfLevel.Error;
+            return level == LogLevel.Warn ? GelfLevel.Warning : GelfLevel.Error;
         }
     }
 }

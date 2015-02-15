@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Threading;
 
 namespace EasyGelf.Core
@@ -9,7 +10,7 @@ namespace EasyGelf.Core
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEventSlim stopEvent = new ManualResetEventSlim(false);
 
-        public BufferedTransport(ITransport transport)
+        public BufferedTransport(IEasyGelfLogger logger, ITransport transport)
         {
             new Thread(() =>
                 {
@@ -23,8 +24,9 @@ namespace EasyGelf.Core
                             {
                                 transport.Send(mesage);
                             }
-                            catch
+                            catch(Exception exception)
                             {
+                                logger.Error("Cannot send message", exception);
                             }
                         }
                     }
@@ -37,8 +39,9 @@ namespace EasyGelf.Core
                             {
                                 transport.Send(message);
                             }
-                            catch
+                            catch (Exception exception)
                             {
+                                logger.Error("Cannot send message", exception);
                             }
                         }
                     }
