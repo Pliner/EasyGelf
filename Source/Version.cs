@@ -2,9 +2,10 @@
 using System.Reflection;
 
 // EasyGelf version number: <major>.<minor>.<non-breaking-feature>.<build>
-[assembly: AssemblyVersion("0.4.2.0")]
+[assembly: AssemblyVersion("0.4.3.0")]
 [assembly: CLSCompliant(true)]
-
+                                 
+//0.4.3.0 Limited EasyGelf.Log4net for Net 3.5         
 //0.4.2.0 Added logging.                                
 //0.4.1.0 Bugfixes. A lot of potential ArgumentNullException                                
 //0.4.0.0 Downgrade to .Net 4.0 and log4net 1.2.10                                

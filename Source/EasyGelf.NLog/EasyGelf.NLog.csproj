@@ -27,7 +27,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\Build\Release\EasyGelf.NLog\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -59,9 +59,9 @@
       <Project>{b928d694-5633-4f00-b70f-23f6e5f3a2db}</Project>
       <Name>EasyGelf.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EasyGelf.Log4Net\EasyGelf.Log4Net.csproj">
-      <Project>{5B64942E-7197-4781-909C-E6AA5813AE9D}</Project>
-      <Name>EasyGelf.Log4Net</Name>
+    <ProjectReference Include="..\EasyGelf.Transport\EasyGelf.Transport.csproj">
+      <Project>{d8d243e9-f851-4f95-8c60-ca9abdd3bca2}</Project>
+      <Name>EasyGelf.Transport</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

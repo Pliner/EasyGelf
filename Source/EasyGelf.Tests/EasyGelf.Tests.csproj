@@ -49,13 +49,13 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
-    <Compile Include="Core\BufferedTransportTests.cs" />
+    <Compile Include="Transport\BufferedTransportTests.cs" />
     <Compile Include="Core\CoreExtentionsTests.cs" />
     <Compile Include="Core\Encoders\ChunkingEncoderTests.cs" />
     <Compile Include="Core\Encoders\CompositeEncoderTests.cs" />
     <Compile Include="Core\Encoders\GZipEncoderTests.cs" />
-    <Compile Include="Core\RetryTransportTests.cs" />
-    <Compile Include="GelfMessageSerializerTests.cs" />
+    <Compile Include="Transport\RetryTransportTests.cs" />
+    <Compile Include="Core\GelfMessageSerializerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +65,10 @@
     <ProjectReference Include="..\EasyGelf.Core\EasyGelf.Core.csproj">
       <Project>{b928d694-5633-4f00-b70f-23f6e5f3a2db}</Project>
       <Name>EasyGelf.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EasyGelf.Transport\EasyGelf.Transport.csproj">
+      <Project>{d8d243e9-f851-4f95-8c60-ca9abdd3bca2}</Project>
+      <Name>EasyGelf.Transport</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

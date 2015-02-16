@@ -1,8 +1,9 @@
 ﻿using System.Net;
 using EasyGelf.Core;
 using EasyGelf.Core.Encoders;
-using EasyGelf.Core.Udp;
 using System.Linq;
+using EasyGelf.Transport;
+using EasyGelf.Transport.Udp;
 
 namespace EasyGelf.Log4Net
 {

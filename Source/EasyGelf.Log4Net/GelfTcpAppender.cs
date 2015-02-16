@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using System.Net;
 using EasyGelf.Core;
-using EasyGelf.Core.Tcp;
+using EasyGelf.Transport;
+using EasyGelf.Transport.Tcp;
 
 namespace EasyGelf.Log4Net
 {

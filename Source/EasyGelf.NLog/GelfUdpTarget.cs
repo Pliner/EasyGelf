@@ -2,7 +2,8 @@
 using System.Net;
 using EasyGelf.Core;
 using EasyGelf.Core.Encoders;
-using EasyGelf.Core.Udp;
+using EasyGelf.Transport;
+using EasyGelf.Transport.Udp;
 using NLog.Targets;
 
 namespace EasyGelf.NLog

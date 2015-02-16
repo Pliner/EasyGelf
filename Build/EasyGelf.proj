@@ -5,7 +5,12 @@
         <BuildNumber>$(BUILD_NUMBER)</BuildNumber>
         <BuildNumber Condition="'$(BuildNumber)' == ''">0</BuildNumber>
         <BaseDir>$(MSBuildProjectDirectory)\..</BaseDir>
-        <OutputDir>$(BaseDir)\bin</OutputDir>
+        <OutputDir>$(BaseDir)\Deploy</OutputDir>
+        <ReleaseDir>$(BaseDir)\Build\Release</ReleaseDir>
+        <Log4NetDir>$(ReleaseDir)\EasyGelf.Log4Net</Log4NetDir>
+        <NLogDir>$(ReleaseDir)\EasyGelf.NLog</NLogDir>
+        <Log4Net_Net35Dir>$(ReleaseDir)\EasyGelf.Log4Net_Net35</Log4Net_Net35Dir>
+      
         <Tools>$(BaseDir)\Tools</Tools>
         <MSBuildCommunityTasksPath>$(Tools)\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
         <Nunit>$(Tools)\NUnit\2.5</Nunit>
@@ -27,7 +32,7 @@
 
     <ItemGroup>
         <ProjectToBuild Include="$(Source)\EasyGelf.sln">
-            <Properties>OutputPath=$(OutputDir);Configuration=Release</Properties>
+            <Properties>Configuration=Release</Properties>
         </ProjectToBuild>
     </ItemGroup>
 
@@ -37,19 +42,24 @@
 
     <Target Name="MergeLog4Net" DependsOnTargets="Build">
       <Exec 
-          WorkingDirectory="$(OutputDir)" 
-          Command="$(ILRepack) /targetplatform:v4 /internalize /out:$(OutputDir)\EasyGelf.Log4Net.dll $(OutputDir)\EasyGelf.Log4Net.dll $(OutputDir)\EasyGelf.Core.dll $(OutputDir)\RabbitMQ.Client.dll" />
+          WorkingDirectory="$(Log4NetDir)" 
+          Command="$(ILRepack) /targetplatform:v4 /internalize /out:$(Log4NetDir)\EasyGelf.Log4Net.dll $(Log4NetDir)\EasyGelf.Log4Net.dll $(Log4NetDir)\EasyGelf.Core.dll $(Log4NetDir)\EasyGelf.Transport.dll $(Log4NetDir)\RabbitMQ.Client.dll" />
     </Target>
     <Target Name="MergeNLog" DependsOnTargets="Build">
       <Exec 
-          WorkingDirectory="$(OutputDir)" 
-          Command="$(ILRepack) /targetplatform:v4 /internalize /out:$(OutputDir)\EasyGelf.NLog.dll $(OutputDir)\EasyGelf.NLog.dll $(OutputDir)\EasyGelf.Core.dll $(OutputDir)\RabbitMQ.Client.dll" />
+          WorkingDirectory="$(NLogDir)" 
+          Command="$(ILRepack) /targetplatform:v4 /internalize /out:$(NLogDir)\EasyGelf.NLog.dll $(NLogDir)\EasyGelf.NLog.dll $(NLogDir)\EasyGelf.Core.dll $(NLogDir)\EasyGelf.Transport.dll $(NLogDir)\RabbitMQ.Client.dll" />
+    </Target>
+    <Target Name="MergeLog4Net_Net35" DependsOnTargets="Build">
+      <Exec 
+          WorkingDirectory="$(Log4NetDir)" 
+          Command="$(ILRepack) /targetplatform:v2 /internalize /out:$(Log4Net_Net35Dir)\EasyGelf.Log4Net.dll $(Log4Net_Net35Dir)\EasyGelf.Log4Net.dll $(Log4Net_Net35Dir)\EasyGelf.Core.dll" />
     </Target>
 
 
     <!-- Packaging -->
 
-    <Target Name="PackageLog4Net" DependsOnTargets="MergeLog4Net">
+    <Target Name="PackageLog4Net" DependsOnTargets="MergeLog4Net;MergeLog4Net_Net35">
 
         <ItemGroup>
             <FilesToDelete Include="$(Package)\EasyGelf.Log4Net\*.nupkg"  />
@@ -57,9 +67,10 @@
       
         <Delete Files="@(FilesToDelete)" />
     
-        <Copy SourceFiles="$(OutputDir)\EasyGelf.Log4Net.dll" DestinationFolder="$(Package)\EasyGelf.Log4Net\lib\net40" />
+        <Copy SourceFiles="$(Log4NetDir)\EasyGelf.Log4Net.dll" DestinationFolder="$(Package)\EasyGelf.Log4Net\lib\net40" />
+        <Copy SourceFiles="$(Log4Net_Net35Dir)\EasyGelf.Log4Net.dll" DestinationFolder="$(Package)\EasyGelf.Log4Net\lib\net35" />
         
-        <GetAssemblyIdentity AssemblyFiles="$(OutputDir)\EasyGelf.Log4Net.dll">
+        <GetAssemblyIdentity AssemblyFiles="$(Log4NetDir)\EasyGelf.Log4Net.dll">
             <Output TaskParameter="Assemblies" ItemName="AsmInfo" />
         </GetAssemblyIdentity>        
         
@@ -84,9 +95,9 @@
       
         <Delete Files="@(FilesToDelete)" />
     
-        <Copy SourceFiles="$(OutputDir)\EasyGelf.NLog.dll" DestinationFolder="$(Package)\EasyGelf.NLog\lib\net40" />
+        <Copy SourceFiles="$(NLogDir)\EasyGelf.NLog.dll" DestinationFolder="$(Package)\EasyGelf.NLog\lib\net40" />
         
-        <GetAssemblyIdentity AssemblyFiles="$(OutputDir)\EasyGelf.NLog.dll">
+        <GetAssemblyIdentity AssemblyFiles="$(NLogDir)\EasyGelf.NLog.dll">
             <Output TaskParameter="Assemblies" ItemName="AsmInfo" />
         </GetAssemblyIdentity>        
         
