@@ -1,0 +1,24 @@
+version: 0.4.3.{build}
+
+assembly_info:
+  patch: true
+  file: Source\Version.cs
+  assembly_version: "{version}"
+
+build:
+  parallel: true                
+  project: Build\EasyGelf.proj
+  verbosity: minimal
+
+artifacts:
+  - path: 'Package\EasyGelf.Log4Net\*.nupkg'
+  - path: 'Package\EasyGelf.NLog\*.nupkg'
+
+deploy:
+  - provider: NuGet
+    server:
+    api_key:
+      secure: EHT7Ev+B/9Dw8RdbyuJKsvgPSTunPry9CmCvT44m47MQErMn8IkJKJGrW2fiuJTB
+    artifact: '*.nupkg'
+    on:
+      branch: master
