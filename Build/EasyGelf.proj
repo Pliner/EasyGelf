@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Default">
 
     <PropertyGroup>
-        <BuildNumber>$(BUILD_NUMBER)</BuildNumber>
+        <BuildNumber>$(APPVEYOR_BUILD_NUMBER)</BuildNumber>
         <BuildNumber Condition="'$(BuildNumber)' == ''">0</BuildNumber>
         <BaseDir>$(MSBuildProjectDirectory)\..</BaseDir>
         <OutputDir>$(BaseDir)\Deploy</OutputDir>
