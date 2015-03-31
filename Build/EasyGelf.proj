@@ -22,13 +22,7 @@
 
     <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 
-    <Target Name="Default" DependsOnTargets="Version; Build; MergeLog4Net; PackageLog4Net; MergeNLog; PackageNLog" />
-
-    <Target Name="Version">
-        <FileUpdate Files="$(Source)\Version.cs"
-            Regex="AssemblyVersion\(&quot;(\d+)\.(\d+)\.(\d+)\.(\d+)&quot;\)"
-            ReplacementText="AssemblyVersion(&quot;$1.$2.$3.$(BuildNumber)&quot;)" />
-    </Target>
+    <Target Name="Default" DependsOnTargets="Build; MergeLog4Net; PackageLog4Net; MergeNLog; PackageNLog" />
 
     <ItemGroup>
         <ProjectToBuild Include="$(Source)\EasyGelf.sln">
@@ -82,7 +76,6 @@
         
         <Exec WorkingDirectory="$(Package)\EasyGelf.Log4Net" Command="$(NuGet)\NuGet.exe pack $(Package)\EasyGelf.Log4Net\EasyGelf.Log4Net.nuspec" />
 
-        <Message Text="##teamcity[buildNumber '%(AsmInfo.Version)']" />
     </Target>
 
 
@@ -109,7 +102,6 @@
         
         <Exec WorkingDirectory="$(Package)\EasyGelf.NLog" Command="$(NuGet)\NuGet.exe pack $(Package)\EasyGelf.NLog\EasyGelf.NLog.nuspec" />
 
-        <Message Text="##teamcity[buildNumber '%(AsmInfo.Version)']" />
     </Target>
 
                                                                  
