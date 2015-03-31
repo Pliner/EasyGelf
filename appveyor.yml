@@ -29,6 +29,9 @@ assembly_info:
   file: Source\Version.cs
   assembly_version: "{version}"
 
+before_build:
+  nuget restore Source\EasyGelf.sln
+
 build:
   parallel: true                
   project: Source\EasyGelf.sln
