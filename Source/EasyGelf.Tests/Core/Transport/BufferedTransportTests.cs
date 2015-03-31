@@ -4,7 +4,7 @@ using EasyGelf.Core;
 using EasyGelf.Core.Transports;
 using NUnit.Framework;
 
-namespace EasyGelf.Tests.Transport
+namespace EasyGelf.Tests.Core.Transport
 {
     [TestFixture]
     public class BufferedTransportTests

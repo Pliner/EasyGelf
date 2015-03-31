@@ -47,12 +47,12 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
-    <Compile Include="Transport\BufferedTransportTests.cs" />
+    <Compile Include="Core\Transport\BufferedTransportTests.cs" />
     <Compile Include="Core\CoreExtentionsTests.cs" />
     <Compile Include="Core\Encoders\ChunkingEncoderTests.cs" />
     <Compile Include="Core\Encoders\CompositeEncoderTests.cs" />
     <Compile Include="Core\Encoders\GZipEncoderTests.cs" />
-    <Compile Include="Transport\RetryTransportTests.cs" />
+    <Compile Include="Core\Transport\RetryTransportTests.cs" />
     <Compile Include="Core\GelfMessageSerializerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
