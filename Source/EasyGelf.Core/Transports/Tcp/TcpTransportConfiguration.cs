@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace EasyGelf.Transport.Tcp
+namespace EasyGelf.Core.Transports.Tcp
 {
     public sealed class TcpTransportConfiguration
     {

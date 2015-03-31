@@ -1,7 +1,7 @@
 ﻿using EasyGelf.Core;
 using EasyGelf.Core.Encoders;
-using EasyGelf.Transport;
-using EasyGelf.Transport.Amqp;
+using EasyGelf.Core.Transports;
+using EasyGelf.Core.Transports.Amqp;
 
 namespace EasyGelf.Log4Net
 {

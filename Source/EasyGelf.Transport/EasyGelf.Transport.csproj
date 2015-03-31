@@ -44,21 +44,7 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
-    <Compile Include="Amqp\AmqpTransport.cs" />
-    <Compile Include="Amqp\AmqpTransportConfiguration.cs" />
-    <Compile Include="BufferedTransport.cs" />
-    <Compile Include="CannotConnectException.cs" />
-    <Compile Include="DisconnectedException.cs" />
-    <Compile Include="Http\HttpTransport.cs" />
-    <Compile Include="Http\HttpTransportConfiguration.cs" />
-    <Compile Include="ITransport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RetryingTransport.cs" />
-    <Compile Include="SendFailedException.cs" />
-    <Compile Include="Tcp\TcpTransport.cs" />
-    <Compile Include="Tcp\TcpTransportConfiguration.cs" />
-    <Compile Include="Udp\UdpTransport.cs" />
-    <Compile Include="Udp\UdpTransportConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EasyGelf.Core\EasyGelf.Core.csproj">

@@ -1,8 +1,7 @@
 ﻿using System.IO;
 using System.Net;
-using EasyGelf.Core;
 
-namespace EasyGelf.Transport.Http
+namespace EasyGelf.Core.Transports.Http
 {
     public sealed class HttpTransport : ITransport
     {

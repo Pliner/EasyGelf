@@ -66,10 +66,6 @@
       <Project>{b928d694-5633-4f00-b70f-23f6e5f3a2db}</Project>
       <Name>EasyGelf.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EasyGelf.Transport\EasyGelf.Transport.csproj">
-      <Project>{d8d243e9-f851-4f95-8c60-ca9abdd3bca2}</Project>
-      <Name>EasyGelf.Transport</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

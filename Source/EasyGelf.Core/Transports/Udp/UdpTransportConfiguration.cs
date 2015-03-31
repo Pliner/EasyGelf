@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace EasyGelf.Transport.Udp
+namespace EasyGelf.Core.Transports.Udp
 {
     public sealed class UdpTransportConfiguration
     {

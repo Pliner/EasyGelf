@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
-using EasyGelf.Core;
 
-namespace EasyGelf.Transport.Tcp
+namespace EasyGelf.Core.Transports.Tcp
 {
     public sealed class TcpTransport : ITransport
     {

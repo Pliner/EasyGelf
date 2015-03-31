@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using EasyGelf.Core;
-using EasyGelf.Transport;
+using EasyGelf.Core.Transports;
 using NUnit.Framework;
 
 namespace EasyGelf.Tests.Transport

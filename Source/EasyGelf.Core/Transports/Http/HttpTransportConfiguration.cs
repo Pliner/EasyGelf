@@ -1,5 +1,5 @@
 ﻿
-namespace EasyGelf.Transport.Http
+namespace EasyGelf.Core.Transports.Http
 {
     public sealed class HttpTransportConfiguration
     {

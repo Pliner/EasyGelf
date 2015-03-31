@@ -1,6 +1,4 @@
-﻿using EasyGelf.Core;
-
-namespace EasyGelf.Transport
+﻿namespace EasyGelf.Core.Transports
 {
     public interface ITransport
     {

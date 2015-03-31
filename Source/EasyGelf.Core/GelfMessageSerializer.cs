@@ -3,6 +3,11 @@ using System.Text;
 
 namespace EasyGelf.Core
 {
+    public interface IGelfMessageSerializer
+    {
+        byte[] Serialize(GelfMessage message);
+    }
+
     public sealed class GelfMessageSerializer : IGelfMessageSerializer
     {
         public byte[] Serialize(GelfMessage message)

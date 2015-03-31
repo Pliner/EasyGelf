@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Threading;
-using EasyGelf.Core;
 
-namespace EasyGelf.Transport
+namespace EasyGelf.Core.Transports
 {
     public sealed class BufferedTransport : ITransport
     {

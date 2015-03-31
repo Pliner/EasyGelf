@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading;
-using EasyGelf.Core;
 
-namespace EasyGelf.Transport
+namespace EasyGelf.Core.Transports
 {
-    public class RetryingTransport : ITransport
+    public sealed class RetryingTransport : ITransport
     {
         private readonly IEasyGelfLogger logger;
         private readonly ITransport transport;

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using EasyGelf.Core;
 using EasyGelf.Core.Encoders;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Framing;
 
-namespace EasyGelf.Transport.Amqp
+namespace EasyGelf.Core.Transports.Amqp
 {
     public sealed class AmqpTransport : ITransport
     {

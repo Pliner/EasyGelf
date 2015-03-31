@@ -1,8 +1,7 @@
 ﻿using System.Net.Sockets;
-using EasyGelf.Core;
 using EasyGelf.Core.Encoders;
 
-namespace EasyGelf.Transport.Udp
+namespace EasyGelf.Core.Transports.Udp
 {
     public sealed class UdpTransport : ITransport
     {

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Net;
 using EasyGelf.Core;
-using EasyGelf.Transport;
-using EasyGelf.Transport.Tcp;
+using EasyGelf.Core.Transports;
+using EasyGelf.Core.Transports.Tcp;
 using NLog.Targets;
 
 namespace EasyGelf.NLog

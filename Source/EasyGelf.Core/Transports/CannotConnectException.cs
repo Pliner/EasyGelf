@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EasyGelf.Transport
+namespace EasyGelf.Core.Transports
 {
     public sealed class CannotConnectException : Exception
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using EasyGelf.Core;
-using EasyGelf.Transport;
+using EasyGelf.Core.Transports;
 using NLog;
 using NLog.Targets;
 

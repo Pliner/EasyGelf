@@ -1,6 +1,6 @@
 ﻿using System;
 using EasyGelf.Core;
-using EasyGelf.Transport;
+using EasyGelf.Core.Transports;
 using log4net.Appender;
 using log4net.Core;
 

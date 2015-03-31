@@ -1,4 +1,4 @@
-﻿namespace EasyGelf.Transport.Amqp
+﻿namespace EasyGelf.Core.Transports.Amqp
 {
     public sealed class AmqpTransportConfiguration
     {
