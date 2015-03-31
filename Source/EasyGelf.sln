@@ -27,8 +27,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyGelf.NLog.Example", "Ea
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyGelf.Transport", "EasyGelf.Transport\EasyGelf.Transport.csproj", "{D8D243E9-F851-4F95-8C60-CA9ABDD3BCA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyGelf.Log4Net_Net35", "EasyGelf.Log4Net_Net35\EasyGelf.Log4Net_Net35.csproj", "{DC998475-EB15-4289-8DC2-8CD3C9E353DB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,10 +61,6 @@ Global
 		{D8D243E9-F851-4F95-8C60-CA9ABDD3BCA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8D243E9-F851-4F95-8C60-CA9ABDD3BCA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8D243E9-F851-4F95-8C60-CA9ABDD3BCA2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DC998475-EB15-4289-8DC2-8CD3C9E353DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DC998475-EB15-4289-8DC2-8CD3C9E353DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DC998475-EB15-4289-8DC2-8CD3C9E353DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DC998475-EB15-4289-8DC2-8CD3C9E353DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
