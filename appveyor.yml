@@ -20,6 +20,10 @@ version: 0.4.4.{build}
 # 0.2.0.0 Merge all external dependencies except log4net into one assembly
 # 0.1.0.0 Initial
 
+platform: Any CPU
+ 
+configuration: Release
+
 assembly_info:
   patch: true
   file: Source\Version.cs
@@ -39,3 +43,11 @@ build:
 #      secure: EHT7Ev+B/9Dw8RdbyuJKsvgPSTunPry9CmCvT44m47MQErMn8IkJKJGrW2fiuJTB
 #    on:
 #      branch: master
+
+notifications:
+  - provider: Email
+    to:
+      - yury.pliner@gmail.com
+    subject: 'Build {{status}}'                  
+    message: "{{message}}, {{commitId}}, ..."    
+    on_build_status_changed: true
