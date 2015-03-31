@@ -4,7 +4,7 @@ using EasyGelf.Core.Transports;
 using NUnit.Framework;
 using Rhino.Mocks;
 
-namespace EasyGelf.Tests.Transport
+namespace EasyGelf.Tests.Core.Transport
 {
     [TestFixture]
     public class RetryTransportTests
