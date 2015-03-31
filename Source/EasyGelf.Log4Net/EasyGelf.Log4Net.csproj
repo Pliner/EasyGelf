@@ -86,7 +86,7 @@
    </ItemGroup>
 
    <ItemGroup>                              
-    <DoNotInternalizeAssemblies Include="EasyGelf.Core.*" />
+    <DoNotInternalizeAssemblies Include="EasyGelf.Core" />
    </ItemGroup>
 
    <ILRepack 
