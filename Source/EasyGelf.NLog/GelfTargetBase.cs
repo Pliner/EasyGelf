@@ -4,6 +4,9 @@ using EasyGelf.Core;
 using EasyGelf.Core.Transports;
 using NLog;
 using NLog.Targets;
+using NLog.Config;
+using NLog.Layouts;
+using System.Collections.Generic;
 
 namespace EasyGelf.NLog
 {
@@ -28,6 +31,9 @@ namespace EasyGelf.NLog
 
         public bool Verbose { get; set; }
 
+		[ArrayParameter(typeof(GelfParameterInfo), "parameter")]
+		public IList<GelfParameterInfo> Parameters { get; private set; }
+
         protected GelfTargetBase()
         {
             Facility = "gelf";
@@ -38,6 +44,8 @@ namespace EasyGelf.NLog
             RetryDelay = TimeSpan.FromMilliseconds(50);
             IncludeStackTrace = true;
             Verbose = false;
+
+			Parameters = new List<GelfParameterInfo>();
         }
 
         protected abstract ITransport InitializeTransport(IEasyGelfLogger logger);
@@ -68,6 +76,18 @@ namespace EasyGelf.NLog
                         messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionStackTrace, exception.StackTrace);
                     }
                 }
+
+				//Add user-defined fields from config
+				foreach (GelfParameterInfo param in Parameters)
+				{
+					var value = param.Layout.Render(loggingEvent);
+					if (value == "" || value == " ")
+						continue;
+					var key = param.Name;
+
+					messageBuilder.SetAdditionalField(key, value);
+				}
+
                 transport.Send(messageBuilder.ToMessage());
             }
             catch (Exception exception)
@@ -106,5 +126,15 @@ namespace EasyGelf.NLog
                 return GelfLevel.Informational;
             return level == LogLevel.Warn ? GelfLevel.Warning : GelfLevel.Error;
         }
+
+		[NLogConfigurationItem]
+		public class GelfParameterInfo
+		{
+			[RequiredParameter]
+			public string Name { get; set; }
+
+			[RequiredParameter]
+			public Layout Layout { get; set; }
+		}
     }
 }
