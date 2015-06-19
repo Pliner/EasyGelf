@@ -7,6 +7,7 @@ using NLog.Targets;
 using NLog.Config;
 using NLog.Layouts;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace EasyGelf.NLog
 {
@@ -20,6 +21,8 @@ namespace EasyGelf.NLog
         public string HostName { get; set; }
 
         public bool IncludeSource { get; set; }
+
+		public bool IncludeEventProperties { get; set; }
        
         public bool UseRetry { get; set; }
 
@@ -39,6 +42,7 @@ namespace EasyGelf.NLog
             Facility = "gelf";
             HostName = Environment.MachineName;
             IncludeSource = true;
+			IncludeEventProperties = true;
             UseRetry = true;
             RetryCount = 5;
             RetryDelay = TimeSpan.FromMilliseconds(50);
@@ -86,6 +90,15 @@ namespace EasyGelf.NLog
 					var key = param.Name;
 
 					messageBuilder.SetAdditionalField(key, value);
+				}
+
+				//Add log event properties
+				if(IncludeEventProperties)
+				{
+					foreach(var property in loggingEvent.Properties)
+					{
+						messageBuilder.SetAdditionalField(property.Key.ToString(), property.Value.ToString());
+					}
 				}
 
                 transport.Send(messageBuilder.ToMessage());
