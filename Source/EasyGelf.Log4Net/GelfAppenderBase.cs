@@ -3,11 +3,28 @@ using EasyGelf.Core;
 using EasyGelf.Core.Transports;
 using log4net.Appender;
 using log4net.Core;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace EasyGelf.Log4Net
 {
-    public abstract class GelfAppenderBase  : AppenderSkeleton
+    public abstract class GelfAppenderBase : AppenderSkeleton
     {
+
+        /// <summary>
+        /// The class contains properties for output as static fields.
+        /// </summary>
+        public class StaticOutField
+        {
+            public string Name { get; set; }
+            public string Value { get; set; }
+        }
+
+        public void AddStaticOutField(StaticOutField additionalParameter)
+        {
+            _staticOutFields.Add(additionalParameter);
+        }
+
         private ITransport transport;
         private IEasyGelfLogger logger;
 
@@ -27,6 +44,8 @@ namespace EasyGelf.Log4Net
 
         public bool Verbose { get; set; }
 
+        protected List<StaticOutField> _staticOutFields;
+
         protected GelfAppenderBase()
         {
             Facility = "gelf";
@@ -37,6 +56,7 @@ namespace EasyGelf.Log4Net
             RetryCount = 5;
             RetryDelay = TimeSpan.FromMilliseconds(50);
             IncludeStackTrace = true;
+            _staticOutFields = new List<StaticOutField>();
         }
 
         public override void ActivateOptions()
@@ -70,6 +90,12 @@ namespace EasyGelf.Log4Net
                     .SetAdditionalField(GelfAdditionalFields.Facility, Facility)
                     .SetAdditionalField(GelfAdditionalFields.LoggerName, loggingEvent.LoggerName)
                     .SetAdditionalField(GelfAdditionalFields.ThreadName, loggingEvent.ThreadName);
+
+                foreach (var item in _staticOutFields)
+                {
+                    messageBuilder.SetAdditionalField(item.Name, item.Value);
+                }
+
                 if (IncludeSource)
                 {
                     var locationInformation = loggingEvent.LocationInformation;
