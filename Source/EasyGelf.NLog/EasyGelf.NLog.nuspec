@@ -14,5 +14,8 @@
     <releaseNotes>
     </releaseNotes>
     <copyright>Copyright Yury Pliner 2015</copyright>
+    <dependencies>
+        <dependency id="NLog" version="[3.2.0.0,]" />
+    </dependencies>                            
   </metadata>
 </package>

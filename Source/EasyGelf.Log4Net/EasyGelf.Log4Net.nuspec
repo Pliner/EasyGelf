@@ -13,6 +13,9 @@
     <tags>GELF, log4net</tags>
     <releaseNotes>
     </releaseNotes>
-    <copyright>Copyright Yury Pliner 2015</copyright>
+    <copyright>Copyright Yury Pliner 2016</copyright>
+    <dependencies>
+        <dependency id="log4net" version="[2.0.3,]" />
+    </dependencies>                            
   </metadata>
 </package>
