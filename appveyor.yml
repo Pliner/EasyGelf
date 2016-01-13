@@ -1,5 +1,6 @@
-version: 0.4.4.{build}
-                                         
+version: 0.4.5.{build}
+              
+# 0.4.5.0 Fix borken nuspecs                           
 # 0.4.4.0 Bug fix. Unixtime + ms         
 # 0.4.3.0 Limited EasyGelf.Log4net for Net 3.5         
 # 0.4.2.0 Added logging.                                
