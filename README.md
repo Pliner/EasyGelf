@@ -48,10 +48,12 @@ Now log4net and NLog are supported. Also Udp, Tcp and Amqp protocols are support
   <targets>
     <target name="GelfUdp" xsi:type="GelfUdp" facility="Easy Gelf Example Application" remoteAddress="127.0.0.1" remotePort="12201" layout="${message}"/>
     <target name="GelfAmqp" xsi:type="GelfAmqp" facility="Easy Gelf Example Application" connectionUri="amqp://" layout="${message}"/>
+    <target name="GelfTcp" xsi:type="GelfTcp" facility="Easy Gelf Example Application" remoteAddress="localhost" remotePort="12201" layout="${message}"/>
   </targets>
   <rules>
     <logger name="*" minlevel="Info" writeTo="GelfUdp" />
     <logger name="*" minlevel="Info" writeTo="GelfAmqp" />
+    <logger name="*" minlevel="Info" writeTo="GelfTcp" />
   </rules>
 </nlog>
 
