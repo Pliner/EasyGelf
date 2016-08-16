@@ -27,7 +27,7 @@ namespace EasyGelf.Log4Net
                 {
                     Host = new IPEndPoint(remoteIpAddress, RemotePort),
                 };
-            return new TcpTransport(configuration, new GelfMessageSerializer());
+            return new TcpTransport(configuration, new GelfMessageSerializer(), () => new TcpConnection(configuration));
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Sockets;
 
 namespace EasyGelf.Core.Transports.Tcp
 {
@@ -7,33 +6,35 @@ namespace EasyGelf.Core.Transports.Tcp
     {
         private readonly TcpTransportConfiguration configuration;
         private readonly IGelfMessageSerializer messageSerializer;
-        private TcpClient client;
+        private readonly Func<ITcpConnection> createConnection;
+        private ITcpConnection connection;
 
-        public TcpTransport(TcpTransportConfiguration configuration, IGelfMessageSerializer messageSerializer)
+        public TcpTransport(TcpTransportConfiguration configuration,
+                            IGelfMessageSerializer messageSerializer,
+                            Func<ITcpConnection> createConnection)
         {
             this.configuration = configuration;
             this.messageSerializer = messageSerializer;
+            this.createConnection = createConnection;
         }
 
 
         private void EstablishConnection()
         {
+            if (connection != null)
+            {
+                return;
+            }
+
             try
             {
-                if (client != null)
-                {
-                    if (client.Connected)
-                        return;
-                    throw new DisconnectedException();
-                }
-                client = new TcpClient();
-                client.Connect(configuration.Host);
+                connection = createConnection();
+                connection.Open();
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
-                if(client != null)
-                    client.SafeDispose();
-                client = null;
+                Close();
+
                 throw new CannotConnectException(string.Format("Cannot connect to {0}", configuration.Host), exception);
             }
         }
@@ -42,20 +43,28 @@ namespace EasyGelf.Core.Transports.Tcp
         public void Send(GelfMessage message)
         {
             EstablishConnection();
-            using (var stream = client.GetStream())
+            
+            var bytes = messageSerializer.Serialize(message);
+
+            try
             {
-                var bytes = messageSerializer.Serialize(message);
-                stream.Write(bytes, 0, bytes.Length);
-                stream.WriteByte(0);
+                connection.Stream.Write(bytes, 0, bytes.Length);
+                connection.Stream.WriteByte(0);
+            }
+            catch (Exception)
+            {
+                Close();
+
+                throw;
             }
         }
 
         public void Close()
         {
-            if (client == null)
+            if (connection == null)
                 return;
-            client.SafeDispose();
-            client = null;
+            connection.Dispose();
+            connection = null;
         }
     }
 }
