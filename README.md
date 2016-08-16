@@ -82,4 +82,5 @@ Now log4net and NLog are supported. Also Udp, Tcp and Amqp protocols are support
 * `includeStackTrace` (default: `true`)
   * Will include exception message and exception stack trace
 	
-
+* `verbose` (default: `false`)
+  * Whether to write logger's errors to the internal logger of the NLog or log4net
