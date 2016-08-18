@@ -1,5 +1,6 @@
-version: 0.4.6.{build}
+version: 0.4.7.{build}
 
+# 0.4.7.0 Added support for SSL over TCP
 # 0.4.6.0 Added verbose flag            
 # 0.4.5.0 Fix borken nuspecs                           
 # 0.4.4.0 Bug fix. Unixtime + ms         

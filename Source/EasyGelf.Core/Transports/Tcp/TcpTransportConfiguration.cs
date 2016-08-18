@@ -2,7 +2,7 @@
 
 namespace EasyGelf.Core.Transports.Tcp
 {
-    public sealed class TcpTransportConfiguration
+    public class TcpTransportConfiguration
     {
         public IPEndPoint Host { get; set; }
     }
