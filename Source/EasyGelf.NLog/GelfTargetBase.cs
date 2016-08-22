@@ -7,7 +7,6 @@ using NLog.Targets;
 using NLog.Config;
 using NLog.Layouts;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace EasyGelf.NLog
 {
@@ -81,18 +80,17 @@ namespace EasyGelf.NLog
                     }
                 }
 
-				//Add user-defined fields from config
-				foreach (GelfParameterInfo param in Parameters)
+				foreach (var param in Parameters)
 				{
 					var value = param.Layout.Render(loggingEvent);
-					if (value == "" || value == " ")
-						continue;
-					var key = param.Name;
+				    if (string.IsNullOrWhiteSpace(value))
+				    {
+				        continue;
+				    }
 
-					messageBuilder.SetAdditionalField(key, value);
+				    messageBuilder.SetAdditionalField(param.Name, value);
 				}
 
-				//Add log event properties
 				if(IncludeEventProperties)
 				{
 					foreach(var property in loggingEvent.Properties)

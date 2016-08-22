@@ -1,5 +1,6 @@
-version: 0.4.7.{build}
+version: 0.4.8.{build}
 
+# 0.4.8.0 Support for custom fields in the config and through event properties
 # 0.4.7.0 Added support for SSL over TCP
 # 0.4.6.0 Added verbose flag            
 # 0.4.5.0 Fix borken nuspecs                           
