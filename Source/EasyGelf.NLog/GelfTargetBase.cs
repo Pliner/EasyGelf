@@ -75,6 +75,7 @@ namespace EasyGelf.NLog
                     var exception = loggingEvent.Exception;
                     if (exception != null)
                     {
+                        messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionType, exception.GetType().FullName);
                         messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionMessage, exception.Message);
                         messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionStackTrace, exception.StackTrace);
                     }

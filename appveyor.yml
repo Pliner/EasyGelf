@@ -1,5 +1,6 @@
-version: 0.4.8.{build}
+version: 0.4.9.{build}
 
+# 0.4.9.0 Send exception type along with the message and stacktrace
 # 0.4.8.0 Support for custom fields in the config and through event properties
 # 0.4.7.0 Added support for SSL over TCP
 # 0.4.6.0 Added verbose flag            
