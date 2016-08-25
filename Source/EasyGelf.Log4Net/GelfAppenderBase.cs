@@ -86,6 +86,7 @@ namespace EasyGelf.Log4Net
                     var exception = loggingEvent.ExceptionObject;
                     if (exception != null)
                     {
+                        messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionType, exception.GetType().FullName);
                         messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionMessage, exception.Message);
                         messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionStackTrace, exception.StackTrace);
                     }
