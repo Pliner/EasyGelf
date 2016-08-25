@@ -18,16 +18,35 @@ namespace EasyGelf.Log4Net
 
         public int RemotePort { get; set; }
 
+        public bool Ssl { get; set; }
+
+        public int Timeout { get; set; }
+
         protected override ITransport InitializeTransport(IEasyGelfLogger logger)
         {
             var remoteIpAddress = Dns.GetHostAddresses(RemoteAddress)
                 .Shuffle()
                 .FirstOrDefault() ?? IPAddress.Loopback;
-            var configuration = new TcpTransportConfiguration
+            var ipEndPoint = new IPEndPoint(remoteIpAddress, RemotePort);
+
+            if (Ssl)
+            {
+                var configuration = new TcpSslTransportConfiguration
                 {
-                    Host = new IPEndPoint(remoteIpAddress, RemotePort),
+                    Host = ipEndPoint,
+                    ServerNameInCertificate = RemoteAddress,
+                    Timeout = Timeout
                 };
-            return new TcpTransport(configuration, new GelfMessageSerializer(), () => new TcpConnection(configuration));
+                return new TcpTransport(configuration, new GelfMessageSerializer(), () => new TcpSslConnection(configuration));
+            }
+            else
+            {
+                var configuration = new TcpTransportConfiguration
+                {
+                    Host = ipEndPoint
+                };
+                return new TcpTransport(configuration, new GelfMessageSerializer(), () => new TcpConnection(configuration));
+            }
         }
     }
 }

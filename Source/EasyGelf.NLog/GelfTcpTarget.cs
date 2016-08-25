@@ -27,10 +27,10 @@ namespace EasyGelf.NLog
 
         protected override ITransport InitializeTransport(IEasyGelfLogger logger)
         {
-            var removeIpAddress = Dns.GetHostAddresses(RemoteAddress)
+            var remoteIpAddress = Dns.GetHostAddresses(RemoteAddress)
                                      .Shuffle()
                                      .FirstOrDefault() ?? IPAddress.Loopback;
-            var ipEndPoint = new IPEndPoint(removeIpAddress, RemotePort);
+            var ipEndPoint = new IPEndPoint(remoteIpAddress, RemotePort);
 
             if (Ssl)
             {
