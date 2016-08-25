@@ -15,8 +15,23 @@ namespace EasyGelf.NLog.Example
             while (!cancelationTokenSource.IsCancellationRequested)
             {
                 Log.Info("I'm alive");
+                
+                try
+                {
+                    ThrowException();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Descriptive message example", ex);
+                }
+                
                 Thread.Sleep(TimeSpan.FromSeconds(0.5));
             }
+        }
+
+        private static void ThrowException()
+        {
+            throw new Exception("Exception example");
         }
     }
 }
