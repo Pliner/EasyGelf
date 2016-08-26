@@ -26,7 +26,8 @@ namespace EasyGelf.Log4Net
         {
             var remoteIpAddress = Dns.GetHostAddresses(RemoteAddress)
                 .Shuffle()
-                .FirstOrDefault() ?? IPAddress.Loopback;
+                .DefaultIfEmpty(IPAddress.Loopback)
+                .First();
             var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(new MessageBasedIdGenerator(), MessageSize.UdpMessageSize()));
             var configuration = new UdpTransportConfiguration
                 {

@@ -29,7 +29,8 @@ namespace EasyGelf.NLog
             var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(new MessageBasedIdGenerator(), MessageSize.UdpMessageSize()));
             var removeIpAddress = Dns.GetHostAddresses(RemoteAddress)
                 .Shuffle()
-                .FirstOrDefault() ?? IPAddress.Loopback;
+                .DefaultIfEmpty(IPAddress.Loopback)
+                .First();
             var configuration = new UdpTransportConfiguration
                 {
                     Host = new IPEndPoint(removeIpAddress, RemotePort)

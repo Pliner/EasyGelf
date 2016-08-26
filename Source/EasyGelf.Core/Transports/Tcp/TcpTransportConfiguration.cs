@@ -34,8 +34,9 @@ namespace EasyGelf.Core.Transports.Tcp
 
             var remoteIpAddress = Dns.GetHostAddresses(RemoteAddress)
                 .Shuffle()
-                .FirstOrDefault() ?? IPAddress.Loopback;
-
+                .DefaultIfEmpty(IPAddress.Loopback)
+                .First();
+            
             host = new IPEndPoint(remoteIpAddress, RemotePort);
             return host;
         }
