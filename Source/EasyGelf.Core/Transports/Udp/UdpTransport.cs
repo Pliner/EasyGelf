@@ -20,7 +20,7 @@ namespace EasyGelf.Core.Transports.Udp
         {
             using (var udpClient = new UdpClient())
                 foreach (var bytes in encoder.Encode(messageSerializer.Serialize(message)))
-                    udpClient.Send(bytes, bytes.Length, configuration.Host);
+                    udpClient.Send(bytes, bytes.Length, configuration.GetHost());
         }
 
         public void Close()

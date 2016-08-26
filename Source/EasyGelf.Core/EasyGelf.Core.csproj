@@ -69,12 +69,13 @@
     <Compile Include="Transports\ITransport.cs" />
     <Compile Include="Transports\RetryingTransport.cs" />
     <Compile Include="Transports\SendFailedException.cs" />
+    <Compile Include="Transports\IpTransportConfiguration.cs" />
     <Compile Include="Transports\Tcp\ITcpConnection.cs" />
     <Compile Include="Transports\Tcp\TcpConnection.cs" />
     <Compile Include="Transports\Tcp\TcpSslConnection.cs" />
     <Compile Include="Transports\Tcp\TcpTransport.cs" />
-    <Compile Include="Transports\Tcp\TcpSslTransportConfiguration.cs" />
     <Compile Include="Transports\Tcp\TcpTransportConfiguration.cs" />
+    <Compile Include="Transports\Tcp\TcpTransportFactory.cs" />
     <Compile Include="Transports\Udp\UdpTransport.cs" />
     <Compile Include="Transports\Udp\UdpTransportConfiguration.cs" />
   </ItemGroup>

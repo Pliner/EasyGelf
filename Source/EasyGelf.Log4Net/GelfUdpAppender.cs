@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using EasyGelf.Core;
 using EasyGelf.Core.Encoders;
-using System.Linq;
 using EasyGelf.Core.Transports;
 using EasyGelf.Core.Transports.Udp;
 
@@ -24,13 +23,11 @@ namespace EasyGelf.Log4Net
 
         protected override ITransport InitializeTransport(IEasyGelfLogger logger)
         {
-            var remoteIpAddress = Dns.GetHostAddresses(RemoteAddress)
-                .Shuffle()
-                .FirstOrDefault() ?? IPAddress.Loopback;
             var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(new MessageBasedIdGenerator(), MessageSize.UdpMessageSize()));
             var configuration = new UdpTransportConfiguration
                 {
-                    Host = new IPEndPoint(remoteIpAddress, RemotePort),
+                    RemoteAddress = RemoteAddress,
+                    RemotePort = RemotePort
                 };
             return new UdpTransport(configuration, encoder, new GelfMessageSerializer());
         }

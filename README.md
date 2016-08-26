@@ -26,10 +26,19 @@ Now log4net and NLog are supported. Also Udp, Tcp and Amqp protocols are support
       <conversionPattern value="%message%newline" />
     </layout>
   </appender>
+  <appender name="GelfTcpAppender" type=" EasyGelf.Log4Net.GelfTcpAppender, EasyGelf.Log4Net">
+    <remoteAddress value="localhost" />
+    <remotePort value="12201" />
+    <facility value="Easy Gelf Example Application" />
+    <layout type="log4net.Layout.PatternLayout">
+      <conversionPattern value="%message%newline" />
+    </layout>
+  </appender>
   <root>
     <level value="ALL" />
     <appender-ref ref="GelfUdpAppender" />
     <appender-ref ref="GelfAmqpAppender" />
+    <appender-ref ref="GelfTcpAppender" />
   </root>
 </log4net>
 ```                                
@@ -88,3 +97,6 @@ Now log4net and NLog are supported. Also Udp, Tcp and Amqp protocols are support
 	
 * `verbose` (default: `false`)
   * Whether to write logger's errors to the internal logger of the NLog or log4net
+
+* `ssl` (default: `false`) - for NLog's GelfTcp target or log4net's GelfTcpAppender only
+  * Whether to send log messages over SSL connection. If set to `true` `remoteAddress` must match the name on the server's certificate.
