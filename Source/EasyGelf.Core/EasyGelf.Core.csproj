@@ -69,6 +69,7 @@
     <Compile Include="Transports\ITransport.cs" />
     <Compile Include="Transports\RetryingTransport.cs" />
     <Compile Include="Transports\SendFailedException.cs" />
+    <Compile Include="Transports\IpTransportConfiguration.cs" />
     <Compile Include="Transports\Tcp\ITcpConnection.cs" />
     <Compile Include="Transports\Tcp\TcpConnection.cs" />
     <Compile Include="Transports\Tcp\TcpSslConnection.cs" />

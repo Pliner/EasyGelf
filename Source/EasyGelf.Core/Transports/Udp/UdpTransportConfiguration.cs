@@ -2,8 +2,7 @@
 
 namespace EasyGelf.Core.Transports.Udp
 {
-    public sealed class UdpTransportConfiguration
+    public sealed class UdpTransportConfiguration : IpTransportConfiguration
     {
-        public IPEndPoint Host { get; set; }
     }
 }

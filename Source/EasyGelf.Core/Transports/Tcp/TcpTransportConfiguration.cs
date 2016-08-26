@@ -1,16 +1,9 @@
-﻿using System.Linq;
-using System.Net;
+﻿using System.Net;
 
 namespace EasyGelf.Core.Transports.Tcp
 {
-    public sealed class TcpTransportConfiguration
+    public sealed class TcpTransportConfiguration : IpTransportConfiguration
     {
-        private IPEndPoint host;
-        
-        public string RemoteAddress { get; set; }
-
-        public int RemotePort { get; set; }
-
         public bool Ssl { get; set; }
         
         public int Timeout { get; set; }
@@ -23,22 +16,6 @@ namespace EasyGelf.Core.Transports.Tcp
                 RemotePort = 12201,
                 Timeout = 30000,
             };
-        }
-
-        public IPEndPoint GetHost()
-        {
-            if (host != null)
-            {
-                return host;
-            }
-
-            var remoteIpAddress = Dns.GetHostAddresses(RemoteAddress)
-                .Shuffle()
-                .DefaultIfEmpty(IPAddress.Loopback)
-                .First();
-            
-            host = new IPEndPoint(remoteIpAddress, RemotePort);
-            return host;
         }
 
         public string GetServerNameInCertificate()
