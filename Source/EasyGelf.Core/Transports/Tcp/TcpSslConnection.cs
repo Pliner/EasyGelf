@@ -6,12 +6,12 @@ namespace EasyGelf.Core.Transports.Tcp
 {
     public class TcpSslConnection : ITcpConnection
     {
-        private readonly TcpSslTransportConfiguration configuration;
+        private readonly TcpTransportConfiguration configuration;
         
         private readonly TcpClient client;
         private SslStream sslStream;
 
-        public TcpSslConnection(TcpSslTransportConfiguration configuration)
+        public TcpSslConnection(TcpTransportConfiguration configuration)
         {
             this.configuration = configuration;
 
@@ -20,13 +20,13 @@ namespace EasyGelf.Core.Transports.Tcp
 
         public void Open()
         {
-            client.Connect(configuration.Host);
+            client.Connect(configuration.GetHost());
             sslStream = new SslStream(client.GetStream())
             {
                 ReadTimeout = configuration.Timeout,
                 WriteTimeout = configuration.Timeout
             };
-            sslStream.AuthenticateAsClient(configuration.ServerNameInCertificate);
+            sslStream.AuthenticateAsClient(configuration.GetServerNameInCertificate());
         }
 
         public void Dispose()

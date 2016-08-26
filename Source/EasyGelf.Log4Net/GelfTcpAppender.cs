@@ -10,8 +10,12 @@ namespace EasyGelf.Log4Net
     {
         public GelfTcpAppender()
         {
-            RemoteAddress = IPAddress.Loopback.ToString();
-            RemotePort = 12201;
+            TcpTransportConfiguration defaultCfg = TcpTransportConfiguration.GetDefaultConfiguration();
+            
+            RemoteAddress = defaultCfg.RemoteAddress;
+            RemotePort = defaultCfg.RemotePort;
+            Ssl = defaultCfg.Ssl;
+            Timeout = defaultCfg.Timeout;
         }
 
         public string RemoteAddress { get; set; }
@@ -24,29 +28,15 @@ namespace EasyGelf.Log4Net
 
         protected override ITransport InitializeTransport(IEasyGelfLogger logger)
         {
-            var remoteIpAddress = Dns.GetHostAddresses(RemoteAddress)
-                .Shuffle()
-                .FirstOrDefault() ?? IPAddress.Loopback;
-            var ipEndPoint = new IPEndPoint(remoteIpAddress, RemotePort);
+            var configuration = new TcpTransportConfiguration
+            {
+                RemoteAddress = RemoteAddress,
+                RemotePort = RemotePort,
+                Ssl = Ssl,
+                Timeout = Timeout
+            };
 
-            if (Ssl)
-            {
-                var configuration = new TcpSslTransportConfiguration
-                {
-                    Host = ipEndPoint,
-                    ServerNameInCertificate = RemoteAddress,
-                    Timeout = Timeout
-                };
-                return new TcpTransport(configuration, new GelfMessageSerializer(), () => new TcpSslConnection(configuration));
-            }
-            else
-            {
-                var configuration = new TcpTransportConfiguration
-                {
-                    Host = ipEndPoint
-                };
-                return new TcpTransport(configuration, new GelfMessageSerializer(), () => new TcpConnection(configuration));
-            }
+            return TcpTransportFactory.Produce(configuration);
         }
     }
 }

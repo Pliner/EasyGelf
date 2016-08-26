@@ -19,7 +19,7 @@ namespace EasyGelf.Core.Transports.Tcp
 
         public void Open()
         {
-            client.Connect(configuration.Host);
+            client.Connect(configuration.GetHost());
             networkStream = client.GetStream();
         }
 
