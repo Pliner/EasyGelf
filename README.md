@@ -6,7 +6,7 @@ Now log4net and NLog are supported. Also Udp, Tcp and Amqp protocols are support
 
 ## Usage(log4net)
 
-###Minimal configuration:
+###Configuration example:
 
 ``` 
 <?xml version="1.0" encoding="utf-8"?>
@@ -36,7 +36,7 @@ Now log4net and NLog are supported. Also Udp, Tcp and Amqp protocols are support
 
 ## Usage(NLog)
 
-###Minimal configuration:
+###Configuration example:
 
 ```
 <?xml version="1.0" encoding="utf-8" ?>
@@ -46,7 +46,9 @@ Now log4net and NLog are supported. Also Udp, Tcp and Amqp protocols are support
     <add assembly="EasyGelf.NLog"/>
   </extensions>
   <targets>
-    <target name="GelfUdp" xsi:type="GelfUdp" facility="Easy Gelf Example Application" remoteAddress="127.0.0.1" remotePort="12201" layout="${message}"/>
+    <target name="GelfUdp" xsi:type="GelfUdp" facility="Easy Gelf Example Application" remoteAddress="127.0.0.1" remotePort="12201" layout="${message}">
+        <parameter name="thread" layout="${threadid}" />
+    </target>
     <target name="GelfAmqp" xsi:type="GelfAmqp" facility="Easy Gelf Example Application" connectionUri="amqp://" layout="${message}"/>
     <target name="GelfTcp" xsi:type="GelfTcp" facility="Easy Gelf Example Application" remoteAddress="localhost" remotePort="12201" layout="${message}"/>
   </targets>
@@ -61,7 +63,7 @@ Now log4net and NLog are supported. Also Udp, Tcp and Amqp protocols are support
 
 
 
-##Additional configuration
+##Configuration parameters
 ###Common
 
 * `includeSource` (default: `true`)
