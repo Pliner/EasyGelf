@@ -38,7 +38,7 @@ namespace EasyGelf.NLog
 
         protected GelfTargetBase()
         {
-            Facility = "gelf";
+            Facility = System.Diagnostics.Process.GetCurrentProcess().ProcessName;
             HostName = Environment.MachineName;
             IncludeSource = true;
 			IncludeEventProperties = true;
