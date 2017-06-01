@@ -42,13 +42,13 @@ namespace EasyGelf.Tests.Core
         {
             var dateTime = new DateTime(2015, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             var message = new GelfMessageBuilder("Backtrace here\n\nmore stuff", "example.org", dateTime, GelfLevel.Alert)
-                .SetAdditionalField(GelfAdditionalFields.Facility, "facility")
-                .SetAdditionalField(GelfAdditionalFields.LoggerName, "loggerName")
-                .SetAdditionalField(GelfAdditionalFields.ThreadName, "threadName")
-                .SetAdditionalField(GelfAdditionalFields.SourceFileName, "sourceFileName")
-                .SetAdditionalField(GelfAdditionalFields.SourceLineNumber, "sourceLineNumber")
-                .SetAdditionalField(GelfAdditionalFields.SourceClassName, "sourceClassName")
-                .SetAdditionalField(GelfAdditionalFields.SourceMethodName, "sourceMethodName")
+                .SetAdditionalField("facility", "facility")
+                .SetAdditionalField("loggerName", "loggerName")
+                .SetAdditionalField("threadName", "threadName")
+                .SetAdditionalField("sourceFileName", "sourceFileName")
+                .SetAdditionalField("sourceLineNumber", "sourceLineNumber")
+                .SetAdditionalField("sourceClassName", "sourceClassName")
+                .SetAdditionalField("sourceMethodName", "sourceMethodName")
                 .ToMessage();
 
             var serializedMessage = Encoding.UTF8.GetString(serializer.Serialize(message));
