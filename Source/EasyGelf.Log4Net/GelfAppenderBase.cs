@@ -6,7 +6,7 @@ using log4net.Core;
 
 namespace EasyGelf.Log4Net
 {
-    public abstract class GelfAppenderBase  : AppenderSkeleton
+    public abstract class GelfAppenderBase : AppenderSkeleton
     {
         private ITransport transport;
         private IEasyGelfLogger logger;
@@ -44,9 +44,13 @@ namespace EasyGelf.Log4Net
             base.ActivateOptions();
             try
             {
-                logger = Verbose ? (IEasyGelfLogger)new VerboseLogger() : new SilentLogger();
+                logger = Verbose ? (IEasyGelfLogger) new VerboseLogger() : new SilentLogger();
                 var mainTransport = InitializeTransport(logger);
-                transport = new BufferedTransport(logger, UseRetry ? new RetryingTransport(logger, mainTransport, RetryCount, RetryDelay) : mainTransport);
+                var selectedTransport = UseRetry
+                    ? new RetryingTransport(logger, mainTransport, RetryCount, RetryDelay)
+                    : mainTransport;
+
+                transport = new BufferedTransport(logger, selectedTransport);
             }
             catch (Exception exception)
             {
@@ -65,11 +69,13 @@ namespace EasyGelf.Log4Net
         {
             try
             {
+                var level = loggingEvent.Level.ToGelf();
                 var renderedEvent = RenderLoggingEvent(loggingEvent);
-                var messageBuilder = new GelfMessageBuilder(renderedEvent, HostName, loggingEvent.TimeStamp, loggingEvent.Level.ToGelf())
+                var messageBuilder = new GelfMessageBuilder(renderedEvent, HostName, loggingEvent.TimeStamp, level)
                     .SetAdditionalField(GelfAdditionalFields.Facility, Facility)
                     .SetAdditionalField(GelfAdditionalFields.LoggerName, loggingEvent.LoggerName)
                     .SetAdditionalField(GelfAdditionalFields.ThreadName, loggingEvent.ThreadName);
+
                 if (IncludeSource)
                 {
                     var locationInformation = loggingEvent.LocationInformation;
@@ -81,6 +87,7 @@ namespace EasyGelf.Log4Net
                             .SetAdditionalField(GelfAdditionalFields.SourceLineNumber, locationInformation.LineNumber);
                     }
                 }
+                
                 if (IncludeStackTrace)
                 {
                     var exception = loggingEvent.ExceptionObject;
@@ -91,6 +98,7 @@ namespace EasyGelf.Log4Net
                         messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionStackTrace, exception.StackTrace);
                     }
                 }
+                
                 transport.Send(messageBuilder.ToMessage());
             }
             catch (Exception exception)
