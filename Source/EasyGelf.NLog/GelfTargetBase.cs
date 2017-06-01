@@ -7,6 +7,8 @@ using NLog.Targets;
 using NLog.Config;
 using NLog.Layouts;
 using System.Collections.Generic;
+using System.Web.Compilation;
+using System.Web.Hosting;
 
 namespace EasyGelf.NLog
 {
@@ -33,12 +35,16 @@ namespace EasyGelf.NLog
 
         public bool Verbose { get; set; }
 
-		[ArrayParameter(typeof(GelfParameterInfo), "parameter")]
+        public string FacilityName => HostingEnvironment.IsHosted
+            ? BuildManager.GetGlobalAsaxType().BaseType?.Assembly.GetName().Name
+            : System.Diagnostics.Process.GetCurrentProcess().ProcessName;
+
+        [ArrayParameter(typeof(GelfParameterInfo), "parameter")]
 		public IList<GelfParameterInfo> Parameters { get; private set; }
 
         protected GelfTargetBase()
         {
-            Facility = System.Diagnostics.Process.GetCurrentProcess().ProcessName;
+            Facility = FacilityName;
             HostName = Environment.MachineName;
             IncludeSource = true;
 			IncludeEventProperties = true;

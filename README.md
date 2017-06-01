@@ -81,7 +81,7 @@ Now log4net and NLog are supported. Also Udp, Tcp and Amqp protocols are support
 * `hostName` (default: the machine name)
   * The host name of the machine generating the logs
 
-* `facility` (default: `gelf`)
+* `facility` (default: AssemblyName)
   * The application specific name
 
 * `useRetry` (default: `true`)
