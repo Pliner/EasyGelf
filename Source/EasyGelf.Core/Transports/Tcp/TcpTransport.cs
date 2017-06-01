@@ -35,7 +35,7 @@ namespace EasyGelf.Core.Transports.Tcp
             {
                 Close();
 
-                throw new CannotConnectException($"Cannot connect to {configuration.GetHost()}", exception);
+                throw new CannotConnectException(string.Format("Cannot connect to {0}", configuration.GetHost()), exception);
             }
         }
 

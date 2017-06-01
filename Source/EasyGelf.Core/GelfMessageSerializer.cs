@@ -26,7 +26,7 @@ namespace EasyGelf.Core
             {
                 var key = additionalField.Key;
                 var value = additionalField.Value;
-                result.Add(key.StartsWith("_") ? key : $"_{key}", value);
+                result.Add(key.StartsWith("_") ? key : "_" + key, value);
             }
             return Encoding.UTF8.GetBytes(result.ToString());
         }
