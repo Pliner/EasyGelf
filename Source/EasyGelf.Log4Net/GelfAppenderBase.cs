@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using EasyGelf.Core;
 using EasyGelf.Core.Transports;
 using log4net.Appender;
@@ -75,20 +74,13 @@ namespace EasyGelf.Log4Net
             {
                 var level = loggingEvent.Level.ToGelf();
                 var renderedEvent = RenderLoggingEvent(loggingEvent);
-<<<<<<< HEAD
                 var messageBuilder = new GelfMessageBuilder(renderedEvent, HostName, loggingEvent.TimeStamp, level)
-                    .SetAdditionalField(GelfAdditionalFields.Facility, Facility)
-                    .SetAdditionalField(GelfAdditionalFields.LoggerName, loggingEvent.LoggerName)
-                    .SetAdditionalField(GelfAdditionalFields.ThreadName, loggingEvent.ThreadName);
-
-=======
-                var messageBuilder = new GelfMessageBuilder(renderedEvent, HostName, loggingEvent.TimeStamp, loggingEvent.Level.ToGelf())
                     .SetAdditionalField("facility", Facility)
                     .SetAdditionalField("loggerName", loggingEvent.LoggerName)
                     .SetAdditionalField("threadName", loggingEvent.ThreadName)
                     .SetAdditionalField("userName", loggingEvent.UserName)
                     .SetAdditionalField("appDomain", loggingEvent.Domain);
->>>>>>> 5b890f62e610e373965653541751c2c13b49f31e
+                
                 if (IncludeSource)
                 {
                     var locationInformation = loggingEvent.LocationInformation;
@@ -111,9 +103,6 @@ namespace EasyGelf.Log4Net
                         messageBuilder.SetAdditionalField("exceptionStackTrace", exception.StackTrace);
                     }
                 }
-<<<<<<< HEAD
-                
-=======
 
                 if (IncludeEventProperties)
                 {
@@ -124,7 +113,6 @@ namespace EasyGelf.Log4Net
                     }
                 }
 
->>>>>>> 5b890f62e610e373965653541751c2c13b49f31e
                 transport.Send(messageBuilder.ToMessage());
             }
             catch (Exception exception)
