@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace EasyGelf.Core.Transports
 {
@@ -8,10 +9,10 @@ namespace EasyGelf.Core.Transports
     {
         private readonly BlockingCollection<GelfMessage> buffer = new BlockingCollection<GelfMessage>();
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        private readonly ManualResetEventSlim stopEvent = new ManualResetEventSlim(false);		        
+        private readonly ManualResetEventSlim stopEvent = new ManualResetEventSlim(false);
         private readonly IEasyGelfLogger logger;
         private readonly ITransport transport;
-   
+
         public BufferedTransport(IEasyGelfLogger logger, ITransport transport)
         {
             this.logger = logger;
@@ -42,12 +43,7 @@ namespace EasyGelf.Core.Transports
                 }
             }
 
-            // Close was called. Dispose all resources
             stopEvent.Set();
-            transport.Close();
-            buffer.Dispose();
-            cancellationTokenSource.Dispose();
-            stopEvent.Dispose();
         }
 
         private void SafeSendMessage(GelfMessage mesage)
@@ -67,16 +63,22 @@ namespace EasyGelf.Core.Transports
             buffer.Add(message, cancellationTokenSource.Token);
         }
 
-        public void Close()
+        public void Close() => Task.Factory.StartNew(
+            Dispose,
+            CancellationToken.None,
+            TaskCreationOptions.None,
+            TaskScheduler.Default
+        );
+
+        public void Dispose()
         {
             cancellationTokenSource.Cancel();
             buffer.CompleteAdding();
-        }
-        
-        public void Dispose()
-        {
-            Close();
             stopEvent.Wait();
+            transport.Close();
+            buffer.Dispose();
+            cancellationTokenSource.Dispose();
+            stopEvent.Dispose();
         }
     }
 }
