@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using EasyGelf.Core;
 using EasyGelf.Core.Transports;
 using log4net.Appender;
@@ -27,10 +28,13 @@ namespace EasyGelf.Log4Net
 
         public bool Verbose { get; set; }
 
+        public bool IncludeEventProperties { get; set; }
+
         protected GelfAppenderBase()
         {
-            Facility = "gelf";
+            Facility = ProcessHelpers.ProcessName;
             IncludeSource = true;
+            IncludeEventProperties = true;
             Verbose = false;
             HostName = Environment.MachineName;
             UseRetry = true;
@@ -71,20 +75,29 @@ namespace EasyGelf.Log4Net
             {
                 var level = loggingEvent.Level.ToGelf();
                 var renderedEvent = RenderLoggingEvent(loggingEvent);
+<<<<<<< HEAD
                 var messageBuilder = new GelfMessageBuilder(renderedEvent, HostName, loggingEvent.TimeStamp, level)
                     .SetAdditionalField(GelfAdditionalFields.Facility, Facility)
                     .SetAdditionalField(GelfAdditionalFields.LoggerName, loggingEvent.LoggerName)
                     .SetAdditionalField(GelfAdditionalFields.ThreadName, loggingEvent.ThreadName);
 
+=======
+                var messageBuilder = new GelfMessageBuilder(renderedEvent, HostName, loggingEvent.TimeStamp, loggingEvent.Level.ToGelf())
+                    .SetAdditionalField("facility", Facility)
+                    .SetAdditionalField("loggerName", loggingEvent.LoggerName)
+                    .SetAdditionalField("threadName", loggingEvent.ThreadName)
+                    .SetAdditionalField("userName", loggingEvent.UserName)
+                    .SetAdditionalField("appDomain", loggingEvent.Domain);
+>>>>>>> 5b890f62e610e373965653541751c2c13b49f31e
                 if (IncludeSource)
                 {
                     var locationInformation = loggingEvent.LocationInformation;
                     if (locationInformation != null)
                     {
-                        messageBuilder.SetAdditionalField(GelfAdditionalFields.SourceFileName, locationInformation.FileName)
-                            .SetAdditionalField(GelfAdditionalFields.SourceClassName, locationInformation.ClassName)
-                            .SetAdditionalField(GelfAdditionalFields.SourceMethodName, locationInformation.MethodName)
-                            .SetAdditionalField(GelfAdditionalFields.SourceLineNumber, locationInformation.LineNumber);
+                        messageBuilder.SetAdditionalField("sourceFileName", locationInformation.FileName)
+                            .SetAdditionalField("sourceClassName", locationInformation.ClassName)
+                            .SetAdditionalField("sourceMethodName", locationInformation.MethodName)
+                            .SetAdditionalField("sourceLineNumber", locationInformation.LineNumber);
                     }
                 }
                 
@@ -93,12 +106,25 @@ namespace EasyGelf.Log4Net
                     var exception = loggingEvent.ExceptionObject;
                     if (exception != null)
                     {
-                        messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionType, exception.GetType().FullName);
-                        messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionMessage, exception.Message);
-                        messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionStackTrace, exception.StackTrace);
+                        messageBuilder.SetAdditionalField("exceptionType", exception.GetType().FullName);
+                        messageBuilder.SetAdditionalField("exceptionMessage", exception.Message);
+                        messageBuilder.SetAdditionalField("exceptionStackTrace", exception.StackTrace);
                     }
                 }
+<<<<<<< HEAD
                 
+=======
+
+                if (IncludeEventProperties)
+                {
+                    var properties = loggingEvent.Properties;
+                    foreach (var propertyKey in properties.GetKeys())
+                    {
+                        messageBuilder.SetAdditionalField(propertyKey, properties[propertyKey].ToString());
+                    }
+                }
+
+>>>>>>> 5b890f62e610e373965653541751c2c13b49f31e
                 transport.Send(messageBuilder.ToMessage());
             }
             catch (Exception exception)

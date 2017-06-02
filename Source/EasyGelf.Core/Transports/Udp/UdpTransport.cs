@@ -7,7 +7,7 @@ namespace EasyGelf.Core.Transports.Udp
     {
         private readonly UdpTransportConfiguration configuration;
         private readonly ITransportEncoder encoder;
-        private readonly IGelfMessageSerializer messageSerializer;
+        private readonly IGelfMessageSerializer     messageSerializer;
 
         public UdpTransport(UdpTransportConfiguration configuration, ITransportEncoder encoder, IGelfMessageSerializer messageSerializer)
         {

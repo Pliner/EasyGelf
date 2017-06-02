@@ -48,10 +48,10 @@
     <Compile Include="Encoders\ChunkingEncoder.cs" />
     <Compile Include="Encoders\CompositeEncoder.cs" />
     <Compile Include="Encoders\MessageBasedIdGenerator.cs" />
-    <Compile Include="GelfAdditionalFields.cs" />
     <Compile Include="GelfMessageBuilder.cs" />
     <Compile Include="Encoders\IChunkedMessageIdGenerator.cs" />
     <Compile Include="GelfMessageSerializer.cs" />
+    <Compile Include="ProcessHelpers.cs" />
     <Compile Include="SilentLogger.cs" />
     <Compile Include="GelfLevel.cs" />
     <Compile Include="GelfMessage.cs" />

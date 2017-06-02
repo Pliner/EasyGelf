@@ -38,7 +38,7 @@ namespace EasyGelf.NLog
 
         protected GelfTargetBase()
         {
-            Facility = System.Diagnostics.Process.GetCurrentProcess().ProcessName;
+            Facility = ProcessHelpers.ProcessName;
             HostName = Environment.MachineName;
             IncludeSource = true;
 			IncludeEventProperties = true;
@@ -59,15 +59,16 @@ namespace EasyGelf.NLog
             {
                 var renderedEvent = Layout.Render(loggingEvent);
                 var messageBuilder = new GelfMessageBuilder(renderedEvent, HostName, loggingEvent.TimeStamp, ToGelf(loggingEvent.Level))
-                    .SetAdditionalField(GelfAdditionalFields.Facility, Facility)
-                    .SetAdditionalField(GelfAdditionalFields.LoggerName, loggingEvent.LoggerName);
+                    .SetAdditionalField("facility", Facility)
+                    .SetAdditionalField("loggerName", loggingEvent.LoggerName)
+                    .SetAdditionalField("sequenceId", loggingEvent.SequenceID.ToString());
                 if (IncludeSource)
                 {
                     var userStackFrame = loggingEvent.UserStackFrame;
                     if (userStackFrame != null)
                     {
-                        messageBuilder.SetAdditionalField(GelfAdditionalFields.SourceFileName, userStackFrame.GetFileName());
-                        messageBuilder.SetAdditionalField(GelfAdditionalFields.SourceLineNumber, userStackFrame.GetFileLineNumber().ToString(CultureInfo.InvariantCulture));
+                        messageBuilder.SetAdditionalField("sourceFileName", userStackFrame.GetFileName());
+                        messageBuilder.SetAdditionalField("sourceLineNumber", userStackFrame.GetFileLineNumber().ToString(CultureInfo.InvariantCulture));
                     }
                 }
                 if (IncludeStackTrace)
@@ -75,21 +76,21 @@ namespace EasyGelf.NLog
                     var exception = loggingEvent.Exception;
                     if (exception != null)
                     {
-                        messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionType, exception.GetType().FullName);
-                        messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionMessage, exception.Message);
-                        messageBuilder.SetAdditionalField(GelfAdditionalFields.ExceptionStackTrace, exception.StackTrace);
+                        messageBuilder.SetAdditionalField("exceptionType", exception.GetType().FullName);
+                        messageBuilder.SetAdditionalField("exceptionMessage", exception.Message);
+                        messageBuilder.SetAdditionalField("exceptionStackTrace", exception.StackTrace);
                     }
                 }
 
-				foreach (var param in Parameters)
+				foreach (var parameter in Parameters)
 				{
-					var value = param.Layout.Render(loggingEvent);
+					var value = parameter.Layout.Render(loggingEvent);
 				    if (string.IsNullOrWhiteSpace(value))
 				    {
 				        continue;
 				    }
 
-				    messageBuilder.SetAdditionalField(param.Name, value);
+				    messageBuilder.SetAdditionalField(parameter.Name, value);
 				}
 
 				if(IncludeEventProperties)
