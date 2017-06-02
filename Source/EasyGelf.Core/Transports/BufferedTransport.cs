@@ -8,9 +8,10 @@ namespace EasyGelf.Core.Transports
     {
         private readonly BlockingCollection<GelfMessage> buffer = new BlockingCollection<GelfMessage>();
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        private readonly ManualResetEventSlim stopEvent = new ManualResetEventSlim(false);		        
         private readonly IEasyGelfLogger logger;
         private readonly ITransport transport;
-
+   
         public BufferedTransport(IEasyGelfLogger logger, ITransport transport)
         {
             this.logger = logger;
@@ -42,9 +43,11 @@ namespace EasyGelf.Core.Transports
             }
 
             // Close was called. Dispose all resources
+            stopEvent.Set();
             transport.Close();
             buffer.Dispose();
             cancellationTokenSource.Dispose();
+            stopEvent.Dispose();
         }
 
         private void SafeSendMessage(GelfMessage mesage)
@@ -69,10 +72,11 @@ namespace EasyGelf.Core.Transports
             cancellationTokenSource.Cancel();
             buffer.CompleteAdding();
         }
-
+        
         public void Dispose()
         {
-            this.Close();
+            Close();
+            stopEvent.Wait();
         }
     }
 }

@@ -15,13 +15,15 @@ namespace EasyGelf.Tests.Core.Transport
         public void ShouldSendMessage()
         {
             var countingTransport = new SuceedCountingTransport();
-            var bufferedTransport = new BufferedTransport(new SilentLogger(), countingTransport);
-            for (var i = 0; i < MessageCount; ++i)
+            using (var bufferedTransport = new BufferedTransport(new SilentLogger(), countingTransport))
             {
-                var message = new GelfMessage();
-                bufferedTransport.Send(message);
+                for (var i = 0; i < MessageCount; ++i)
+                {
+                    var message = new GelfMessage();
+                    bufferedTransport.Send(message);
+                }
             }
-            bufferedTransport.Close();
+            
             Assert.AreEqual(MessageCount, countingTransport.Count);
         }
 
@@ -29,13 +31,15 @@ namespace EasyGelf.Tests.Core.Transport
         public void ShouldSkipMessageIfSendFailed()
         {
             var countingTransport = new FailCountingTransport();
-            var bufferedTransport = new BufferedTransport(new SilentLogger(), countingTransport);
-            for (var i = 0; i < MessageCount; ++i)
+            using (var bufferedTransport = new BufferedTransport(new SilentLogger(), countingTransport))
             {
-                var message = new GelfMessage();
-                bufferedTransport.Send(message);
+                for (var i = 0; i < MessageCount; ++i)
+                {
+                    var message = new GelfMessage();
+                    bufferedTransport.Send(message);
+                }
             }
-            bufferedTransport.Close();
+            
             Assert.AreEqual(MessageCount, countingTransport.Count);
         }
 
