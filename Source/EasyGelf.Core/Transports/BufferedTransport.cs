@@ -4,50 +4,59 @@ using System.Threading;
 
 namespace EasyGelf.Core.Transports
 {
-    public sealed class BufferedTransport : ITransport
+    public sealed class BufferedTransport : ITransport, IDisposable
     {
         private readonly BlockingCollection<GelfMessage> buffer = new BlockingCollection<GelfMessage>();
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        private readonly ManualResetEvent stopEvent = new ManualResetEvent(false);
+        private readonly IEasyGelfLogger logger;
+        private readonly ITransport transport;
 
         public BufferedTransport(IEasyGelfLogger logger, ITransport transport)
         {
-            new Thread(() =>
+            this.logger = logger;
+            this.transport = transport;
+            new Thread(PollAndSend)
+            {
+                IsBackground = true,
+                Name = "EasyGelf Buffered Transport Thread"
+            }.Start();
+        }
+
+        private void PollAndSend()
+        {
+            GelfMessage message;
+            var cancellationToken = cancellationTokenSource.Token;
+            try
+            {
+                while (buffer.TryTake(out message, -1, cancellationToken))
                 {
-                    var cancellationToken = cancellationTokenSource.Token;
-                    try
-                    {
-                        GelfMessage mesage;
-                        while (buffer.TryTake(out mesage, -1, cancellationToken))
-                        {
-                            try
-                            {
-                                transport.Send(mesage);
-                            }
-                            catch(Exception exception)
-                            {
-                                logger.Error("Cannot send message", exception);
-                            }
-                        }
-                    }
-                    catch
-                    {
-                        GelfMessage message;
-                        while (buffer.TryTake(out message))
-                        {
-                            try
-                            {
-                                transport.Send(message);
-                            }
-                            catch (Exception exception)
-                            {
-                                logger.Error("Cannot send message", exception);
-                            }
-                        }
-                    }
-                    transport.Close();
-                    stopEvent.Set();
-                }) {IsBackground = true, Name = "EasyGelf Buffered Transport Thread"}.Start();
+                    SafeSendMessage(message);
+                }
+            }
+            catch
+            {
+                while (buffer.TryTake(out message))
+                {
+                    SafeSendMessage(message);
+                }
+            }
+
+            // Close was called. Dispose all resources
+            transport.Close();
+            buffer.Dispose();
+            cancellationTokenSource.Dispose();
+        }
+
+        private void SafeSendMessage(GelfMessage mesage)
+        {
+            try
+            {
+                transport.Send(mesage);
+            }
+            catch (Exception exception)
+            {
+                logger.Error("Cannot send message", exception);
+            }
         }
 
         public void Send(GelfMessage message)
@@ -57,10 +66,13 @@ namespace EasyGelf.Core.Transports
 
         public void Close()
         {
-            buffer.CompleteAdding();
             cancellationTokenSource.Cancel();
-            stopEvent.WaitOne();
-            stopEvent.Dispose();
+            buffer.CompleteAdding();
+        }
+
+        public void Dispose()
+        {
+            this.Close();
         }
     }
 }
