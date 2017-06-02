@@ -17,11 +17,7 @@ namespace EasyGelf.Core.Transports
         {
             this.logger = logger;
             this.transport = transport;
-            new Thread(PollAndSend)
-            {
-                IsBackground = true,
-                Name = "EasyGelf Buffered Transport Thread"
-            }.Start();
+            TaskRun(PollAndSend);
         }
 
         private void PollAndSend()
@@ -63,22 +59,25 @@ namespace EasyGelf.Core.Transports
             buffer.Add(message, cancellationTokenSource.Token);
         }
 
-        public void Close() => Task.Factory.StartNew(
-            Dispose,
-            CancellationToken.None,
-            TaskCreationOptions.None,
-            TaskScheduler.Default
-        );
+        public void Close() => TaskRun(Dispose);
 
         public void Dispose()
         {
             cancellationTokenSource.Cancel();
             buffer.CompleteAdding();
             stopEvent.Wait();
+            
             transport.Close();
             buffer.Dispose();
             cancellationTokenSource.Dispose();
             stopEvent.Dispose();
         }
+        
+        private static void TaskRun(Action action) => Task.Factory.StartNew(
+            action,
+            CancellationToken.None,
+            TaskCreationOptions.None,
+            TaskScheduler.Default
+        );
     }
 }
