@@ -1,5 +1,6 @@
-version: 0.4.10.{build}
+version: 0.4.11.{build}
 
+# 0.4.11.0 Add missing dispose calls
 # 0.4.10.0 Added support for SSL over TCP in log4net
 # 0.4.9.0 Send exception type along with the message and stacktrace
 # 0.4.8.0 Support for custom fields in the config and through event properties

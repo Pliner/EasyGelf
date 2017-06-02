@@ -54,7 +54,6 @@ namespace EasyGelf.Core.Transports.Tcp
             catch (Exception)
             {
                 Close();
-
                 throw;
             }
         }
