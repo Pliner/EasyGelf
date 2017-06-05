@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using EasyGelf.Core;
 using EasyGelf.Core.Transports;
 using log4net.Appender;
@@ -103,7 +102,7 @@ namespace EasyGelf.Log4Net
                     var properties = loggingEvent.Properties;
                     foreach (var propertyKey in properties.GetKeys())
                     {
-                        messageBuilder.SetAdditionalField(propertyKey, properties[propertyKey].ToString());
+                        messageBuilder.SetAdditionalField(propertyKey, properties[propertyKey]?.ToString());
                     }
                 }
 

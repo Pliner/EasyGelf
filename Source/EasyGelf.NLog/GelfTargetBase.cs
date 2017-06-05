@@ -97,7 +97,7 @@ namespace EasyGelf.NLog
 				{
 					foreach(var property in loggingEvent.Properties)
 					{
-						messageBuilder.SetAdditionalField(property.Key.ToString(), property.Value.ToString());
+						messageBuilder.SetAdditionalField(property.Key.ToString(), property.Value?.ToString());
 					}
 				}
 
