@@ -1,7 +1,9 @@
 ﻿namespace EasyGelf.Core.Encoders
 {
+    using System.Threading.Tasks;
+
     public interface IChunkedMessageIdGenerator
     {
-        byte[] GenerateId(byte[] message);
+        Task<byte[]> GenerateId(byte[] message);
     }
 }

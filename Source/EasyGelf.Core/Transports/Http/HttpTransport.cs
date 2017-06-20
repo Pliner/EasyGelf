@@ -1,12 +1,17 @@
-﻿using System.IO;
-using System.Net;
-
+﻿
 namespace EasyGelf.Core.Transports.Http
 {
+    using System;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+
     public sealed class HttpTransport : ITransport
     {
         private readonly HttpTransportConfiguration configuration;
         private readonly IGelfMessageSerializer messageSerializer;
+
+        private HttpClient httpClient;
 
         public HttpTransport(HttpTransportConfiguration configuration, IGelfMessageSerializer messageSerializer)
         {
@@ -14,16 +19,12 @@ namespace EasyGelf.Core.Transports.Http
             this.messageSerializer = messageSerializer;
         }
 
-        public void Send(GelfMessage message)
+        public async Task Send(GelfMessage message)
         {
-            var request = (HttpWebRequest)WebRequest.Create(configuration.Uri);
-            using (var requestStream = request.GetRequestStream())
-            using (var messageStream = new MemoryStream(messageSerializer.Serialize(message)))
-                messageStream.CopyTo(requestStream);
-            request.Method = "POST";
-            request.AllowAutoRedirect = false;
-            request.ReadWriteTimeout = request.Timeout = configuration.Timeout;
-            using (var response = (HttpWebResponse)request.GetResponse())
+            this.PrepareHttpClient();
+
+            var content = new ByteArrayContent(messageSerializer.Serialize(message));
+            using (var response = await this.httpClient.PostAsync(this.configuration.Uri, content))
             {
                 if (response.StatusCode == HttpStatusCode.Accepted)
                     return;
@@ -33,6 +34,18 @@ namespace EasyGelf.Core.Transports.Http
 
         public void Close()
         {
+            this.httpClient.SafeDispose();
+        }
+
+        private void PrepareHttpClient()
+        {
+            if (this.httpClient != null) return;
+
+            var httpHandler = new HttpClientHandler { AllowAutoRedirect = false };
+            this.httpClient = new HttpClient(httpHandler)
+            {
+                Timeout = TimeSpan.FromMilliseconds(this.configuration.Timeout)
+            };
         }
     }
 }

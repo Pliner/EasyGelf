@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>EasyGelf.NLog</id>
     <version>$version$</version>
@@ -15,7 +15,17 @@
     </releaseNotes>
     <copyright>Copyright Yury Pliner 2015</copyright>
     <dependencies>
-        <dependency id="NLog" version="[3.2.0.0,]" />
-    </dependencies>                            
+      <group targetFramework=".NETStandard1.5">
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+        <dependency id="NLog.Extensions.Logging" version="1.0.0-rtm-beta5" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETFramework4.5.1">
+        <dependency id="NLog" version="4.4.11" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
   </metadata>
+  <files>
+    <file src="bin\Release\**\EasyGelf*.dll" target="lib" />
+    <file src="bin\Release\**\EasyGelf*.pdb" target="lib" />
+  </files>
 </package>

@@ -4,17 +4,22 @@ using System.IO.Compression;
 
 namespace EasyGelf.Core.Encoders
 {
+    using System.Threading.Tasks;
+
     public sealed class GZipEncoder : ITransportEncoder
     {
-        public IEnumerable<byte[]> Encode(byte[] bytes)
+        public async Task<IEnumerable<byte[]>> Encode(byte[] bytes)
         {
+            var result = new List<byte[]>();
             using (var input = new MemoryStream(bytes))
             using (var output = new MemoryStream())
             {
                 using (var compressed = new GZipStream(output, CompressionMode.Compress))
                     CopyTo(input, compressed);
-                yield return output.ToArray();
+                result.Add(output.ToArray());
             }
+
+            return result;
         }
 
         private static void CopyTo(Stream source, Stream destination)

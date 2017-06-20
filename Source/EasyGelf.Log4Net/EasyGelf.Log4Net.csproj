@@ -1,99 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5B64942E-7197-4781-909C-E6AA5813AE9D}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EasyGelf.Log4Net</RootNamespace>
-    <AssemblyName>EasyGelf.Log4Net</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <TargetFrameworkProfile />
+    <TargetFrameworks>netstandard1.5;net451</TargetFrameworks>
+    <Authors>Yuriy Pliner</Authors>
+    <Company />
+    <PackageLicenseUrl>https://github.com/Pliner/EasyGelf/blob/master/license.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Pliner/EasyGelf</PackageProjectUrl>
+    <Description>GELF log4net targets</Description>
+    <PackageTags>GELF, log4net</PackageTags>
+    <Copyright>Copyright Yury Pliner 2016</Copyright>
+    <RepositoryUrl>https://github.com/Pliner/EasyGelf</RepositoryUrl>
+    <NuspecFile>EasyGelf.Log4Net.nuspec</NuspecFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\Build\Release\EasyGelf.Log4Net\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\Version.cs">
-      <Link>Properties\Version.cs</Link>
-    </Compile>
-    <Compile Include="VerboseLogger.cs" />
-    <Compile Include="Extentions.cs" />
-    <Compile Include="GelfAmqpAppender.cs" />
-    <Compile Include="GelfAppenderBase.cs" />
-    <Compile Include="GelfTcpAppender.cs" />
-    <Compile Include="GelfUdpAppender.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\EasyGelf.Core\EasyGelf.Core.csproj">
-      <Project>{b928d694-5633-4f00-b70f-23f6e5f3a2db}</Project>
-      <Name>EasyGelf.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="EasyGelf.Log4Net.nuspec" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\packages\ILRepack.MSBuild.Task.1.0.9\build\ILRepack.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.MSBuild.Task.1.0.9\build\ILRepack.MSBuild.Task.targets'))" />
-  </Target>
-  <Import Project="..\packages\ILRepack.MSBuild.Task.1.0.9\build\ILRepack.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.MSBuild.Task.1.0.9\build\ILRepack.MSBuild.Task.targets')" />
 
-  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
-   <ItemGroup>
-    <InputAssemblies Include="$(OutputPath)\EasyGelf.Log4Net.dll" />
-    <InputAssemblies Include="$(OutputPath)\EasyGelf.Core.dll" />
-    <InputAssemblies Include="$(OutputPath)\RabbitMQ.Client.dll" />
-   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="log4net">
+      <Version>2.0.8</Version>
+    </PackageReference>
+  </ItemGroup>
 
-   <ItemGroup>                              
-    <DoNotInternalizeAssemblies Include="EasyGelf.Core" />
-   </ItemGroup>
-
-   <ILRepack 
-    Parallel="true"
-    Internalize="true"
-    InternalizeExclude="@(DoNotInternalizeAssemblies)"
-    InputAssemblies="@(InputAssemblies)"
-    TargetKind="Dll"
-    TargetPlatformVersion="v4"
-    OutputFile="$(OutputPath)\EasyGelf.Log4Net.dll"
-   />
-
-  </Target>
+  <ItemGroup>
+    <ProjectReference Include="..\EasyGelf.Core\EasyGelf.Core.csproj" />
+  </ItemGroup>
 </Project>

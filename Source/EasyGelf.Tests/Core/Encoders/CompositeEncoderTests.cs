@@ -3,51 +3,38 @@ using System.Text;
 using EasyGelf.Core.Encoders;
 using NUnit.Framework;
 using System.Linq;
-using Rhino.Mocks;
 
 namespace EasyGelf.Tests.Core.Encoders
 {
+    using System.Threading.Tasks;
+
+    using Moq;
+
     [TestFixture]
     public class CompositeEncoderTests
     {
-        private MockRepository mockRepository;
-
-        [SetUp]
-        public void SetUp()
-        {
-            mockRepository = new MockRepository();
-        }
-
         [Test]
-        public void ShouldWorkWithZeroEncoders()
+        public async Task ShouldWorkWithZeroEncoders()
         {
             var compositeEncoder = new CompositeEncoder();
             var bytes = Encoding.UTF8.GetBytes("lalala");
-            var encoderResult = compositeEncoder.Encode(bytes).ToArray();
+            var encoderResult = (await compositeEncoder.Encode(bytes)).ToArray();
             Assert.AreEqual(1, encoderResult.Count());
             Assert.AreEqual(bytes, encoderResult.ElementAt(0));
         }
 
         [Test]
-        public void ShouldWorkWithMultipleEncoders()
+        public async Task ShouldWorkWithMultipleEncoders()
         {
-            var firstEncoder = mockRepository.StrictMultiMock<ITransportEncoder>();
-            firstEncoder.Replay();
-            var secondEncoder = mockRepository.StrictMultiMock<ITransportEncoder>();
-            secondEncoder.Replay();
-            var compositeEncoder = new CompositeEncoder(firstEncoder, secondEncoder);
+            var firstEncoder = new Mock<ITransportEncoder>();
+            var secondEncoder = new Mock<ITransportEncoder>();
+            var compositeEncoder = new CompositeEncoder(firstEncoder.Object, secondEncoder.Object);
             var bytes = Encoding.UTF8.GetBytes("lalala");
-            firstEncoder.Expect(x => x.Encode(bytes)).Return(new List<byte[]> { bytes });
-            secondEncoder.Expect(x => x.Encode(bytes)).Return(new List<byte[]> { bytes });
-            var encoderResult = compositeEncoder.Encode(bytes).ToArray();
+            firstEncoder.Setup(x => x.Encode(bytes)).Returns(Task.FromResult<IEnumerable<byte[]>>(new List<byte[]> { bytes }));
+            secondEncoder.Expect(x => x.Encode(bytes)).Returns(Task.FromResult <IEnumerable<byte[]>> (new List<byte[]> { bytes }));
+            var encoderResult = (await compositeEncoder.Encode(bytes)).ToArray();
             Assert.AreEqual(1, encoderResult.Count());
             Assert.AreEqual(bytes, encoderResult.ElementAt(0));
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            mockRepository.VerifyAll();
         }
     }
 

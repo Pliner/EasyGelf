@@ -2,6 +2,8 @@
 
 namespace EasyGelf.Core.Transports.Tcp
 {
+    using System.Threading.Tasks;
+
     public sealed class TcpTransport : ITransport
     {
         private readonly TcpTransportConfiguration configuration;
@@ -19,7 +21,7 @@ namespace EasyGelf.Core.Transports.Tcp
         }
 
 
-        private void EstablishConnection()
+        private async Task EstablishConnectionAsync()
         {
             if (connection != null)
             {
@@ -29,7 +31,7 @@ namespace EasyGelf.Core.Transports.Tcp
             try
             {
                 connection = createConnection();
-                connection.Open();
+                await connection.Open();
             }
             catch (Exception exception)
             {
@@ -40,15 +42,15 @@ namespace EasyGelf.Core.Transports.Tcp
         }
 
 
-        public void Send(GelfMessage message)
+        public async Task Send(GelfMessage message)
         {
-            EstablishConnection();
+            await this.EstablishConnectionAsync();
             
             var bytes = messageSerializer.Serialize(message);
 
             try
             {
-                connection.Stream.Write(bytes, 0, bytes.Length);
+                await connection.Stream.WriteAsync(bytes, 0, bytes.Length);
                 connection.Stream.WriteByte(0);
             }
             catch (Exception)

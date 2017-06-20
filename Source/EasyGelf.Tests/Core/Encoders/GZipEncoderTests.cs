@@ -7,15 +7,17 @@ using System.Linq;
 
 namespace EasyGelf.Tests.Core.Encoders
 {
+    using System.Threading.Tasks;
+
     [TestFixture]
     public class GZipEncoderTests
     {
         [Test]
-        public void ShoudUnzip()
+        public async Task ShoudUnzip()
         {
             var encoder = new GZipEncoder();
             var bytes = Encoding.UTF8.GetBytes("lalala");
-            var encodeResult = encoder.Encode(bytes).ToArray();
+            var encodeResult = (await encoder.Encode(bytes)).ToArray();
             Assert.AreEqual(1, encodeResult.Count());
             var encodedBytes = encodeResult.ElementAt(0);
             Assert.AreEqual(bytes, Unzip(encodedBytes));

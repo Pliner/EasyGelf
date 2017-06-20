@@ -4,6 +4,8 @@ using System.IO;
 
 namespace EasyGelf.Core.Encoders
 {
+    using System.Threading.Tasks;
+
     public sealed class ChunkingEncoder : ITransportEncoder
     {
         private const int HeaderSize = 12;
@@ -19,10 +21,10 @@ namespace EasyGelf.Core.Encoders
             this.maxSize = maxSize;
         }
 
-        public IEnumerable<byte[]> Encode(byte[] bytes)
+        public async Task<IEnumerable<byte[]>> Encode(byte[] bytes)
         {
             if (bytes.Length <= maxSize)
-                yield return bytes;
+                return new[] { bytes };
             else
             {
                 var messageChunkSize = maxSize - HeaderSize;
@@ -30,7 +32,8 @@ namespace EasyGelf.Core.Encoders
                 if(chunksCount > MaxChunkCount)
                     throw new ArgumentOutOfRangeException("bytes");
                 var remainingBytes = bytes.Length;
-                var messageId = idGenerator.GenerateId(bytes);
+                var messageId = await idGenerator.GenerateId(bytes);
+                var result = new List<byte[]>();
                 for (var chunkSequenceNumber = 0; chunkSequenceNumber < chunksCount; ++chunkSequenceNumber)
                 {
                     var chunkOffset = chunkSequenceNumber * messageChunkSize;
@@ -43,10 +46,12 @@ namespace EasyGelf.Core.Encoders
                         stream.WriteByte((byte)chunkSequenceNumber);
                         stream.WriteByte((byte)chunksCount);
                         stream.Write(bytes, chunkOffset, chunkBytes);
-                        yield return stream.ToArray();
+                        result.Add(stream.ToArray());
                     }
                     remainingBytes -= chunkBytes;
                 }
+
+                return result;
             }
         }
     }

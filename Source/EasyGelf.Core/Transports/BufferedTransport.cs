@@ -4,6 +4,8 @@ using System.Threading;
 
 namespace EasyGelf.Core.Transports
 {
+    using System.Threading.Tasks;
+
     public sealed class BufferedTransport : ITransport
     {
         private readonly BlockingCollection<GelfMessage> buffer = new BlockingCollection<GelfMessage>();
@@ -50,7 +52,7 @@ namespace EasyGelf.Core.Transports
                 }) {IsBackground = true, Name = "EasyGelf Buffered Transport Thread"}.Start();
         }
 
-        public void Send(GelfMessage message)
+        public async Task Send(GelfMessage message)
         {
             buffer.Add(message, cancellationTokenSource.Token);
         }

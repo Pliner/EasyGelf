@@ -1,8 +1,10 @@
-﻿namespace EasyGelf.Core.Transports
+﻿using System.Threading.Tasks;
+
+namespace EasyGelf.Core.Transports
 {
     public interface ITransport
     {
-        void Send(GelfMessage message);
+        Task Send(GelfMessage message);
         void Close();
     }
 }

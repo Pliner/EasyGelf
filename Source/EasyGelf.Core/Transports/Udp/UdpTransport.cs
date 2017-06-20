@@ -3,6 +3,8 @@ using EasyGelf.Core.Encoders;
 
 namespace EasyGelf.Core.Transports.Udp
 {
+    using System.Threading.Tasks;
+
     public sealed class UdpTransport : ITransport
     {
         private readonly UdpTransportConfiguration configuration;
@@ -16,11 +18,11 @@ namespace EasyGelf.Core.Transports.Udp
             this.messageSerializer = messageSerializer;
         }
 
-        public void Send(GelfMessage message)
+        public async Task Send(GelfMessage message)
         {
             using (var udpClient = new UdpClient())
-                foreach (var bytes in encoder.Encode(messageSerializer.Serialize(message)))
-                    udpClient.Send(bytes, bytes.Length, configuration.GetHost());
+                foreach (var bytes in await encoder.Encode(messageSerializer.Serialize(message)))
+                    await udpClient.SendAsync(bytes, bytes.Length, await configuration.GetHost());
         }
 
         public void Close()

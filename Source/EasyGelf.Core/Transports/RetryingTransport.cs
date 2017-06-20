@@ -3,6 +3,8 @@ using System.Threading;
 
 namespace EasyGelf.Core.Transports
 {
+    using System.Threading.Tasks;
+
     public sealed class RetryingTransport : ITransport
     {
         private readonly IEasyGelfLogger logger;
@@ -18,14 +20,14 @@ namespace EasyGelf.Core.Transports
             this.retryDelay = retryDelay;
         }
 
-        public void Send(GelfMessage message)
+        public async Task Send(GelfMessage message)
         {
             var sendRetryCount = retryCount;
             while (true)
             {
                 try
                 {
-                    transport.Send(message);
+                    await this.transport.Send(message);
                     break;
                 }
                 catch(Exception exception)

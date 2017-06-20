@@ -8,7 +8,7 @@ namespace EasyGelf.Log4Net.Example
 {
     public static class EntryPoint
     {
-        private static readonly ILog Log = LogManager.GetLogger("ExampleLog");
+        private static readonly ILog Log = LogManager.GetLogger("EasyGelf.Log4Net", "ExampleLog");
 
         public static void Main()
         {
@@ -27,7 +27,8 @@ namespace EasyGelf.Log4Net.Example
             var fileInfo = new FileInfo("log4net.config");
             if (!fileInfo.Exists)
                 throw new Exception();
-            XmlConfigurator.Configure(fileInfo);
+            var repository = LogManager.CreateRepository("EasyGelf.Log4Net");
+            XmlConfigurator.Configure(repository, fileInfo);
         }
     }
 }
