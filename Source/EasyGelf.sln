@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.13
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyGelf.Log4Net", "EasyGelf.Log4Net\EasyGelf.Log4Net.csproj", "{5B64942E-7197-4781-909C-E6AA5813AE9D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyGelf.Core", "EasyGelf.Core\EasyGelf.Core.csproj", "{B928D694-5633-4F00-B70F-23F6E5F3A2DB}"

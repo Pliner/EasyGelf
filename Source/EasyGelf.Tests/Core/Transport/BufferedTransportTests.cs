@@ -6,34 +6,36 @@ using NUnit.Framework;
 
 namespace EasyGelf.Tests.Core.Transport
 {
+    using System.Threading.Tasks;
+
     [TestFixture]
     public class BufferedTransportTests
     {
         private const int MessageCount = 100;
 
         [Test]
-        public void ShouldSendMessage()
+        public async Task ShouldSendMessage()
         {
             var countingTransport = new SuceedCountingTransport();
             var bufferedTransport = new BufferedTransport(new SilentLogger(), countingTransport);
             for (var i = 0; i < MessageCount; ++i)
             {
                 var message = new GelfMessage();
-                bufferedTransport.Send(message);
+                await bufferedTransport.Send(message);
             }
             bufferedTransport.Close();
             Assert.AreEqual(MessageCount, countingTransport.Count);
         }
 
         [Test]
-        public void ShouldSkipMessageIfSendFailed()
+        public async Task ShouldSkipMessageIfSendFailed()
         {
             var countingTransport = new FailCountingTransport();
             var bufferedTransport = new BufferedTransport(new SilentLogger(), countingTransport);
             for (var i = 0; i < MessageCount; ++i)
             {
                 var message = new GelfMessage();
-                bufferedTransport.Send(message);
+                await bufferedTransport.Send(message);
             }
             bufferedTransport.Close();
             Assert.AreEqual(MessageCount, countingTransport.Count);
@@ -47,7 +49,7 @@ namespace EasyGelf.Tests.Core.Transport
                 get { return Interlocked.Read(ref count); }
             }
 
-            public void Send(GelfMessage message)
+            public async Task Send(GelfMessage message)
             {
                 Interlocked.Increment(ref count);
             }
@@ -66,7 +68,7 @@ namespace EasyGelf.Tests.Core.Transport
                 get { return Interlocked.Read(ref count); }
             }
 
-            public void Send(GelfMessage message)
+            public async Task Send(GelfMessage message)
             {
                 Interlocked.Increment(ref count);
                 throw new Exception();

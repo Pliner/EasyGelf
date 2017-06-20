@@ -7,15 +7,17 @@ using System.Security.Cryptography;
 
 namespace EasyGelf.Core.Encoders
 {
+    using System.Threading.Tasks;
+
     //TODO Simplify message id generator
     public sealed class MessageBasedIdGenerator : IChunkedMessageIdGenerator
     {
-        public byte[] GenerateId(byte[] message)
+        public async Task<byte[]> GenerateId(byte[] message)
         {     //create a bit array to store the entire message id (which is 8 bytes)
             var bitArray = new BitArray(64);
 
             //Read the server ip address
-            var ipAddresses = Dns.GetHostAddresses(Dns.GetHostName());
+            var ipAddresses = await Dns.GetHostAddressesAsync(Dns.GetHostName());
             var ipAddress =
                 (from ip in ipAddresses where ip.AddressFamily == AddressFamily.InterNetwork select ip).FirstOrDefault();
 
@@ -49,7 +51,7 @@ namespace EasyGelf.Core.Encoders
 
             //copy all bits from bit array into a byte[]
             var result = new byte[8];
-            bitArray.CopyTo(result, 0);
+            ((ICollection)bitArray).CopyTo(result, 0);
 
             return result;
         }

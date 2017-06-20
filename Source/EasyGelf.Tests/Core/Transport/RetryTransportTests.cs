@@ -2,34 +2,34 @@
 using EasyGelf.Core;
 using EasyGelf.Core.Transports;
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace EasyGelf.Tests.Core.Transport
 {
+    using System.Threading.Tasks;
+
+    using Moq;
+
     [TestFixture]
     public class RetryTransportTests
     {
         private readonly int retryCount = 5;
         private readonly TimeSpan retryDelay = TimeSpan.FromMilliseconds(50);
-        private MockRepository mockRepository;
-        private ITransport mainTransport;
+        private Mock<ITransport> mainTransport;
         private ITransport retryingTransport;
 
 
         [SetUp]
         public void SetUp()
-        {              
-            mockRepository = new MockRepository();
-            mainTransport = mockRepository.StrictMultiMock<ITransport>();
-            mainTransport.Replay();
-            retryingTransport = new RetryingTransport(new SilentLogger(), mainTransport, retryCount, retryDelay);
+        {
+            mainTransport = new Mock<ITransport>();
+            retryingTransport = new RetryingTransport(new SilentLogger(), mainTransport.Object, retryCount, retryDelay);
         }
 
         [Test]
         public void ShouldContinueWhenSendSuceed()
         {
             var message = new GelfMessage();
-            mainTransport.Expect(x => x.Send(message)).TentativeReturn();
+            mainTransport.Setup(x => x.Send(message));
             retryingTransport.Send(message);
         }
 
@@ -37,25 +37,26 @@ namespace EasyGelf.Tests.Core.Transport
         public void ShouldSendAgainIfFirstAttempFailed()
         {
             var message = new GelfMessage();
-            mainTransport.Expect(x => x.Send(message)).Throw(new Exception());
-            mainTransport.Expect(x => x.Send(message)).TentativeReturn();
+            mainTransport.Setup(x => x.Send(message)).Throws(new Exception());
+            mainTransport.Setup(x => x.Send(message));
             retryingTransport.Send(message);
         }
 
         [Test]
-        [ExpectedException(typeof(Exception))]
-        public void ShouldFailIfAllAttemptsFailed()
+        public async Task ShouldFailIfAllAttemptsFailed()
         {
-            var message = new GelfMessage();
-            for(var i = 0; i < retryCount; ++i)
-                mainTransport.Expect(x => x.Send(message)).Throw(new Exception());
-            retryingTransport.Send(message);
-        }
+            try
+            {
+                var message = new GelfMessage();
+                for (var i = 0; i < retryCount; ++i) mainTransport.Setup(x => x.Send(message)).Throws(new Exception());
+                await retryingTransport.Send(message);
+            }
+            catch (Exception)
+            {
+                return;
+            }
 
-        [TearDown]
-        public void TearDown()
-        {
-            mockRepository.VerifyAll();
-        }
+            throw new Exception();
+    }
     }
 }

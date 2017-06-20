@@ -4,6 +4,8 @@ using NUnit.Framework;
 
 namespace EasyGelf.Tests.Core.Encoders
 {
+    using System.Threading.Tasks;
+
     [TestFixture]
     public class ChunkingEncoderTests
     {
@@ -17,24 +19,24 @@ namespace EasyGelf.Tests.Core.Encoders
         }
 
         [Test]
-        public void ShouldEncodeMessageLessThanMaxSize()
+        public async Task ShouldEncodeMessageLessThanMaxSize()
         {
             var bytes = new byte[32];
             for (var i = 0; i < bytes.Length; ++i)
                 bytes[i] = (byte) i;
-            var encodeResult = chunkingEncoder.Encode(bytes).ToArray();
+            var encodeResult = (await chunkingEncoder.Encode(bytes)).ToArray();
             Assert.AreEqual(1, encodeResult.Count());
             Assert.AreEqual(bytes, encodeResult.ElementAt(0));
         }
 
 
         [Test]
-        public void ShouldEncodeMessageGreaterThanMaxSize()
+        public async Task ShouldEncodeMessageGreaterThanMaxSize()
         {
             var bytes = new byte[39];
             for (var i = 0; i < bytes.Length; ++i)
                 bytes[i] = (byte)i;
-            var encodeResult = chunkingEncoder.Encode(bytes).ToArray();
+            var encodeResult = (await chunkingEncoder.Encode(bytes)).ToArray();
             Assert.AreEqual(2, encodeResult.Count());
             var firstChunk = encodeResult.ElementAt(0);
             var secondChunk = encodeResult.ElementAt(1);

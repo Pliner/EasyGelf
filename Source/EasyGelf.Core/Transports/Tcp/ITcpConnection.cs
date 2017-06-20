@@ -3,9 +3,11 @@ using System.IO;
 
 namespace EasyGelf.Core.Transports.Tcp
 {
+    using System.Threading.Tasks;
+
     public interface ITcpConnection : IDisposable
     {
-        void Open();
+        Task Open();
 
         Stream Stream { get; }
     }

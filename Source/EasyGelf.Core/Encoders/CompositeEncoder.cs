@@ -3,6 +3,8 @@ using System.Linq;
 
 namespace EasyGelf.Core.Encoders
 {
+    using System.Threading.Tasks;
+
     public sealed class CompositeEncoder : ITransportEncoder
     {
         private readonly ITransportEncoder[] encoders;
@@ -12,9 +14,12 @@ namespace EasyGelf.Core.Encoders
             this.encoders = encoders;
         }
 
-        public IEnumerable<byte[]> Encode(byte[] bytes)
+        public async Task<IEnumerable<byte[]>> Encode(byte[] bytes)
         {
-            return encoders.Aggregate((IEnumerable<byte[]>) new List<byte[]> {bytes}, (current, encoder) => current.SelectMany(encoder.Encode));
+
+            return encoders.Aggregate(
+                (IEnumerable<byte[]>)new List<byte[]> { bytes },
+                (current, encoder) => current.SelectMany(x => encoder.Encode(x).Result));
         }
     }
 }

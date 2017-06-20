@@ -3,6 +3,8 @@ using System.Net.Sockets;
 
 namespace EasyGelf.Core.Transports.Tcp
 {
+    using System.Threading.Tasks;
+
     public class TcpConnection : ITcpConnection
     {
         private readonly TcpTransportConfiguration configuration;
@@ -17,25 +19,19 @@ namespace EasyGelf.Core.Transports.Tcp
             client = new TcpClient();
         }
 
-        public void Open()
+        public async Task Open()
         {
-            client.Connect(configuration.GetHost());
+            var host = await this.configuration.GetHost();
+            await client.ConnectAsync(host.Address, host.Port);
             networkStream = client.GetStream();
         }
 
         public void Dispose()
         {
-            if (networkStream != null)
-            {
-                networkStream.Close();
-            }
-
-            client.Close();
+            this.networkStream?.Dispose();
+            this.client.SafeDispose();
         }
 
-        public Stream Stream
-        {
-            get { return networkStream; }
-        }
+        public Stream Stream => networkStream;
     }
 }

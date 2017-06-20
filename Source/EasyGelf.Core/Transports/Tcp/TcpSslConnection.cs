@@ -4,6 +4,8 @@ using System.Net.Sockets;
 
 namespace EasyGelf.Core.Transports.Tcp
 {
+    using System.Threading.Tasks;
+
     public class TcpSslConnection : ITcpConnection
     {
         private readonly TcpTransportConfiguration configuration;
@@ -18,30 +20,25 @@ namespace EasyGelf.Core.Transports.Tcp
             client = new TcpClient();
         }
 
-        public void Open()
+        public async Task Open()
         {
-            client.Connect(configuration.GetHost());
+            var host = await this.configuration.GetHost();
+            await client.ConnectAsync(host.Address, host.Port);
             sslStream = new SslStream(client.GetStream())
             {
                 ReadTimeout = configuration.Timeout,
                 WriteTimeout = configuration.Timeout
             };
-            sslStream.AuthenticateAsClient(configuration.GetServerNameInCertificate());
+            await sslStream.AuthenticateAsClientAsync(configuration.GetServerNameInCertificate());
         }
 
         public void Dispose()
         {
-            if (sslStream != null)
-            {
-                sslStream.Close();
-            }
+            this.sslStream?.Dispose();
 
-            client.Close();
+            this.client.SafeDispose();
         }
 
-        public Stream Stream
-        {
-            get { return sslStream; }
-        }
+        public Stream Stream => sslStream;
     }
 }

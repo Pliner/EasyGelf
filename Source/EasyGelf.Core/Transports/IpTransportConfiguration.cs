@@ -3,6 +3,8 @@ using System.Net;
 
 namespace EasyGelf.Core.Transports
 {
+    using System.Threading.Tasks;
+
     public class IpTransportConfiguration
     {
         private IPEndPoint host;
@@ -13,14 +15,14 @@ namespace EasyGelf.Core.Transports
         public int RemotePort { get; set; }
 
 
-        public IPEndPoint GetHost()
+        public async Task<IPEndPoint> GetHost()
         {
             if (host != null)
             {
                 return host;
             }
 
-            var remoteIpAddress = Dns.GetHostAddresses(RemoteAddress)
+            var remoteIpAddress = (await Dns.GetHostAddressesAsync(RemoteAddress))
                 .Shuffle()
                 .DefaultIfEmpty(IPAddress.Loopback)
                 .First();

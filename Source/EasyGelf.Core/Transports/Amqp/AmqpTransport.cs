@@ -6,6 +6,8 @@ using RabbitMQ.Client.Framing;
 
 namespace EasyGelf.Core.Transports.Amqp
 {
+    using System.Threading.Tasks;
+
     public sealed class AmqpTransport : ITransport
     {
         private readonly AmqpTransportConfiguration configuration;
@@ -21,16 +23,16 @@ namespace EasyGelf.Core.Transports.Amqp
             this.messageSerializer = messageSerializer;
         }
 
-        public void Send(GelfMessage message)
+        public async Task Send(GelfMessage message)
         {
             EstablishConnection();
-            foreach (var bytes in encoder.Encode(messageSerializer.Serialize(message)))
+            foreach (var bytes in await encoder.Encode(messageSerializer.Serialize(message)))
             {
                 var basicProperties = new BasicProperties
                     {
                         DeliveryMode = configuration.Persistent ? (byte)2 : (byte)1
                     };
-                channel.BasicPublish(configuration.Exchange, configuration.RoutingKey, false, false, basicProperties, bytes);
+                channel.BasicPublish(configuration.Exchange, configuration.RoutingKey, false, basicProperties, bytes);
             }
         }
 

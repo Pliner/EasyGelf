@@ -2,8 +2,10 @@
 
 namespace EasyGelf.Core.Encoders
 {
+    using System.Threading.Tasks;
+
     public interface ITransportEncoder
     {
-        IEnumerable<byte[]> Encode(byte[] bytes);
+        Task<IEnumerable<byte[]>> Encode(byte[] bytes);
     }
 }

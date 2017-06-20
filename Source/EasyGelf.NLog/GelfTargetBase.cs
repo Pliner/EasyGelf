@@ -10,6 +10,10 @@ using System.Collections.Generic;
 
 namespace EasyGelf.NLog
 {
+    using System.Threading.Tasks;
+
+    using global::NLog.Common;
+
     public abstract class GelfTargetBase : TargetWithLayout
     {
         private ITransport transport;
@@ -53,8 +57,9 @@ namespace EasyGelf.NLog
 
         protected abstract ITransport InitializeTransport(IEasyGelfLogger logger);
 
-        protected override void Write(LogEventInfo loggingEvent)
+        protected override async void Write(LogEventInfo loggingEvent)
         {
+            //var loggingEvent = logEvent.LogEvent;
             try
             {
                 var renderedEvent = Layout.Render(loggingEvent);
@@ -101,7 +106,8 @@ namespace EasyGelf.NLog
 					}
 				}
 
-                transport.Send(messageBuilder.ToMessage());
+                await transport.Send(messageBuilder.ToMessage());
+                //Task.Run(() => ));
             }
             catch (Exception exception)
             {
