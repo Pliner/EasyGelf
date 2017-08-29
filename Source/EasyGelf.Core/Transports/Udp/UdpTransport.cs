@@ -44,7 +44,7 @@ namespace EasyGelf.Core.Transports.Udp
             var encoded = encoder.Encode(serialzed);
             foreach (var bytes in encoded)
             {
-                udpClient.Send(bytes, bytes.Length, configuration.GetHost());
+                udpClient.Send(bytes, bytes.Length);
             }
         }
 
