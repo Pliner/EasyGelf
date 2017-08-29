@@ -4,13 +4,12 @@ using EasyGelf.Core.Encoders;
 
 namespace EasyGelf.Core.Transports.Udp
 {
-    public sealed class UdpTransport : ITransport, IDisposable
+    public sealed class UdpTransport : ITransport
     {
         private readonly UdpTransportConfiguration configuration;
         private readonly ITransportEncoder encoder;
         private readonly IGelfMessageSerializer messageSerializer;
-        private readonly UdpClient udpClient;
-        private bool disposed;
+        private UdpClient udpClient;
 
         public UdpTransport(
             UdpTransportConfiguration configuration,
@@ -20,11 +19,27 @@ namespace EasyGelf.Core.Transports.Udp
             this.configuration = configuration;
             this.encoder = encoder;
             this.messageSerializer = messageSerializer;
-            this.udpClient = new UdpClient();
+        }
+
+        private void EstablishConnection()
+        {
+            if (udpClient != null) return;
+            var host = configuration.GetHost();
+            try
+            {
+                udpClient = new UdpClient();
+                udpClient.Connect(host);
+            }
+            catch (Exception exception)
+            {
+                Close();
+                throw new CannotConnectException(string.Format("Cannot connect to {0}", host), exception);
+            }
         }
 
         public void Send(GelfMessage message)
         {
+            EstablishConnection();
             var serialzed = messageSerializer.Serialize(message);
             var encoded = encoder.Encode(serialzed);
             foreach (var bytes in encoded)
@@ -35,16 +50,9 @@ namespace EasyGelf.Core.Transports.Udp
 
         public void Close()
         {
-            Dispose();
-        }
-
-        public void Dispose()
-        {
-            if (!disposed)
-            {
-                udpClient.Close();
-                disposed = true;
-            }
+            if (udpClient == null) return;
+            udpClient.Close();
+            udpClient = null;
         }
     }
 }
