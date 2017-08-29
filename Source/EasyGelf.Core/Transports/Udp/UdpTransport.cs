@@ -42,7 +42,7 @@ namespace EasyGelf.Core.Transports.Udp
         {
             if (!disposed)
             {
-                udpClient.Dispose();
+                udpClient.Close();
                 disposed = true;
             }
         }
