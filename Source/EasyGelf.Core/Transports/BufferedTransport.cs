@@ -27,6 +27,7 @@ namespace EasyGelf.Core.Transports
                             catch(Exception exception)
                             {
                                 logger.Error("Cannot send message", exception);
+                                logger.SetException(exception);
                             }
                         }
                     }
@@ -42,6 +43,7 @@ namespace EasyGelf.Core.Transports
                             catch (Exception exception)
                             {
                                 logger.Error("Cannot send message", exception);
+                                logger.SetException(exception);
                             }
                         }
                     }
