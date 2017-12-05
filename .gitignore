@@ -50,3 +50,4 @@ packages
 *.nupkg
 Package/EasyGelf.NLog/lib/net40/EasyGelf.NLog.dll
 /Build/Release
+/Source/EasyGelf.NLog/EasyGelf.NLog.csproj.user

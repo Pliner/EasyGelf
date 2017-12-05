@@ -16,18 +16,22 @@ namespace EasyGelf.Core.Transports.Http
 
         public void Send(GelfMessage message)
         {
-            var request = (HttpWebRequest)WebRequest.Create(configuration.Uri);
-            using (var requestStream = request.GetRequestStream())
-            using (var messageStream = new MemoryStream(messageSerializer.Serialize(message)))
-                messageStream.CopyTo(requestStream);
+            var request = (HttpWebRequest)WebRequest.Create(configuration.GetComposedUri());            
             request.Method = "POST";
             request.AllowAutoRedirect = false;
             request.ReadWriteTimeout = request.Timeout = configuration.Timeout;
-            using (var response = (HttpWebResponse)request.GetResponse())
+            using (var requestStream = request.GetRequestStream())
             {
-                if (response.StatusCode == HttpStatusCode.Accepted)
-                    return;
-                throw new SendFailedException();
+                using (var messageStream = new MemoryStream(messageSerializer.Serialize(message)))
+                {
+                    messageStream.CopyTo(requestStream);
+                }
+                using (var response = (HttpWebResponse)request.GetResponse())
+                {
+                    if (response.StatusCode == HttpStatusCode.Accepted)
+                        return;
+                    throw new SendFailedException();
+                }
             }
         }
 
