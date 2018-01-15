@@ -1,4 +1,5 @@
-version: 0.5.1.{build}
+version: 0.5.2.{build}
+# 0.5.2.0 Don't dispose UDP client after each message send.
 # 0.5.1.0 Bug fix. Null Reference Exception.
 # 0.5.0.0 Change default facility value, add logingEvent.Properties to GelfMessage and a lot of small changes.
 # 0.4.10.0 Added support for SSL over TCP in log4net
