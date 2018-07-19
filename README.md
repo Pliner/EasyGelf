@@ -77,6 +77,10 @@ Now log4net and NLog are supported. Also Udp, Tcp and Amqp protocols are support
 
 * `includeSource` (default: `true`)
   * Whether the source of the log message should be included
+  
+* `IncludeEventProperties` (default: `true`)
+  * Include ALL [additional properties](https://github.com/nlog/nlog/wiki/Event-Context-Layout-Renderer) of log event.
+  You have to set it to `false` if you'd like to log only the couple of ones using `parameter` childs of `target` config node.
 
 * `hostName` (default: the machine name)
   * The host name of the machine generating the logs
