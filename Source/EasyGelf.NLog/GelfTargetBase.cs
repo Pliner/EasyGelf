@@ -106,7 +106,9 @@ namespace EasyGelf.NLog
             catch (Exception exception)
             {
                 logger.Error("Failed to send message", exception);
+                throw;
             }
+            logger.CheckException();
         }
 
         protected override void InitializeTarget()
