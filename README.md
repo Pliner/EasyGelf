@@ -6,9 +6,9 @@ Now log4net and NLog are supported. Also Udp, Tcp and Amqp protocols are support
 
 ## Usage(log4net)
 
-###Configuration example:
+### Configuration example:
 
-``` 
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <log4net>
   <appender name="GelfUdpAppender" type=" EasyGelf.Log4Net.GelfUdpAppender, EasyGelf.Log4Net">
@@ -45,9 +45,9 @@ Now log4net and NLog are supported. Also Udp, Tcp and Amqp protocols are support
 
 ## Usage(NLog)
 
-###Configuration example:
+### Configuration example:
 
-```
+```xml
 <?xml version="1.0" encoding="utf-8" ?>
 <nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -72,8 +72,8 @@ Now log4net and NLog are supported. Also Udp, Tcp and Amqp protocols are support
 
 
 
-##Configuration parameters
-###Common
+## Configuration parameters
+### Common
 
 * `includeSource` (default: `true`)
   * Whether the source of the log message should be included
