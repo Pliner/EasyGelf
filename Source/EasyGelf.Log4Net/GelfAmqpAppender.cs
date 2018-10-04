@@ -44,7 +44,7 @@ namespace EasyGelf.Log4Net
                     Persistent = Persistent,
                 };
             var encoder = new CompositeEncoder(new GZipEncoder(), new ChunkingEncoder(new MessageBasedIdGenerator(), MessageSize));
-            return new AmqpTransport(configuration, encoder, new GelfMessageSerializer());
+            return new AmqpTransport(configuration, encoder, new GelfMessageSerializer(logger));
         }
     }
 }

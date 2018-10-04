@@ -13,7 +13,7 @@ namespace EasyGelf.Tests.Core
         [SetUp]
         public void SetUp()
         {
-            serializer = new GelfMessageSerializer();
+            serializer = new GelfMessageSerializer(new SilentLogger());
         }
 
         [Test]

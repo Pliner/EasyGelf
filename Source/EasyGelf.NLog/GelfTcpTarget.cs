@@ -38,7 +38,7 @@ namespace EasyGelf.NLog
                 Timeout = Timeout
             };
 
-            return TcpTransportFactory.Produce(configuration);
+            return TcpTransportFactory.Produce(configuration, logger);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace EasyGelf.Log4Net
                     RemoteAddress = RemoteAddress,
                     RemotePort = RemotePort
                 };
-            return new UdpTransport(configuration, encoder, new GelfMessageSerializer());
+            return new UdpTransport(configuration, encoder, new GelfMessageSerializer(logger));
         }
     }
 }
