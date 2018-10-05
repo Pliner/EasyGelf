@@ -46,7 +46,7 @@ namespace EasyGelf.NLog
                     RoutingKey = RoutingKey,
                     Persistent = Persistent
                 };
-            return new AmqpTransport(configuration, encoder, new GelfMessageSerializer());
+            return new AmqpTransport(configuration, encoder, new GelfMessageSerializer(logger));
         }
     }
 }

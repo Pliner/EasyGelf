@@ -9,16 +9,11 @@ namespace EasyGelf.Core.Transports.Tcp
 {
     public class TcpTransportFactory
     {
-        public static ITransport Produce(TcpTransportConfiguration configuration)
+        public static ITransport Produce(TcpTransportConfiguration configuration, IEasyGelfLogger logger)
         {
-            if (configuration.Ssl)
-            {
-                return new TcpTransport(configuration, new GelfMessageSerializer(), () => new TcpSslConnection(configuration));
-            }
-            else
-            {
-                return new TcpTransport(configuration, new GelfMessageSerializer(), () => new TcpConnection(configuration));
-            }
+            return configuration.Ssl
+                ? new TcpTransport(configuration, new GelfMessageSerializer(logger), () => new TcpSslConnection(configuration))
+                : new TcpTransport(configuration, new GelfMessageSerializer(logger), () => new TcpConnection(configuration));
         }
     }
 }

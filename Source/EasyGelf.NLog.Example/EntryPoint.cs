@@ -22,7 +22,7 @@ namespace EasyGelf.NLog.Example
                 }
                 catch (Exception ex)
                 {
-                    Log.Error("Descriptive message example", ex);
+                    Log.Error(ex, "Descriptive message example");
                 }
                 
                 Thread.Sleep(TimeSpan.FromSeconds(0.5));

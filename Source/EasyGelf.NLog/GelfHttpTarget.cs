@@ -34,7 +34,7 @@ namespace EasyGelf.NLog
                 Port = RemotePort
             };
 
-            return new HttpTransport(configuration, new GelfMessageSerializer());
+            return new HttpTransport(configuration, new GelfMessageSerializer(logger));
         }
     }
 }
